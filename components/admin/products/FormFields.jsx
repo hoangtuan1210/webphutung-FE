@@ -8,7 +8,7 @@ import FormControl from "@mui/material/FormControl";
 import FormHelperText from "@mui/material/FormHelperText";
 import InputAdornment from "@mui/material/InputAdornment";
 import Typography from "@mui/material/Typography";
-import styles from "../../../styles/productForm.module.css";
+import styles from "../../../styles/admin/productForm.module.css";
 
 /**
  * Standard text / number field inside a Grid item.

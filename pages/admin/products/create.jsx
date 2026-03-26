@@ -482,7 +482,7 @@ function CreateProductPage() {
               <CardHeader
                 icon={<FiImage size={16} />}
                 title="Hình ảnh sản phẩm"
-                subtitle="Tối đa 6 ảnh · Ảnh đầu là ảnh chính"
+                subtitle="Tối đa 4 ảnh · Ảnh đầu là ảnh chính"
               />
               <Box className={styles.cardBody}>
                 <ImageUpload images={images} onChange={setImages} />

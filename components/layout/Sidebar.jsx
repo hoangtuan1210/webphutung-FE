@@ -16,23 +16,21 @@ import { FiBarChart2, FiChevronDown, FiChevronRight } from "react-icons/fi";
 import { MENU_SECTIONS } from "../../section/menu_section";
 import styles from "../../styles/admin/sidebar.module.css";
 
-// ── Width constants ────────────────────────────────────────────────────────
-const DRAWER_EXPANDED  = 260;
+const DRAWER_EXPANDED = 260;
 const DRAWER_COLLAPSED = 72;
 
-// ── Helper: join class names (filter falsy) ────────────────────────────────
 const cx = (...classes) => classes.filter(Boolean).join(" ");
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Logo
-// ─────────────────────────────────────────────────────────────────────────────
-function Logo({ collapsed }) {
+/* ───────────────── LOGO ───────────────── */
+function Logo({ isExpanded }) {
   return (
-    <Box className={cx(styles.logoWrap, collapsed && styles.logoWrapCollapsed)}>
+    <Box
+      className={cx(styles.logoWrap, !isExpanded && styles.logoWrapCollapsed)}
+    >
       <Box className={styles.logoIcon}>
         <FiBarChart2 color="#fff" size={18} />
       </Box>
-      {!collapsed && (
+      {isExpanded && (
         <Typography className={styles.logoText} variant="h6">
           Admin
         </Typography>
@@ -41,11 +39,9 @@ function Logo({ collapsed }) {
   );
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Section label
-// ─────────────────────────────────────────────────────────────────────────────
-function SectionLabel({ label, collapsed }) {
-  if (collapsed) return <Box className={styles.sectionDivider} />;
+/* ───────────────── SECTION LABEL ───────────────── */
+function SectionLabel({ label, isExpanded }) {
+  if (!isExpanded) return <Box className={styles.sectionDivider} />;
   return (
     <Typography variant="overline" className={styles.sectionLabel}>
       {label}
@@ -53,10 +49,8 @@ function SectionLabel({ label, collapsed }) {
   );
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Nav item (leaf — no children)
-// ─────────────────────────────────────────────────────────────────────────────
-function NavItem({ item, collapsed, pathname }) {
+/* ───────────────── NAV ITEM ───────────────── */
+function NavItem({ item, isExpanded, pathname }) {
   const isActive = pathname === item.href;
 
   return (
@@ -66,7 +60,7 @@ function NavItem({ item, collapsed, pathname }) {
         href={item.href}
         className={cx(
           styles.navItemBtn,
-          collapsed && styles.navItemBtnCollapsed,
+          !isExpanded && styles.navItemBtnCollapsed,
           isActive ? styles.navItemBtnActive : styles.navItemBtnDefault,
         )}
         sx={{ color: isActive ? "var(--active-color)" : "var(--text-default)" }}
@@ -74,20 +68,17 @@ function NavItem({ item, collapsed, pathname }) {
         <ListItemIcon
           className={cx(
             styles.navIcon,
-            isActive  && styles.navIconActive,
-            collapsed && styles.navIconCollapsed,
+            isActive && styles.navIconActive,
+            !isExpanded && styles.navIconCollapsed,
           )}
         >
           {item.icon}
         </ListItemIcon>
 
-        {!collapsed && (
+        {isExpanded && (
           <ListItemText
             primary={item.label}
-            primaryTypographyProps={{
-              fontSize:   "0.875rem",
-              fontWeight: isActive ? 600 : 500,
-            }}
+            className={cx(styles.navText, !isExpanded && styles.navTextHidden)}
           />
         )}
       </ListItemButton>
@@ -95,43 +86,44 @@ function NavItem({ item, collapsed, pathname }) {
   );
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Nav group (with children)
-// ─────────────────────────────────────────────────────────────────────────────
-function NavGroup({ item, collapsed, pathname, expanded, onToggle }) {
-  const isOpen        = expanded.includes(item.label);
+/* ───────────────── NAV GROUP ───────────────── */
+function NavGroup({ item, isExpanded, pathname, expanded, onToggle }) {
+  const isOpen = expanded.includes(item.label);
   const isGroupActive = item.children?.some((c) => pathname === c.href);
 
   return (
     <Box className={styles.navGroupOuter}>
-      {/* Group header button */}
       <ListItem disablePadding className={styles.navItemOuter}>
         <ListItemButton
           onClick={() => onToggle(item.label)}
           className={cx(
             styles.navGroupBtn,
-            collapsed                  && styles.navGroupBtnCollapsed,
-            isGroupActive              && styles.navGroupBtnGroupActive,
-            isGroupActive && !isOpen   && styles.navGroupBtnActiveCollapsed,
+            !isExpanded && styles.navGroupBtnCollapsed,
+            isGroupActive && styles.navGroupBtnGroupActive,
+            isGroupActive && !isOpen && styles.navGroupBtnActiveCollapsed,
           )}
-          sx={{ color: isGroupActive ? "var(--active-color)" : "var(--text-default)" }}
+          sx={{
+            color: isGroupActive
+              ? "var(--active-color)"
+              : "var(--text-default)",
+          }}
         >
           <ListItemIcon
             className={cx(
               styles.navIcon,
               isGroupActive && styles.navIconActive,
-              collapsed     && styles.navIconCollapsed,
+              !isExpanded && styles.navIconCollapsed,
             )}
           >
             {item.icon}
           </ListItemIcon>
 
-          {!collapsed && (
+          {isExpanded && (
             <>
               <ListItemText
                 primary={item.label}
                 primaryTypographyProps={{
-                  fontSize:   "0.875rem",
+                  fontSize: "0.875rem",
                   fontWeight: isGroupActive ? 600 : 500,
                 }}
               />
@@ -143,8 +135,7 @@ function NavGroup({ item, collapsed, pathname, expanded, onToggle }) {
         </ListItemButton>
       </ListItem>
 
-      {/* Sub-items */}
-      <Collapse in={isOpen && !collapsed} timeout="auto" unmountOnExit>
+      <Collapse in={isOpen && isExpanded} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
           {item.children.map((sub) => {
             const isSubActive = pathname === sub.href;
@@ -154,7 +145,7 @@ function NavGroup({ item, collapsed, pathname, expanded, onToggle }) {
                 disablePadding
                 className={cx(
                   styles.subItemOuter,
-                  !collapsed && styles.subItemOuterIndented,
+                  isExpanded && styles.subItemOuterIndented,
                 )}
               >
                 <ListItemButton
@@ -162,14 +153,20 @@ function NavGroup({ item, collapsed, pathname, expanded, onToggle }) {
                   href={sub.href}
                   className={cx(
                     styles.subItemBtn,
-                    isSubActive ? styles.subItemBtnActive : styles.subItemBtnDefault,
+                    isSubActive
+                      ? styles.subItemBtnActive
+                      : styles.subItemBtnDefault,
                   )}
-                  sx={{ color: isSubActive ? "var(--active-color)" : "var(--text-default)" }}
+                  sx={{
+                    color: isSubActive
+                      ? "var(--active-color)"
+                      : "var(--text-default)",
+                  }}
                 >
                   <ListItemText
                     primary={sub.label}
                     primaryTypographyProps={{
-                      fontSize:   "0.85rem",
+                      fontSize: "0.85rem",
                       fontWeight: isSubActive ? 600 : 400,
                     }}
                   />
@@ -183,16 +180,27 @@ function NavGroup({ item, collapsed, pathname, expanded, onToggle }) {
   );
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Main Sidebar
-// ─────────────────────────────────────────────────────────────────────────────
-export default function Sidebar({ mobileOpen, onClose, collapsed }) {
-  const pathname    = usePathname();
-  const drawerWidth = collapsed ? DRAWER_COLLAPSED : DRAWER_EXPANDED;
+/* ───────────────── MAIN SIDEBAR ───────────────── */
+export default function Sidebar({
+  mobileOpen,
+  onClose,
+  collapsed,
+  isHovered,
+  setIsHovered,
+}) {
+  const pathname = usePathname();
 
-  // Auto-expand the group whose child is active
-  const defaultExpanded = MENU_SECTIONS
-    .flatMap((s) => s.items)
+  const isExpanded = !collapsed || isHovered;
+
+  // ⚠️ width hiển thị (KHÔNG ảnh hưởng layout)
+  const visualWidth = collapsed
+    ? isHovered
+      ? DRAWER_EXPANDED
+      : DRAWER_COLLAPSED
+    : DRAWER_EXPANDED;
+
+  // auto expand group active
+  const defaultExpanded = MENU_SECTIONS.flatMap((s) => s.items)
     .filter((item) => item.children?.some((c) => pathname === c.href))
     .map((item) => item.label);
 
@@ -202,33 +210,28 @@ export default function Sidebar({ mobileOpen, onClose, collapsed }) {
 
   const toggleExpand = (label) =>
     setExpanded((prev) =>
-      prev.includes(label)
-        ? prev.filter((i) => i !== label)
-        : [...prev, label],
+      prev.includes(label) ? prev.filter((i) => i !== label) : [...prev, label],
     );
 
-  // ── Shared drawer content ──────────────────────────────────────────────────
   const content = (
-    <Box className={styles.drawerPaper} sx={{ width: drawerWidth }}>
-      {/* Logo */}
+    <Box className={styles.drawerPaper} sx={{ width: visualWidth }}>
       <Box className={styles.logoRow}>
-        <Logo collapsed={collapsed} />
+        <Logo isExpanded={isExpanded} />
       </Box>
 
-      <Divider sx={{ borderColor: "var(--border-color)", flexShrink: 0 }} />
+      <Divider sx={{ borderColor: "var(--border-color)" }} />
 
-      {/* Navigation */}
       <Box className={styles.navBox}>
         {MENU_SECTIONS.map((section) => (
           <Box key={section.section}>
-            <SectionLabel label={section.section} collapsed={collapsed} />
+            <SectionLabel label={section.section} isExpanded={isExpanded} />
             <List disablePadding>
               {section.items.map((item) =>
                 item.children ? (
                   <NavGroup
                     key={item.label}
                     item={item}
-                    collapsed={collapsed}
+                    isExpanded={isExpanded}
                     pathname={pathname}
                     expanded={expanded}
                     onToggle={toggleExpand}
@@ -237,7 +240,7 @@ export default function Sidebar({ mobileOpen, onClose, collapsed }) {
                   <NavItem
                     key={item.href}
                     item={item}
-                    collapsed={collapsed}
+                    isExpanded={isExpanded}
                     pathname={pathname}
                   />
                 ),
@@ -247,25 +250,17 @@ export default function Sidebar({ mobileOpen, onClose, collapsed }) {
         ))}
       </Box>
 
-      {/* Footer */}
-      <Divider sx={{ borderColor: "var(--border-color)", flexShrink: 0 }} />
+      <Divider sx={{ borderColor: "var(--border-color)" }} />
+
       <Typography className={styles.footer}>
-        {collapsed ? "v1.0" : "Version 1.0.0"}
+        {!isExpanded ? "v1.0" : "Version 1.0.0"}
       </Typography>
     </Box>
   );
 
   return (
-    <Box
-      component="nav"
-      sx={{
-        width:      { md: drawerWidth },
-        flexShrink: { md: 0 },
-        transition: "width 0.25s ease",
-      }}
-      aria-label="admin sidebar"
-    >
-      {/* ── Mobile: temporary overlay ── */}
+    <>
+      {/* MOBILE */}
       <Drawer
         variant="temporary"
         open={mobileOpen}
@@ -274,32 +269,42 @@ export default function Sidebar({ mobileOpen, onClose, collapsed }) {
         sx={{
           display: { xs: "block", md: "none" },
           "& .MuiDrawer-paper": {
-            width:  260,
+            width: DRAWER_EXPANDED,
             border: "none",
-            boxShadow: "4px 0 24px rgba(0,0,0,0.08)",
           },
         }}
-      >
-        {content} 
-      </Drawer>
-
-      {/* ── Tablet + Desktop: permanent ── */}
-      <Drawer
-        variant="permanent"
-        sx={{
-          display: { xs: "none", md: "block" },
-          "& .MuiDrawer-paper": {
-            width:      drawerWidth,
-            top:        0,
-            border:     "none",
-            transition: "width 0.25s ease",
-            overflow:   "hidden",
-          },
-        }}
-        open
       >
         {content}
       </Drawer>
-    </Box>
+
+      {/* DESKTOP */}
+      <Box
+        onMouseEnter={() => collapsed && setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        sx={{
+          display: { xs: "none", md: "block" },
+          position: "fixed", // 🔥 FIX QUAN TRỌNG
+          top: 0,
+          left: 0,
+          zIndex: 1200,
+        }}
+      >
+        <Drawer
+          variant="permanent"
+          open
+          sx={{
+            "& .MuiDrawer-paper": {
+              width: visualWidth,
+              border: "none",
+              transition: "width 0.25s ease",
+              overflow: "hidden",
+              boxShadow: isHovered ? "4px 0 20px rgba(0,0,0,0.1)" : "none",
+            },
+          }}
+        >
+          {content}
+        </Drawer>
+      </Box>
+    </>
   );
 }

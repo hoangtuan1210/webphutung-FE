@@ -1,0 +1,88 @@
+
+:root {
+  --card-radius:        12px;
+  --card-border:        1px solid #e5e7eb;
+  --card-divider:       1px solid #f1f5f9;
+
+  --field-radius:       8px;
+  --field-border:       #e2e8f0;
+  --field-border-hover: #94a3b8;
+  --field-border-focus: #6366f1;
+  --field-font-size:    0.875rem;
+
+  --icon-bg:            #eef2ff;
+  --icon-color:         #6366f1;
+  --icon-size:          32px;
+  --icon-radius:        8px;
+}
+
+.card {
+  background-color: #ffffff;
+  border-radius: var(--card-radius);
+  border: var(--card-border);
+  overflow: hidden;
+}
+
+.cardHeader {
+  padding: 16px;        
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: var(--card-divider);
+}
+
+@media (min-width: 600px) {
+  .cardHeader {
+    padding: 16px 24px;
+  }
+}
+
+
+.cardBody {
+  padding: 20px 16px;
+}
+
+@media (min-width: 600px) {
+  .cardBody {
+    padding: 24px;
+  }
+}
+
+
+.sectionIcon {
+  width: var(--icon-size);
+  height: var(--icon-size);
+  border-radius: var(--icon-radius);
+  background-color: var(--icon-bg);
+  color: var(--icon-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.field :global(.MuiOutlinedInput-root) {
+  border-radius: var(--field-radius);
+  font-size: var(--field-font-size);
+}
+
+.field :global(.MuiOutlinedInput-root fieldset) {
+  border-color: var(--field-border);
+}
+
+.field :global(.MuiOutlinedInput-root:hover fieldset) {
+  border-color: var(--field-border-hover);
+}
+
+.field :global(.MuiOutlinedInput-root.Mui-focused fieldset) {
+  border-color: var(--field-border-focus);
+  border-width: 1.5px;
+}
+
+.field :global(.MuiInputLabel-root) {
+  font-size: var(--field-font-size);
+}
+
+.field :global(.MuiInputLabel-root.Mui-focused) {
+  color: var(--field-border-focus);
+}

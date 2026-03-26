@@ -7,11 +7,18 @@ import Box from "@mui/material/Box";
 export default function AdminLayout({ children }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   const drawerWidth = collapsed ? 72 : 260;
 
   return (
-    <Box sx={{ display: "flex", minHeight: "100vh", bgcolor: "#f1f5f9" }}>
+    <Box
+      sx={{
+        display: "flex",
+        minHeight: "100vh",
+        bgcolor: "var(--color-admin-bg)",
+      }}
+    >
       <TopBar
         onOpenSidebar={() => setMobileOpen((p) => !p)}
         onToggleCollapse={() => setCollapsed((p) => !p)}
@@ -24,6 +31,8 @@ export default function AdminLayout({ children }) {
         onClose={() => setMobileOpen(false)}
         collapsed={collapsed}
         onToggleCollapse={() => setCollapsed((p) => !p)}
+        isHovered={isHovered}
+        setIsHovered={setIsHovered}
       />
 
       <Box
@@ -31,11 +40,12 @@ export default function AdminLayout({ children }) {
         sx={{
           flexGrow: 1,
           mt: "56px",
-          width: { md: `calc(100% - ${drawerWidth}px)` },
           minHeight: "calc(100vh - 56px)",
-          bgcolor: "#f1f5f9",  
-          p: { xs: 2, md: 3.5 }, 
+          bgcolor: "var(--color-admin-bg)",
+          p: { xs: 2, md: 3.5 },
           transition: "width 0.25s ease",
+          minWidth: 0,
+          ml: { md: `${drawerWidth}px` },
         }}
       >
         {children}

@@ -1,12 +1,4 @@
-/* ═══════════════════════════════════════════════════════════
-   Sidebar.module.css
-   Breakpoints:
-     mobile  — < 600px   (xs)
-     tablet  — 600–899px (sm)
-     desktop — ≥ 900px   (md)
-   ═══════════════════════════════════════════════════════════ */
 
-/* ── CSS Variables ──────────────────────────────────────── */
 :root {
   --sidebar-bg:           #ffffff;
   --active-color:         #3641f5;
@@ -23,9 +15,6 @@
   --item-radius:          8px;
 }
 
-/* ══════════════════════════════════════════════════════════
-   DRAWER PAPER
-   ══════════════════════════════════════════════════════════ */
 .drawerPaper {
   display: flex;
   flex-direction: column;
@@ -35,7 +24,6 @@
   transition: var(--sidebar-transition);
   overflow-x: hidden;
   overflow-y: auto;
-  /* Smooth scroll */
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
 }
@@ -47,12 +35,7 @@
   background-color: var(--scrollbar-thumb);
   border-radius: 4px;
 }
-
-/* ══════════════════════════════════════════════════════════
-   LOGO
-   ══════════════════════════════════════════════════════════ */
 .logoRow {
-  display: flex;
   align-items: center;
   justify-content: space-between;
   flex-shrink: 0;
@@ -92,9 +75,7 @@
   overflow: hidden;
 }
 
-/* ══════════════════════════════════════════════════════════
-   SECTION LABEL
-   ══════════════════════════════════════════════════════════ */
+
 .sectionLabel {
   display: block;
   padding: 16px 20px 4px;
@@ -113,9 +94,6 @@
   background-color: var(--border-color);
 }
 
-/* ══════════════════════════════════════════════════════════
-   NAV ITEM (leaf)
-   ══════════════════════════════════════════════════════════ */
 .navItemOuter {
   padding: 0 12px !important;
   margin-bottom: 2px !important;
@@ -126,6 +104,19 @@
   padding: 8px 12px !important;
   transition: background 0.12s, color 0.12s !important;
   width: 100%;
+}
+
+.navText {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all 0.5s ease;
+  white-space: nowrap;
+}
+
+.navTextHidden {
+  opacity: 0;
+  transform: translateX(-10px);
+  pointer-events: none;
 }
 
 .navItemBtnCollapsed {
@@ -145,9 +136,7 @@
   background-color: var(--hover-bg) !important;
 }
 
-/* ══════════════════════════════════════════════════════════
-   NAV ICON
-   ══════════════════════════════════════════════════════════ */
+
 .navIcon {
   min-width: 0 !important;
   margin-right: 12px;
@@ -166,9 +155,6 @@
   margin-right: 0;
 }
 
-/* ══════════════════════════════════════════════════════════
-   NAV GROUP (with children)
-   ══════════════════════════════════════════════════════════ */
 .navGroupOuter {
   margin-bottom: 2px;
 }
@@ -204,9 +190,7 @@
   flex-shrink: 0;
 }
 
-/* ══════════════════════════════════════════════════════════
-   SUB-ITEM
-   ══════════════════════════════════════════════════════════ */
+
 .subItemOuter {
   padding: 0 12px !important;
   margin-bottom: 2px !important;
@@ -234,9 +218,7 @@
   background-color: var(--hover-bg) !important;
 }
 
-/* ══════════════════════════════════════════════════════════
-   NAV BOX + FOOTER
-   ══════════════════════════════════════════════════════════ */
+
 .navBox {
   flex-grow: 1;
   padding-top: 8px;
@@ -255,13 +237,8 @@
   overflow: hidden;
 }
 
-/* ══════════════════════════════════════════════════════════
-   RESPONSIVE — TABLET (600px – 899px)
-   • Permanent sidebar auto-collapses to icon-only rail
-   • Touch targets slightly larger
-   ══════════════════════════════════════════════════════════ */
+
 @media (min-width: 600px) and (max-width: 899px) {
-  /* Larger tap targets on tablet */
   .navItemBtn,
   .navGroupBtn {
     padding: 9px 12px !important;
@@ -272,31 +249,23 @@
     padding: 9px !important;
   }
 
-  /* Slightly bigger icons */
   .navIcon {
     font-size: 1.2rem;
   }
 
-  /* Tighter section gap */
   .sectionLabel {
     padding-top: 12px;
   }
 
-  /* Footer compact */
   .footer {
     padding: 8px 12px;
     text-align: center;
   }
 }
 
-/* ══════════════════════════════════════════════════════════
-   RESPONSIVE — MOBILE (< 600px)
-   • Sidebar shown only as temporary overlay (handled by MUI)
-   • Make overlay content comfortable for thumb reach
-   ══════════════════════════════════════════════════════════ */
+
 @media (max-width: 599px) {
   .drawerPaper {
-    /* Full height safe area on iOS notch devices */
     height: 100dvh;
   }
 
@@ -309,7 +278,6 @@
     padding: 14px 16px 4px;
   }
 
-  /* Bigger tap targets */
   .navItemOuter,
   .subItemOuter {
     padding: 0 10px !important;
@@ -331,7 +299,6 @@
     padding-left: 24px !important;
   }
 
-  /* Slightly larger icon + text on mobile */
   .navIcon {
     font-size: 1.15rem;
     margin-right: 14px;
@@ -343,9 +310,7 @@
   }
 }
 
-/* ══════════════════════════════════════════════════════════
-   HOVER — touch devices (disable hover flicker)
-   ══════════════════════════════════════════════════════════ */
+
 @media (hover: none) {
   .navItemBtnDefault:hover,
   .navGroupBtn:hover,

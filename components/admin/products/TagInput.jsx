@@ -36,9 +36,9 @@ export default function TagInput({ tags, onChange, placeholder }) {
           size="small"
           aria-label="Thêm tag"
           sx={{
-            borderRadius: "8px", borderColor: "#e2e8f0", color: "#374151",
+            borderRadius: "8px", borderColor: "var(--color-admin-border)", color: "var(--color-pagination-inactive)",
             minWidth: 40, px: 1.5,
-            "&:hover": { borderColor: "#6366f1", color: "#6366f1", bgcolor: "#eef2ff" },
+            "&:hover": { borderColor: "var(--color-primary)", color: "var(--color-primary)", bgcolor: "var(--color-gray-50)" },
           }}
         >
           <FiPlus size={16} />
@@ -54,10 +54,10 @@ export default function TagInput({ tags, onChange, placeholder }) {
               size="small"
               onDelete={() => remove(tag)}
               sx={{
-                bgcolor: "#eef2ff", color: "#4f46e5",
+                bgcolor: "var(--color-gray-50)", color: "var(--color-primary)",
                 fontWeight: 500, fontSize: "0.78rem",
-                border: "1px solid #c7d2fe",
-                "& .MuiChip-deleteIcon": { color: "#818cf8", "&:hover": { color: "#4f46e5" } },
+                border: "1px solid var(--color-gray-100)",
+                "& .MuiChip-deleteIcon": { color: "var(--color-gray-200)", "&:hover": { color: "var(--color-primary)" } },
               }}
             />
           ))}

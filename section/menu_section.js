@@ -18,7 +18,7 @@ export const MENU_SECTIONS = [
         label: "Tổng quan",
         icon: <FiGrid />,
         children: [
-          { href: "/admin", label: "Ecommerce", icon: <FiShoppingBag /> },
+          { href: "/admin/dashboard", label: "Doanh Thu", icon: <FiShoppingBag /> },
         ],
       },
       { href: "/admin/profile", label: "Thông tin người dùng", icon: <FiUser /> },
