@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
-import styles from "@/styles/cartDrawer.module.css";
+import styles from "@/styles/client/cartDrawer.module.css";
 
 export default function CartDrawer() {
   const {

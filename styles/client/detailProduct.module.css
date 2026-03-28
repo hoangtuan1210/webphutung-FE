@@ -1,5 +1,5 @@
-.page { composes: page from "./shared.module.css"; }
-.breadcrumb { composes: breadcrumb from "./shared.module.css"; }
+.page { composes: page from "../shared.module.css"; }
+.breadcrumb { composes: breadcrumb from "../shared.module.css"; }
 .breadcrumb a {
   color: #666;
   text-decoration: none;
@@ -45,7 +45,7 @@
   padding: 0;
 }
 
-.badge { composes: badge from "./shared.module.css"; top: 12px; left: 12px; letter-spacing: 0.5px; }
+.badge { composes: badge from "../shared.module.css"; top: 12px; left: 12px; letter-spacing: 0.5px; }
 
 .thumbs {
   display: flex;
@@ -95,11 +95,11 @@
   margin: 0 0 1rem;
 }
 
-.priceRow { composes: priceRow from "./shared.module.css"; margin-bottom: 0.85rem; gap: 0.75rem; }
+.priceRow { composes: priceRow from "../shared.module.css"; margin-bottom: 0.85rem; gap: 0.75rem; }
 
-.price { composes: price from "./shared.module.css"; font-size: 1.6rem; font-weight: 800; }
+.price { composes: price from "../shared.module.css"; font-size: 1.6rem; font-weight: 800; }
 
-.oldPrice { composes: oldPrice from "./shared.module.css"; font-size: 1rem; }
+.oldPrice { composes: oldPrice from "../shared.module.css"; font-size: 1rem; }
 
 .discount {
   background: #fff3f3;
@@ -182,10 +182,10 @@
   margin-bottom: 1.25rem;
 }
 
-.btnCart { composes: btnOutline from "./shared.module.css"; flex: 1; display: flex; align-items: center; justify-content: center; gap: 0.4rem; height: 48px; font-size: 0.92rem; font-weight: 700; }
+.btnCart { composes: btnOutline from "../shared.module.css"; flex: 1; display: flex; align-items: center; justify-content: center; gap: 0.4rem; height: 48px; font-size: 0.92rem; font-weight: 700; }
 .btnCart:hover { background: #111; color: #fff; border-color: #111; }
 
-.btnBuy { composes: btnPrimary from "./shared.module.css"; flex: 1; height: 48px; font-size: 0.92rem; font-weight: 700; }
+.btnBuy { composes: btnPrimary from "../shared.module.css"; flex: 1; height: 48px; font-size: 0.92rem; font-weight: 700; }
 
 .guarantees {
   display: grid;

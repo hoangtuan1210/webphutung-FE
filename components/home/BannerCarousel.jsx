@@ -1,5 +1,5 @@
 import Image from "next/image";
-import styles from "@/styles/banner.module.css";
+import styles from "@/styles/client/banner.module.css";
 import Link from "next/link";
 
 const SLIDES = [

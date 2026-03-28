@@ -5,7 +5,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import { FiPlus } from "react-icons/fi";
-import styles from "../../../styles/productForm.module.css";
+import styles from "../../../styles/admin/productForm.module.css";
 
 export default function TagInput({ tags, onChange, placeholder }) {
   const [input, setInput] = useState("");

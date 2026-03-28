@@ -1,9 +1,9 @@
 .page {
-  composes: page from "./shared.module.css";
+  composes: page from "../shared.module.css";
 }
 
 .breadcrumb {
-  composes: breadcrumb from "./shared.module.css";
+  composes: breadcrumb from "../shared.module.css";
 }
 .breadcrumb a {
   color: var(--color-secondary);
@@ -24,7 +24,7 @@
   margin-bottom: 1.1rem;
 }
 .title {
-  composes: sectionTitle from "./shared.module.css";
+  composes: sectionTitle from "../shared.module.css";
   font-size: 1.8rem;
   margin: 0 0 0.2rem;
 }
@@ -133,11 +133,11 @@
 }
 
 .filterRow {
-  composes: filterRow from "./shared.module.css";
+  composes: filterRow from "../shared.module.css";
   margin-bottom: 1.5rem;
 }
 .filterBtn {
-  composes: filterBtn from "./shared.module.css";
+  composes: filterBtn from "../shared.module.css";
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
@@ -147,7 +147,7 @@
   color: var(--color-black);
 }
 .filterActive {
-  composes: filterActive from "./shared.module.css";
+  composes: filterActive from "../shared.module.css";
 }
 .filterActive .filterCount {
   background: rgba(255, 255, 255, 0.15);
@@ -175,7 +175,7 @@
 }
 
 .card {
-  composes: card from "./shared.module.css";
+  composes: card from "../shared.module.css";
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -188,11 +188,11 @@
   display: block;
 }
 .cardImg {
-  composes: cardImg from "./shared.module.css";
+  composes: cardImg from "../shared.module.css";
   aspect-ratio: 1 / 1;
 }
 .cardImgEl {
-  composes: cardImgEl from "./shared.module.css";
+  composes: cardImgEl from "../shared.module.css";
   padding: 0;
 }
 .card:hover .cardImgEl {
@@ -201,13 +201,13 @@
 }
 
 .cardInfo {
-  composes: cardInfo from "./shared.module.css";
+  composes: cardInfo from "../shared.module.css";
   padding: 0.8rem 0.9rem 0.9rem;
   gap: 0.3rem;
 }
 
 .catTag {
-  composes: catTag from "./shared.module.css";
+  composes: catTag from "../shared.module.css";
 }
 
 .cardNameLink {
@@ -230,14 +230,14 @@
 }
 
 .priceRow {
-  composes: priceRow from "./shared.module.css";
+  composes: priceRow from "../shared.module.css";
   margin-top: auto;
 }
 .price {
-  composes: price from "./shared.module.css";
+  composes: price from "../shared.module.css";
 }
 .oldPrice {
-  composes: oldPrice from "./shared.module.css";
+  composes: oldPrice from "../shared.module.css";
 }
 
 .badge {
@@ -255,7 +255,7 @@
 }
 
 .addBtn {
-  composes: btnPrimary from "./shared.module.css";
+  composes: btnPrimary from "../shared.module.css";
   width: 100%;
   padding: 0.48rem 0;
   font-size: 0.8rem;
@@ -266,7 +266,7 @@
 
 /* LIST */
 .list {
-  composes: list from "./shared.module.css";
+  composes: list from "../shared.module.css";
 }
 
 .listItem {

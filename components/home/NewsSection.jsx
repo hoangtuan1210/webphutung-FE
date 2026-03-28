@@ -1,7 +1,7 @@
 import Link from "next/link";
 import NewsCard from "./NewsCard";
 import { newsList } from "@/data/news";
-import styles from "@/styles/home.module.css";
+import styles from "@/styles/client/home.module.css";
 
 export default function NewsSection() {
   const highlighted = newsList.slice(0, 4);

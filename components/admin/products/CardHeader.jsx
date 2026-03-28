@@ -1,7 +1,7 @@
 // components/CardHeader.jsx
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import styles from "../../../styles/productForm.module.css";
+import styles from "../../../styles/admin/productForm.module.css";
 
 export default function CardHeader({ icon, title, subtitle }) {
   return (

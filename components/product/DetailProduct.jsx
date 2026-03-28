@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import styles from "@/styles/detailProduct.module.css";
+import styles from "../../styles/client/detailProduct.module.css";
 import { useCart } from "@/context/CartContext";
 import { toSlug } from "@/utils/slug";
 import { MOCK_PRODUCTS } from "@/data/product";

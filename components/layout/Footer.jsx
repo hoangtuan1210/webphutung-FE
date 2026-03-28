@@ -1,6 +1,6 @@
 // footer.jsx
 import Link from "next/link";
-import styles from "@/styles/footer.module.css";
+import styles from "@/styles/client/footer.module.css";
 
 export default function Footer() {
   return (

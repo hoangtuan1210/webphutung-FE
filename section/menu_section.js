@@ -18,10 +18,18 @@ export const MENU_SECTIONS = [
         label: "Tổng quan",
         icon: <FiGrid />,
         children: [
-          { href: "/admin/dashboard", label: "Doanh Thu", icon: <FiShoppingBag /> },
+          {
+            href: "/admin/dashboard",
+            label: "Doanh Thu",
+            icon: <FiShoppingBag />,
+          },
         ],
       },
-      { href: "/admin/profile", label: "Thông tin người dùng", icon: <FiUser /> },
+      {
+        href: "/admin/profile",
+        label: "Thông tin người dùng",
+        icon: <FiUser />,
+      },
       {
         label: "Sản phẩm",
         icon: <FiBox />,
@@ -55,20 +63,9 @@ export const MENU_SECTIONS = [
         ],
       },
       {
+        href: "/admin/order",
         label: "Đơn hàng",
         icon: <FiBarChart2 />,
-        children: [
-          {
-            href: "/admin/orders/list",
-            label: "Danh sách đơn hàng",
-            icon: <FiBarChart2 />,
-          },
-          {
-            href: "/admin/orders/create",
-            label: "Tạo đơn hàng",
-            icon: <FiBarChart2 />,
-          },
-        ],
       },
     ],
   },

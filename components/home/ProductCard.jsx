@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import styles from "@/styles/home.module.css";
+import styles from "@/styles/client/home.module.css";
 import { toSlug } from "@/utils/slug";
 
 export default function ProductCard({ product }) {

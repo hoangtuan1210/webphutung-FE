@@ -20,7 +20,7 @@
   margin-top: 3rem;
 }
 
-.productTitle { composes: sectionTitle from "./shared.module.css"; text-align: left; margin-bottom: 2rem; font-weight: 600; }
+.productTitle { composes: sectionTitle from "../shared.module.css"; text-align: left; margin-bottom: 2rem; font-weight: 600; }
 
 
 .productCard {

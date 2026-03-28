@@ -1,5 +1,5 @@
 import Image from "next/image";
-import styles from "@/styles/home.module.css";
+import styles from "@/styles/client/home.module.css";
 
 export default function NewsCard({ image, title, desc, date, category, size = "small" }) {
   const cardClass = `${styles.newsCard} ${

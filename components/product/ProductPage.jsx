@@ -4,7 +4,7 @@ import Link from "next/link";
 import { MOCK_PRODUCTS } from "@/data/product";
 import { toSlug } from "@/utils/slug";
 import { useCart } from "@/context/CartContext";
-import styles from "@/styles/productPage.module.css";
+import styles from "@/styles/admin/productPage.module.css";
 
 const CATEGORIES = ["Tất cả", "Đồ chơi xe", "Phụ tùng"];
 const SORT_OPTIONS = [

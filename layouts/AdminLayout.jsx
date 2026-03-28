@@ -1,15 +1,23 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TopBar from "@/components/layout/TopBar";
 import Sidebar from "@/components/layout/Sidebar";
 import Box from "@mui/material/Box";
+import Loading from "@/components/admin/Loading";
 
 export default function AdminLayout({ children }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-
+  const [loading, setLoading] = useState(true);
   const drawerWidth = collapsed ? 72 : 260;
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <Box
@@ -48,7 +56,7 @@ export default function AdminLayout({ children }) {
           ml: { md: `${drawerWidth}px` },
         }}
       >
-        {children}
+        {loading ? <Loading /> : children}
       </Box>
     </Box>
   );

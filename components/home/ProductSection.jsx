@@ -1,6 +1,6 @@
 import Link from "next/link";
 import ProductCard from "./ProductCard";
-import styles from "@/styles/home.module.css";
+import styles from "@/styles/client/home.module.css";
 
 const products = [
   {

@@ -25,7 +25,7 @@ import {
   UNITS,
   DIMENSION_FIELDS,
 } from "../../../constants/product";
-import styles from "../../../styles/productForm.module.css";
+import styles from "../../../styles/admin/productForm.module.css";
 import CardHeader from "../../../components/admin/products/CardHeader";
 import ImageUpload from "../../../components/admin/products/ImageUpload";
 import TagInput from "../../../components/admin/products/TagInput";

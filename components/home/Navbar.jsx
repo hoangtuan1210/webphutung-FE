@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import styles from "@/styles/navbar.module.css";
+import styles from "../../styles/client/navbar.module.css";
 import { useCart } from "@/context/CartContext";
 
 const NAV_ITEMS = [
