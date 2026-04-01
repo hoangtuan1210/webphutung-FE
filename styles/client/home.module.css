@@ -254,3 +254,193 @@
     right: 0.8rem;
   }
 }
+/* ── Features ── */
+.featureCard {
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  height: 100%;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s;
+  text-align: center;
+  border: 1px solid #f0f0f0;
+}
+
+.featureCard:hover {
+  transform: translateY(-0.5rem);
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.05);
+}
+
+.featureIcon {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.25rem;
+  font-size: 1.5rem;
+}
+
+.featureTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #111;
+}
+
+.featureDesc {
+  font-size: 0.875rem;
+  color: #666;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ── Why Choose Us ── */
+.sectionHighlightContent {
+  padding: 1rem 0;
+}
+
+.tagline {
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: #ff3d00;
+  margin-bottom: 0.75rem;
+}
+
+.titleEmphasized {
+  font-size: 2.5rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+  color: #111;
+}
+
+.titleEmphasized span {
+  color: #ff3d00;
+}
+
+.highlightList {
+  list-style: none;
+  padding: 0;
+  margin: 2rem 0;
+}
+
+.highlightList li {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.highlightIcon {
+  min-width: 2.5rem;
+  height: 2.5rem;
+  background: #f8f8f8;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #111;
+  font-size: 1rem;
+}
+
+.highlightList h6 {
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.highlightList p {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 0;
+}
+
+.imageHighlightWrapper {
+  position: relative;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.decorationBox {
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  width: 150px;
+  height: 150px;
+  border: 10px solid #f0f0f0;
+  z-index: 1;
+}
+
+.mainImageFrame {
+  position: relative;
+  z-index: 2;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 2rem 4rem rgba(0, 0, 0, 0.15);
+}
+
+.mainImage {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.experienceBadge {
+  position: absolute;
+  bottom: 20px;
+  left: -20px;
+  background: #111;
+  color: white;
+  padding: 1.25rem;
+  border-radius: 0.75rem;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 120px;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.3);
+}
+
+.badgeNum {
+  font-size: 1.75rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.badgeText {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-top: 0.25rem;
+}
+
+.btnSecondaryOutline {
+  background: white;
+  border: 2px solid #111;
+  color: #111;
+  padding: 0.75rem 2rem;
+  font-weight: 700;
+  border-radius: 0.5rem;
+  transition: all 0.3s;
+}
+
+.btnSecondaryOutline:hover {
+  background: #f8f8f8;
+  color: #111;
+}
+
+@media (max-width: 768px) {
+  .titleEmphasized {
+    font-size: 1.8rem;
+  }
+  
+  .imageHighlightWrapper {
+    margin-bottom: 2rem;
+  }
+  
+  .decorationBox {
+    display: none;
+  }
+}

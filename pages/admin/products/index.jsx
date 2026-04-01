@@ -1,5 +1,5 @@
 "use client";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback, memo } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Box from "@mui/material/Box";
@@ -24,29 +24,7 @@ import {
 import Pagination from "@/components/admin/Pagination";
 import AdminLayout from "@/layouts/AdminLayout";
 
-// ─── DATA ─────────────────────────────────────────────────────────────────────
-const ALL_PRODUCTS = [
-  { id: 1,  image: "/bao-tay.jpg",      name: "Lốp xe Michelin Pilot Street 2",   sku: "LX-MC-001", category: "Lốp xe",               price: 850000,  stock: 42,  status: "Còn hàng",  brand: "Michelin",  createdAt: "12 Jan, 2025" },
-  { id: 2,  image: "/bo-cong-tac.jpg",   name: "Bình ắc quy xe điện GS 12V-20Ah", sku: "AQ-GS-002", category: "Ắc quy",               price: 1250000, stock: 18,  status: "Còn hàng",  brand: "GS",         createdAt: "05 Feb, 2025" },
-  { id: 3,  image: "/cum-tang-toc.jpg",  name: "Phanh đĩa Wave Alpha 110cc",       sku: "PD-WA-003", category: "Phanh",                price: 320000,  stock: 0,   status: "Hết hàng",  brand: "Honda",      createdAt: "18 Mar, 2025" },
-  { id: 4,  image: "/day-curoa.jpg",     name: "Đèn LED headlight xe máy 35W",     sku: "DL-LE-004", category: "Đèn chiếu sáng",       price: 185000,  stock: 76,  status: "Còn hàng",  brand: "Osram",      createdAt: "22 Mar, 2025" },
-  { id: 5,  image: "/gu-carbon.jpg",     name: "Nhớt Motul 3000 4T 20W-50 1L",    sku: "NT-MO-005", category: "Nhớt & dầu",           price: 145000,  stock: 120, status: "Còn hàng",  brand: "Motul",      createdAt: "01 Apr, 2025" },
-  { id: 6,  image: "/tay-thang.jpg",     name: "Bộ côn xe SH 150i 2023",           sku: "BC-SH-006", category: "Động cơ",              price: 2100000, stock: 5,   status: "Sắp hết",   brand: "Honda",      createdAt: "10 Apr, 2025" },
-  { id: 7,  image: "/bao-tay.jpg",      name: "Pin lithium xe đạp điện 48V-15Ah", sku: "PN-LI-007", category: "Ắc quy",               price: 3850000, stock: 12,  status: "Còn hàng",  brand: "Panasonic",  createdAt: "14 Apr, 2025" },
-  { id: 8,  image: "/bo-cong-tac.jpg",   name: "Bộ lọc gió Yamaha Exciter 155",    sku: "LG-YM-008", category: "Lọc & làm sạch",      price: 95000,   stock: 0,   status: "Hết hàng",  brand: "Yamaha",     createdAt: "20 Apr, 2025" },
-  { id: 9,  image: "/cum-tang-toc.jpg",  name: "Còi điện 12V xe máy Denso",        sku: "CO-DN-009", category: "Điện xe",              price: 78000,   stock: 88,  status: "Còn hàng",  brand: "Denso",      createdAt: "25 Apr, 2025" },
-  { id: 10, image: "/day-curoa.jpg",     name: "Yên xe Honda Vision 2022",          sku: "YX-HV-010", category: "Thân xe & ngoại thất", price: 750000,  stock: 9,   status: "Sắp hết",   brand: "Honda",      createdAt: "02 May, 2025" },
-  { id: 11, image: "/gu-carbon.jpg",     name: "Bộ sạc xe điện thông minh 60V-5A", sku: "SC-EV-011", category: "Ắc quy",               price: 420000,  stock: 33,  status: "Còn hàng",  brand: "Bosch",      createdAt: "08 May, 2025" },
-  { id: 12, image: "/tay-thang.jpg",     name: "Bugi NGK Iridium CR8EIX",           sku: "BG-NK-012", category: "Động cơ",              price: 165000,  stock: 64,  status: "Còn hàng",  brand: "NGK",        createdAt: "15 May, 2025" },
-  { id: 13, image: "/bao-tay.jpg",      name: "Vành bánh trước Exciter 150",       sku: "VB-EX-013", category: "Thân xe & ngoại thất", price: 580000,  stock: 0,   status: "Hết hàng",  brand: "Yamaha",     createdAt: "18 May, 2025" },
-  { id: 14, image: "/bo-cong-tac.jpg",   name: "Đèn xi nhan LED SH Mode 125",       sku: "XN-SH-014", category: "Đèn chiếu sáng",       price: 125000,  stock: 47,  status: "Còn hàng",  brand: "Honda",      createdAt: "22 May, 2025" },
-  { id: 15, image: "/cum-tang-toc.jpg",  name: "Xích xe máy Honda Wave RSX",        sku: "XC-WR-015", category: "Truyền động",          price: 210000,  stock: 55,  status: "Còn hàng",  brand: "Honda",      createdAt: "28 May, 2025" },
-  { id: 16, image: "/day-curoa.jpg",     name: "Nhớt Castrol Power 1 4T 10W-40",   sku: "NT-CA-016", category: "Nhớt & dầu",           price: 138000,  stock: 200, status: "Còn hàng",  brand: "Castrol",    createdAt: "01 Jun, 2025" },
-  { id: 17, image: "/gu-carbon.jpg",     name: "Ắc quy Yuasa YTX7A-BS 12V",        sku: "AQ-YU-017", category: "Ắc quy",               price: 680000,  stock: 22,  status: "Còn hàng",  brand: "Yuasa",      createdAt: "05 Jun, 2025" },
-  { id: 18, image: "/tay-thang.jpg",     name: "Kính chắn gió xe máy universal",   sku: "KC-UN-018", category: "Thân xe & ngoại thất", price: 290000,  stock: 3,   status: "Sắp hết",   brand: "Generic",    createdAt: "10 Jun, 2025" },
-  { id: 19, image: "/bao-tay.jpg",      name: "Bộ phanh ABS Honda CB150R",         sku: "PH-CB-019", category: "Phanh",                price: 1850000, stock: 7,   status: "Còn hàng",  brand: "Honda",      createdAt: "12 Jun, 2025" },
-  { id: 20, image: "/bo-cong-tac.jpg",   name: "Lốp Bridgestone Battlax BT46",     sku: "LX-BS-020", category: "Lốp xe",               price: 920000,  stock: 31,  status: "Còn hàng",  brand: "Bridgestone", createdAt: "15 Jun, 2025" },
-];
+import { MOCK_PRODUCTS, CATEGORIES as PRODUCT_CATEGORIES } from "@/data/product";
 
 const PAGE_SIZE_OPTIONS = [5, 7, 10, 20];
 const fmtVND = (n) => n.toLocaleString("vi-VN") + "₫";
@@ -58,17 +36,18 @@ const STATUS_CFG = {
   "Hết hàng": { label: "Hết hàng",  color: "#dc2626", bg: "transparent" },
 };
 
-function StatusText({ status }) {
+const StatusText = memo(({ status }) => {
   const cfg = STATUS_CFG[status] ?? { label: status, color: "#6b7280", bg: "transparent" };
   return (
     <Typography sx={{ fontSize: "0.82rem", fontWeight: 600, color: cfg.color }}>
       {cfg.label}
     </Typography>
   );
-}
+});
+StatusText.displayName = "StatusText";
 
 // ─── SORT HEADER ──────────────────────────────────────────────────────────────
-function SortHeader({ label, sortKey, currentSort, onSort }) {
+const SortHeader = memo(({ label, sortKey, currentSort, onSort }) => {
   const active = currentSort?.key === sortKey;
   const asc    = currentSort?.dir === "asc";
   return (
@@ -83,22 +62,27 @@ function SortHeader({ label, sortKey, currentSort, onSort }) {
       </Box>
     </Box>
   );
-}
+});
+SortHeader.displayName = "SortHeader";
 
 // ─── ROW ACTION MENU ──────────────────────────────────────────────────────────
-function RowMenu({ id }) {
-  const router = useRouter();
+const RowMenu = memo(({ id, onView, onEdit, onDelete }) => {
   const [anchor, setAnchor] = useState(null);
 
-  const handleView = () => {
+  const handleView = useCallback(() => {
     setAnchor(null);
-    router.push(`/admin/products/${id}`);
-  };
+    onView(id);
+  }, [id, onView]);
 
-  const handleEdit = () => {
+  const handleEdit = useCallback(() => {
     setAnchor(null);
-    router.push(`/admin/products/${id}/edit`);
-  };
+    onEdit(id);
+  }, [id, onEdit]);
+
+  const handleDelete = useCallback(() => {
+    setAnchor(null);
+    onDelete(id);
+  }, [id, onDelete]);
 
   return (
     <>
@@ -130,7 +114,7 @@ function RowMenu({ id }) {
           <FiEdit2 size={14} /> Chỉnh sửa
         </MenuItem>
         <MenuItem
-          onClick={() => setAnchor(null)}
+          onClick={handleDelete}
           sx={{ fontSize: "0.82rem", color: "#ef4444", gap: 1.25, py: 1, px: 1.75, "&:hover": { bgcolor: "#fef2f2" } }}
         >
           <FiTrash2 size={14} /> Xoá
@@ -138,28 +122,37 @@ function RowMenu({ id }) {
       </Menu>
     </>
   );
-}
+});
+RowMenu.displayName = "RowMenu";
 
-// ─── PAGE ─────────────────────────────────────────────────────────────────────
 export default function ProductsPage() {
+  const router = useRouter();
   const [search,   setSearch]   = useState("");
   const [page,     setPage]     = useState(1);
   const [pageSize, setPageSize] = useState(7);
   const [selected, setSelected] = useState([]);
-  const [sort,     setSort]     = useState(null); // { key, dir }
+  const [sort,     setSort]     = useState(null); 
 
-  const handleSort = (key) => {
+  const handleSort = useCallback((key) => {
     setSort((prev) =>
       prev?.key === key
         ? { key, dir: prev.dir === "asc" ? "desc" : "asc" }
         : { key, dir: "asc" }
     );
-  };
+  }, []);
+
+  const products = useMemo(() => {
+    return MOCK_PRODUCTS.map(p => ({
+      ...p,
+      image: p.images?.[0] || "/placeholder.jpg",
+      status: p.stock === 0 ? "Hết hàng" : p.stock < 10 ? "Sắp hết" : "Còn hàng"
+    }));
+  }, []);
 
   const filtered = useMemo(() => {
     const q = search.toLowerCase();
-    let list = ALL_PRODUCTS.filter((p) =>
-      !q || p.name.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q) || p.category.toLowerCase().includes(q)
+    let list = products.filter((p) =>
+      !q || p.name.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q) || (p.brand && p.brand.toLowerCase().includes(q)) || p.category.toLowerCase().includes(q)
     );
     if (sort) {
       list = [...list].sort((a, b) => {
@@ -169,25 +162,34 @@ export default function ProductsPage() {
       });
     }
     return list;
-  }, [search, sort]);
+  }, [products, search, sort]);
 
-  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
-  const safePage   = Math.min(page, totalPages);
-  const paginated  = filtered.slice((safePage - 1) * pageSize, safePage * pageSize);
+  const totalPages = useMemo(() => Math.max(1, Math.ceil(filtered.length / pageSize)), [filtered.length, pageSize]);
+  const safePage   = useMemo(() => Math.min(page, totalPages), [page, totalPages]);
+  const paginated  = useMemo(() => filtered.slice((safePage - 1) * pageSize, safePage * pageSize), [filtered, safePage, pageSize]);
 
-  const allChecked   = paginated.length > 0 && paginated.every((r) => selected.includes(r.id));
-  const someChecked  = paginated.some((r) => selected.includes(r.id));
-  const toggleAll    = () => setSelected(allChecked ? [] : paginated.map((r) => r.id));
-  const toggleRow    = (id) => setSelected((p) => p.includes(id) ? p.filter((x) => x !== id) : [...p, id]);
+  const allChecked   = useMemo(() => paginated.length > 0 && paginated.every((r) => selected.includes(r.id)), [paginated, selected]);
+  const someChecked  = useMemo(() => paginated.some((r) => selected.includes(r.id)), [paginated, selected]);
+  
+  const toggleAll    = useCallback(() => setSelected(allChecked ? [] : paginated.map((r) => r.id)), [allChecked, paginated]);
+  const toggleRow    = useCallback((id) => setSelected((p) => p.includes(id) ? p.filter((x) => x !== id) : [...p, id]), []);
 
-  const COLS = [
+  const COLS = useMemo(() => [
     { key: "name",      label: "Sản phẩm"  },
     { key: "category",  label: "Danh mục"  },
     { key: "brand",     label: "Thương hiệu" },
     { key: "price",     label: "Giá"       },
     { key: "stock",     label: "Tồn kho"   },
     { key: "createdAt", label: "Ngày tạo"  },
-  ];
+  ], []);
+
+  /* ── Navigation Handlers ── */
+  const handleViewProduct = useCallback((id) => router.push(`/admin/products/${id}`), [router]);
+  const handleEditProduct = useCallback((id) => router.push(`/admin/products/${id}/edit`), [router]);
+  const handleDeleteProduct = useCallback((id) => {
+     // handle delete logic or open confirm dialog
+     console.log("Delete", id);
+  }, []);
 
   return (
     <Box>
@@ -208,7 +210,7 @@ export default function ProductsPage() {
             startIcon={<FiDownload size={15} />}
             sx={{ borderRadius: "10px", textTransform: "none", fontSize: "0.85rem", fontWeight: 500, borderColor: "#e8ecf0", color: "#374151", "&:hover": { borderColor: "#94a3b8", bgcolor: "#f8fafc" }, px: 2.25, py: 0.9 }}
           >
-            Export
+            Xuất File
           </Button>
           <Button
             component={Link}
@@ -217,7 +219,7 @@ export default function ProductsPage() {
             startIcon={<FiPlus size={15} />}
             sx={{ borderRadius: "10px", textTransform: "none", fontSize: "0.85rem", fontWeight: 600, bgcolor: "#4f67f5", boxShadow: "0 2px 10px rgba(79,103,245,0.3)", "&:hover": { bgcolor: "#3d55e0" }, px: 2.25, py: 0.9 }}
           >
-            Add Product
+            Thêm sản phẩm
           </Button>
         </Box>
       </Box>
@@ -226,11 +228,10 @@ export default function ProductsPage() {
       <Box sx={{ bgcolor: "#fff", borderRadius: "16px", border: "1px solid #e8ecf0", overflow: "hidden" }}>
 
         {/* Search + filter toolbar */}
-        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", px: 2.5, py: 2, gap: 2 }}>
-          {/* Search input */}
+        <Box sx={{ p: 2.5, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 2 }}>
           <Box sx={{
             display: "flex", alignItems: "center", gap: 1,
-            border: "1px solid #e8ecf0", borderRadius: "10px", px: 1.75, py: 0.85,
+            border: "1px solid #e8ecf0", borderRadius: "10px", px: 1.5, py: 0.75,
             width: { xs: "100%", sm: 280 },
             "&:focus-within": { borderColor: "#4f67f5", boxShadow: "0 0 0 3px rgba(79,103,245,0.1)" },
             transition: "all 0.15s",
@@ -239,27 +240,17 @@ export default function ProductsPage() {
             <InputBase
               value={search}
               onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-              placeholder="Search..."
+              placeholder="Tìm kiếm sản phẩm..."
               sx={{ fontSize: "0.85rem", color: "#374151", flex: 1, "& input::placeholder": { color: "#9ca3af" } }}
             />
           </Box>
-
-          {/* Filter button */}
-          <Button
-            variant="outlined"
-            startIcon={<FiSliders size={14} />}
-            sx={{ borderRadius: "10px", textTransform: "none", fontSize: "0.82rem", fontWeight: 500, borderColor: "#e8ecf0", color: "#374151", "&:hover": { borderColor: "#94a3b8", bgcolor: "#f8fafc" }, px: 2, py: 0.85, whiteSpace: "nowrap" }}
-          >
-            Filter
-          </Button>
+          <Typography sx={{ fontSize: "0.8rem", color: "#9ca3af" }}>{filtered.length} kết quả</Typography>
         </Box>
 
-        {/* Table */}
-        <TableContainer>
-          <Table>
+        <TableContainer sx={{ overflowX: "auto" }}>
+          <Table sx={{ minWidth: 900 }}>
             <TableHead>
-              <TableRow sx={{ "& th": { borderBottom: "1px solid #f1f5f9", py: 1.25, fontSize: "0.75rem", fontWeight: 600, color: "#9ca3af", bgcolor: "#fff" } }}>
-                {/* Checkbox */}
+              <TableRow sx={{ "& th": { bgcolor: "#f8fafc", color: "#6b7280", fontSize: "0.75rem", fontWeight: 600, borderBottom: "1px solid #f1f5f9" } }}>
                 <TableCell sx={{ pl: 2.5, width: 44 }}>
                   <Checkbox
                     size="small"
@@ -270,14 +261,12 @@ export default function ProductsPage() {
                   />
                 </TableCell>
 
-                {/* Sortable columns */}
                 {COLS.map((col) => (
-                  <TableCell key={col.key} sx={{ cursor: "pointer", ...(col.key === "name" && { minWidth: 260 }) }}>
+                  <TableCell key={col.key}>
                     <SortHeader label={col.label} sortKey={col.key} currentSort={sort} onSort={handleSort} />
                   </TableCell>
                 ))}
 
-                {/* Actions */}
                 <TableCell />
               </TableRow>
             </TableHead>
@@ -294,15 +283,14 @@ export default function ProductsPage() {
                 return (
                   <TableRow
                     key={row.id}
+                    hover
                     sx={{
-                      "& td": { borderBottom: "1px solid #f8fafc", py: 1.75, fontSize: "0.875rem", color: "#374151" },
+                      "& td": { borderBottom: "1px solid #f8fafc", py: 2, fontSize: "0.875rem", color: "#374151" },
                       "&:last-child td": { borderBottom: "none" },
                       bgcolor: checked ? "#f5f7ff" : "transparent",
-                      "&:hover": { bgcolor: checked ? "#eef1ff" : "#fafafa" },
                       transition: "background 0.1s",
                     }}
                   >
-                    {/* Checkbox */}
                     <TableCell sx={{ pl: 2.5 }}>
                       <Checkbox
                         size="small"
@@ -312,40 +300,33 @@ export default function ProductsPage() {
                       />
                     </TableCell>
 
-                    {/* Product */}
                     <TableCell>
                       <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-                        <Box sx={{ width: 44, height: 44, borderRadius: "10px", overflow: "hidden", border: "1px solid #f1f5f9", flexShrink: 0, bgcolor: "#f8fafc" }}>
+                        <Box sx={{ width: 40, height: 40, borderRadius: "8px", overflow: "hidden", border: "1px solid #f1f5f9", flexShrink: 0, bgcolor: "#f8fafc" }}>
                           <img src={row.image} alt={row.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                         </Box>
-                        <Link href={`/admin/products/${row.id}`} style={{ textDecoration: "none", color: "#111827", fontWeight: 600 }}>
-                          <Typography sx={{fontSize: "0.875rem" }}>
-                            {row.name}
-                          </Typography>
-                        </Link>
+                        <Box>
+                          <Typography sx={{ fontSize: "0.875rem", fontWeight: 600 }}>{row.name}</Typography>
+                          <Typography sx={{ fontSize: "0.75rem", color: "#9ca3af" }}>{row.sku}</Typography>
+                        </Box>
                       </Box>
                     </TableCell>
 
-                    {/* Category */}
                     <TableCell sx={{ color: "#6b7280" }}>{row.category}</TableCell>
-
-                    {/* Brand */}
                     <TableCell sx={{ color: "#6b7280" }}>{row.brand}</TableCell>
-
-                    {/* Price */}
-                    <TableCell sx={{ fontWeight: 600, color: "#111827", whiteSpace: "nowrap" }}>
+                    <TableCell sx={{ fontWeight: 700, color: "#111827" }}>
                       {fmtVND(row.price)}
                     </TableCell>
-
-                    {/* Stock status */}
                     <TableCell><StatusText status={row.status} /></TableCell>
+                    <TableCell sx={{ color: "#9ca3af" }}>{row.createdAt}</TableCell>
 
-                    {/* Created At */}
-                    <TableCell sx={{ color: "#9ca3af", whiteSpace: "nowrap" }}>{row.createdAt}</TableCell>
-
-                    {/* Actions */}
                     <TableCell align="right" sx={{ pr: 2 }}>
-                      <RowMenu id={row.id} />
+                      <RowMenu 
+                        id={row.id} 
+                        onView={handleViewProduct}
+                        onEdit={handleEditProduct}
+                        onDelete={handleDeleteProduct}
+                      />
                     </TableCell>
                   </TableRow>
                 );
@@ -354,16 +335,13 @@ export default function ProductsPage() {
           </Table>
         </TableContainer>
 
-        {/* Pagination */}
         <Pagination
           currentPage={safePage}
           totalPages={totalPages}
           pageSize={pageSize}
           pageSizeOptions={PAGE_SIZE_OPTIONS}
-          onPageChange={(p) => setPage(p)}
-          onPageSizeChange={(size) => { setPageSize(size); setPage(1); }}
-          showPageSizeSelector={true}
-          showPageInfo={true}
+          onPageChange={setPage}
+          onPageSizeChange={(s) => { setPageSize(s); setPage(1); }}
         />
       </Box>
     </Box>

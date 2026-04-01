@@ -1,0 +1,10 @@
+{
+  // CSS Modules uses 'composes' which is not standard CSS.
+  // VS Code's built-in linter flags it as unknown — disable that check.
+  "css.lint.unknownProperties": "ignore",
+  "scss.lint.unknownProperties": "ignore",
+
+  // Treat *.module.css as CSS Modules for better IntelliSense
+  "css.validate": false,
+  "scss.validate": false
+}

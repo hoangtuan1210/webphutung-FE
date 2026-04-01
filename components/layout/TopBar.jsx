@@ -11,11 +11,23 @@ import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import Avatar from "@mui/material/Avatar";
-import { FiMenu, FiMoon, FiBell, FiChevronDown, FiUser, FiSettings, FiLogOut } from "react-icons/fi";
+import {
+  FiMenu,
+  FiMoon,
+  FiChevronDown,
+  FiUser,
+  FiSettings,
+  FiLogOut,
+} from "react-icons/fi";
 import { MdSearch } from "react-icons/md";
 import styles from "../../styles/admin/topbar.module.css";
+import Notification from "../notification/Notification";
 
-export default function TopBar({ onOpenSidebar, onToggleCollapse, drawerWidth }) {
+export default function TopBar({
+  onOpenSidebar,
+  onToggleCollapse,
+  drawerWidth,
+}) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -24,13 +36,11 @@ export default function TopBar({ onOpenSidebar, onToggleCollapse, drawerWidth })
       className={styles.appBar}
       sx={{
         zIndex: (theme) => theme.zIndex.drawer - 1,
-        left:  { xs: 0, md: `${drawerWidth}px` },
+        left: { xs: 0, md: `${drawerWidth}px` },
         width: { xs: "100%", md: `calc(100% - ${drawerWidth}px)` },
       }}
     >
       <Toolbar className={styles.toolbar} sx={{ px: { xs: 1.5, md: 2.5 } }}>
-
-        {/* Desktop collapse toggle */}
         <IconButton
           onClick={onToggleCollapse}
           size="small"
@@ -39,7 +49,6 @@ export default function TopBar({ onOpenSidebar, onToggleCollapse, drawerWidth })
           <FiMenu size={18} />
         </IconButton>
 
-        {/* Mobile open sidebar */}
         <IconButton
           onClick={onOpenSidebar}
           size="small"
@@ -48,7 +57,6 @@ export default function TopBar({ onOpenSidebar, onToggleCollapse, drawerWidth })
           <FiMenu size={18} />
         </IconButton>
 
-        {/* Search */}
         <Box className={styles.searchBox}>
           <MdSearch size={18} className={styles.searchIcon} />
           <InputBase
@@ -61,21 +69,15 @@ export default function TopBar({ onOpenSidebar, onToggleCollapse, drawerWidth })
           </Box>
         </Box>
 
-        {/* Spacer */}
         <Box className={styles.spacer} />
 
-        {/* Dark mode */}
-        <IconButton size="small" className={styles.circleBtn}>
-          <FiMoon size={16} />
-        </IconButton>
 
-        {/* Notifications */}
-        <IconButton size="small" className={styles.circleBtn}>
-          <FiBell size={16} />
-        </IconButton>
+        <Notification />
 
-        {/* User trigger */}
-        <Box className={styles.userTrigger} onClick={(e) => setAnchorEl(e.currentTarget)}>
+        <Box
+          className={styles.userTrigger}
+          onClick={(e) => setAnchorEl(e.currentTarget)}
+        >
           <Avatar src="/avatar.jpg" alt="Admin" className={styles.userAvatar}>
             A
           </Avatar>
@@ -83,18 +85,19 @@ export default function TopBar({ onOpenSidebar, onToggleCollapse, drawerWidth })
           <FiChevronDown size={14} color="#6b7280" />
         </Box>
 
-        {/* Dropdown menu */}
         <Menu
           anchorEl={anchorEl}
           open={open}
           onClose={() => setAnchorEl(null)}
           anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-          transformOrigin={{ vertical: "top",  horizontal: "right" }}
+          transformOrigin={{ vertical: "top", horizontal: "right" }}
           PaperProps={{ elevation: 0, className: styles.menuPaper }}
         >
           <Box className={styles.menuHeader}>
             <Typography className={styles.menuHeaderName}>ADMIN</Typography>
-            <Typography className={styles.menuHeaderEmail}>admin@admin.com</Typography>
+            <Typography className={styles.menuHeaderEmail}>
+              admin@admin.com
+            </Typography>
           </Box>
 
           <Divider className={styles.menuDivider} />

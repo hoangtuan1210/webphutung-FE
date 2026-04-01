@@ -5,6 +5,7 @@ import styles from "../../styles/client/detailProduct.module.css";
 import { useCart } from "@/context/CartContext";
 import { toSlug } from "@/utils/slug";
 import { MOCK_PRODUCTS } from "@/data/product";
+import { toast } from "react-hot-toast";
 
 export default function DetailProduct({ slug }) {
   const product =
@@ -14,7 +15,7 @@ export default function DetailProduct({ slug }) {
   const [qty, setQty] = useState(1);
   const [activeTab, setActiveTab] = useState("desc");
   const images = product.images ?? [product.image];
-  const { addToCart } = useCart();
+  const { addToCart, setIsOpen } = useCart();
 
   const related = MOCK_PRODUCTS
     .filter((p) => p.category === product.category && p.id !== product.id)
@@ -30,6 +31,19 @@ export default function DetailProduct({ slug }) {
       },
       qty,
     );
+  };
+
+  const handleBuyNow = () => {
+    addToCart(
+      {
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        image: images[0],
+      },
+      qty,
+    );
+    setIsOpen(true);
   };
 
   return (
@@ -135,7 +149,12 @@ export default function DetailProduct({ slug }) {
               <button className={styles.btnCart} onClick={handleAddToCart}>
                 <i className="bi bi-cart3" /> Thêm vào giỏ
               </button>
-              <button className={styles.btnBuy}>Mua ngay</button>
+              <button
+                className={styles.btnBuy}
+                onClick={handleBuyNow}
+              >
+                Mua ngay
+              </button>
             </div>
 
             <div className={styles.guarantees}>

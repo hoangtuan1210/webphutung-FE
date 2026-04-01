@@ -1,5 +1,4 @@
-"use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import TopBar from "@/components/layout/TopBar";
 import Sidebar from "@/components/layout/Sidebar";
 import Box from "@mui/material/Box";
@@ -7,9 +6,14 @@ import Loading from "@/components/admin/Loading";
 
 export default function AdminLayout({ children }) {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
   const [loading, setLoading] = useState(true);
+  
+  const handleOpenSidebar = useCallback(() => setMobileOpen((p) => !p), []);
+  const handleCloseSidebar = useCallback(() => setMobileOpen(false), []);
+  const handleToggleCollapse = useCallback(() => setCollapsed((p) => !p), []);
+
   const drawerWidth = collapsed ? 72 : 260;
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -28,17 +32,17 @@ export default function AdminLayout({ children }) {
       }}
     >
       <TopBar
-        onOpenSidebar={() => setMobileOpen((p) => !p)}
-        onToggleCollapse={() => setCollapsed((p) => !p)}
+        onOpenSidebar={handleOpenSidebar}
+        onToggleCollapse={handleToggleCollapse}
         collapsed={collapsed}
         drawerWidth={drawerWidth}
       />
 
       <Sidebar
         mobileOpen={mobileOpen}
-        onClose={() => setMobileOpen(false)}
+        onClose={handleCloseSidebar}
         collapsed={collapsed}
-        onToggleCollapse={() => setCollapsed((p) => !p)}
+        onToggleCollapse={handleToggleCollapse}
         isHovered={isHovered}
         setIsHovered={setIsHovered}
       />
@@ -51,9 +55,12 @@ export default function AdminLayout({ children }) {
           minHeight: "calc(100vh - 56px)",
           bgcolor: "var(--color-admin-bg)",
           p: { xs: 2, md: 3.5 },
-          transition: "width 0.25s ease",
+          width: { xs: "100%", md: `calc(100% - ${drawerWidth}px)` },
+          ml: { xs: 0, md: `${drawerWidth}px` },
+          transition: "margin-left 0.25s ease, width 0.25s ease",
+          overflow: "hidden",
           minWidth: 0,
-          ml: { md: `${drawerWidth}px` },
+          boxSizing: "border-box",
         }}
       >
         {loading ? <Loading /> : children}

@@ -1,5 +1,6 @@
 // footer.jsx
 import Link from "next/link";
+import Image from "next/image";
 import styles from "@/styles/client/footer.module.css";
 
 export default function Footer() {
@@ -10,7 +11,13 @@ export default function Footer() {
         {/* CỘT 1 — Logo + mô tả */}
         <div className={styles.brand}>
           <div className={styles.logo}>
-            <span className={styles.logoText}>MyShop</span>
+            <Image
+              src="/logo.png"
+              alt="Anh Hậu Logo"
+              width={160}
+              height={50}
+              className={styles.logoImg}
+            />
           </div>
           <p className={styles.desc}>
             Chúng tôi cung cấp xe máy, xe điện chính hãng, chất lượng cao.
@@ -73,7 +80,7 @@ export default function Footer() {
       </div>
 
       <div className={styles.bottom}>
-        <p>© 2026 MyShop. All rights reserved.</p>
+        <p>© 2026 MyShop Store. All rights reserved.</p>
       </div>
     </footer>
   );

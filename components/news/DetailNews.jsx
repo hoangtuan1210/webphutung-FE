@@ -1,54 +1,57 @@
 import Image from "next/image";
 import Link from "next/link";
+import styles from "@/styles/client/newsPage.module.css";
 
 export default function DetailNews({ article }) {
   if (!article) return null;
 
   return (
-    <div className="page">
-      <div className="news-detail-container">
-        <Link href="/news" className="news-detail-back btn btn-outline">
-          ← Quay lại tin tức
+    <article className={styles.detailWrapper}>
+      <div className="container">
+        <Link href="/news" className={styles.backBtn}>
+          <i className="bi bi-arrow-left" /> Quay lại tin tức
         </Link>
 
-        <article>
-          {article.image && (
-            <div className="news-detail-image">
-              <Image
-                src={article.image}
-                alt={article.title}
-                width={900}
-                height={450}
-                style={{ width: "100%", height: "auto", objectFit: "cover" }}
-              />
-            </div>
-          )}
-
-          <h1 className="news-detail-title">{article.title}</h1>
-
-          <div className="news-detail-meta">
-            <span>{article.category}</span>
-            <span>{article.date}</span>
-            <span>{article.readTime}</span>
+        <header className={styles.detailHeader}>
+          <div className={styles.detailMeta}>
+            <span className={styles.catTag}>{article.category}</span>
+            <span className={styles.date}>{article.date}</span>
+            <span className={styles.dot}>•</span>
+            <span className={styles.readTime}>{article.readTime}</span>
           </div>
+          <h1 className={styles.detailTitle}>{article.title}</h1>
+          <p className={styles.detailExcerpt}>{article.excerpt}</p>
+        </header>
 
-          <p className="news-detail-text">{article.excerpt}</p>
-
-          <div className="news-detail-text">
-            <p>
-              Nội dung chi tiết demo chưa có sẵn trong dữ liệu mẫu. Bạn có thể mở rộng thêm trường <code>article.content</code> trong <code>newsList</code> để render nội dung đầy đủ.
-            </p>
-
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras interdum, metus in bibendum scelerisque, libero lectus sodales nisl, in feugiat nisi nisl vitae purus. Fusce ullamcorper varius ipsum, vitae feugiat nunc finibus a.
-            </p>
-
-            <p>
-              Aenean dapibus orci nec nisl efficitur, et lobortis arcu faucibus. Duis eu commodo orci, ac viverra ex. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae.
-            </p>
+        {article.image && (
+          <div className={styles.detailImage}>
+            <Image
+              src={article.image}
+              alt={article.title}
+              width={1200}
+              height={600}
+              priority
+              className={styles.detailImgEl}
+            />
           </div>
-        </article>
+        )}
+
+        <div 
+          className={styles.detailContent}
+          dangerouslySetInnerHTML={{ __html: article.content }}
+        />
+        
+        <footer className={styles.detailFooter}>
+           <div className={styles.shareRow}>
+              <span>Chia sẻ bài viết:</span>
+              <div className={styles.shareIcons}>
+                <a href="#"><i className="bi bi-facebook" /></a>
+                <a href="#"><i className="bi bi-messenger" /></a>
+                <a href="#"><i className="bi bi-link-45deg" /></a>
+              </div>
+           </div>
+        </footer>
       </div>
-    </div>
+    </article>
   );
 }

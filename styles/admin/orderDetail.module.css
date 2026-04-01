@@ -1,0 +1,614 @@
+.pageRoot {
+  composes: admin-container from global;
+  padding-top: 24px;
+  padding-bottom: 48px;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+/* ─── TOP BAR ───────────────────────────────────────────────────────────────── */
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.topBarLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.topBarTitle {
+  font-weight: 700 !important;
+  font-size: 1.15rem !important;
+  color: #111827 !important;
+  line-height: 1.2 !important;
+}
+
+.topBarMeta {
+  font-size: 0.78rem !important;
+  color: #9ca3af !important;
+}
+
+.topBarActions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ─── BUTTONS ───────────────────────────────────────────────────────────────── */
+.btnBack {
+  text-transform: none !important;
+  font-size: 0.82rem !important;
+  color: #6b7280 !important;
+  border-radius: 9px !important;
+  border: 1px solid #e8ecf0 !important;
+  padding: 5.6px 14px !important;
+  background-color: #fff !important;
+  white-space: nowrap;
+}
+.btnBack:hover {
+  background-color: #f8fafc !important;
+  border-color: #cbd5e1 !important;
+}
+
+.btnSecondary {
+  text-transform: none !important;
+  font-size: 0.82rem !important;
+  color: #374151 !important;
+  border: 1px solid #e8ecf0 !important;
+  border-radius: 9px !important;
+  background-color: #fff !important;
+  padding: 5.6px 14px !important;
+  white-space: nowrap;
+}
+.btnSecondary:hover {
+  background-color: #f8fafc !important;
+}
+
+.btnPrimary {
+  text-transform: none !important;
+  font-size: 0.82rem !important;
+  color: #fff !important;
+  border-radius: 9px !important;
+  background-color: #4f67f5 !important;
+  padding: 5.6px 16px !important;
+  box-shadow: 0 2px 8px rgba(79, 103, 245, 0.25) !important;
+  white-space: nowrap;
+}
+.btnPrimary:hover {
+  background-color: #3d55e0 !important;
+}
+
+/* ─── MAIN GRID ─────────────────────────────────────────────────────────────── */
+.mainGrid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 20px;
+  align-items: start;
+}
+
+.leftColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+.rightColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+/* ─── CARD ───────────────────────────────────────────────────────────────────── */
+.card {
+  composes: admin-card from global;
+}
+
+.cardGray {
+  background-color: #fafbfc;
+}
+
+/* ─── CARD HEADER ────────────────────────────────────────────────────────────── */
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.cardHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cardHeaderIcon {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background-color: #eef2ff;
+  color: #4f67f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.cardHeaderTitle {
+  font-weight: 700 !important;
+  font-size: 0.9rem !important;
+  color: #111827 !important;
+}
+
+/* ─── TIMELINE ───────────────────────────────────────────────────────────────── */
+.timeline {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  margin-top: 8px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.timelineStep {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  min-width: 72px;
+  position: relative;
+}
+
+.timelineConnector {
+  position: absolute;
+  top: 13px;
+  left: calc(50% + 13px);
+  right: calc(-50% + 13px);
+  height: 2px;
+  z-index: 0;
+}
+
+.timelineDot {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  z-index: 1;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.timelineLabel {
+  font-size: 0.68rem !important;
+  font-weight: 400;
+  margin-top: 6px !important;
+  text-align: center;
+  line-height: 1.3 !important;
+}
+
+.timelineLabelDone {
+  color: #374151 !important;
+  font-weight: 600 !important;
+}
+
+.timelineLabelPending {
+  color: #9ca3af !important;
+}
+
+.timelineFooter {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.timelineNote {
+  font-size: 0.78rem !important;
+  color: #9ca3af !important;
+  font-style: italic !important;
+}
+
+/* ─── STATUS DROPDOWN ROW ────────────────────────────────────────────────────── */
+.statusActionRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btnSave {
+  text-transform: none !important;
+  font-size: 0.78rem !important;
+  background-color: #4f67f5 !important;
+  color: #fff !important;
+  border-radius: 7px !important;
+  padding: 3.2px 12px !important;
+  white-space: nowrap;
+}
+.btnSave:hover {
+  background-color: #3d55e0 !important;
+}
+
+/* ─── TABLE ──────────────────────────────────────────────────────────────────── */
+.tableWrapper {
+  margin-top: 4px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.tableHeadCell {
+  font-size: 0.75rem !important;
+  color: #9ca3af !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.03em !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+  padding: 10px 12px !important;
+  background-color: #fafbfc !important;
+  white-space: nowrap;
+}
+
+.tableBodyCell {
+  border-bottom: 1px solid #f9fafb !important;
+  padding: 12px !important;
+}
+
+.productCell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.productIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background-color: #eef2ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.productName {
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+  color: #111827 !important;
+}
+
+.productSku {
+  font-size: 0.72rem !important;
+  color: #9ca3af !important;
+}
+
+.qtyBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  background-color: #f9fafb;
+  border: 1px solid #e8ecf0;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+/* ─── SUMMARY ────────────────────────────────────────────────────────────────── */
+.summarySection {
+  margin-top: 16px;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.summaryLabel {
+  font-size: 0.82rem !important;
+  color: #6b7280 !important;
+}
+
+.summaryValue {
+  font-size: 0.82rem !important;
+  font-weight: 500 !important;
+  color: #374151 !important;
+}
+
+.summaryValueBold {
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  color: #111827 !important;
+}
+
+/* ─── PAYMENT GRID ───────────────────────────────────────────────────────────── */
+.paymentGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.paymentBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3.2px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ─── INFO ITEM ──────────────────────────────────────────────────────────────── */
+.infoItem {
+  min-width: 0;
+}
+
+.infoLabel {
+  font-size: 0.72rem !important;
+  color: #9ca3af !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+  margin-bottom: 3.2px !important;
+}
+
+.infoValue {
+  font-size: 0.85rem !important;
+  font-weight: 500 !important;
+  color: #111827 !important;
+}
+
+.infoValueBold {
+  font-weight: 700 !important;
+}
+
+.infoValueMono {
+  font-family: monospace !important;
+  word-break: break-all;
+}
+
+/* ─── CUSTOMER CARD ──────────────────────────────────────────────────────────── */
+.customerHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  margin-bottom: 16px;
+}
+
+.customerName {
+  font-weight: 700 !important;
+  font-size: 0.95rem !important;
+  color: #111827 !important;
+}
+
+.customerRole {
+  font-size: 0.75rem !important;
+  color: #9ca3af !important;
+}
+
+.contactList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.contactRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.contactIcon {
+  color: #4f67f5;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.contactLabel {
+  font-size: 0.82rem !important;
+  color: #374151 !important;
+  line-height: 1.5 !important;
+  word-break: break-word;
+}
+
+/* ─── DELIVERY CARD ──────────────────────────────────────────────────────────── */
+.deliveryList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.noteBox {
+  padding: 12px;
+  background-color: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 10px;
+}
+
+.noteTitle {
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  color: #92400e !important;
+  margin-bottom: 4px !important;
+}
+
+.noteText {
+  font-size: 0.8rem !important;
+  color: #78350f !important;
+}
+
+/* ─── QUICK ACTIONS ──────────────────────────────────────────────────────────── */
+.quickActionsTitle {
+  font-size: 0.78rem !important;
+  font-weight: 700 !important;
+  color: #9ca3af !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  margin-bottom: 12px !important;
+}
+
+.actionList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ─── NOT FOUND ──────────────────────────────────────────────────────────────── */
+.notFound {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 16px;
+}
+
+.notFoundText {
+  color: #9ca3af !important;
+  font-size: 1rem !important;
+}
+
+/* ─── RESPONSIVE ─────────────────────────────────────────────────────────────── */
+
+/* Tablet: ≤ 960px */
+@media (max-width: 960px) {
+  .mainGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .rightColumn {
+    /* On tablet/mobile, right column comes after left */
+    order: 2;
+  }
+
+  .leftColumn {
+    order: 1;
+  }
+}
+
+/* Mobile: ≤ 600px */
+@media (max-width: 600px) {
+  .pageRoot {
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-bottom: 32px;
+  }
+
+  .topBar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .topBarLeft {
+    flex-wrap: wrap;
+  }
+
+  .topBarActions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .btnBack,
+  .btnSecondary,
+  .btnPrimary {
+    font-size: 0.78rem !important;
+    padding: 5.6px 10px !important;
+  }
+
+  .card {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .mainGrid {
+    gap: 14px;
+  }
+
+  .leftColumn,
+  .rightColumn {
+    gap: 14px;
+  }
+
+  .paymentGrid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .topBarTitle {
+    font-size: 1rem !important;
+  }
+
+  .timelineStep {
+    min-width: 60px;
+  }
+
+  .timelineLabel {
+    font-size: 0.62rem !important;
+  }
+
+  /* Stack status row on mobile */
+  .cardHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .statusActionRow {
+    width: 100%;
+  }
+}
+
+/* Extra small: ≤ 400px */
+@media (max-width: 400px) {
+  .timelineStep {
+    min-width: 54px;
+  }
+
+  .productCell {
+    gap: 8px;
+  }
+
+  .productIcon {
+    width: 34px;
+    height: 34px;
+  }
+}

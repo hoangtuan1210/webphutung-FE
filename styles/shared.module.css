@@ -1,14 +1,8 @@
-:root {
-  --surface: #fff;
-  --muted: #999;
-  --muted2: #777;
-  --border: #e0e0e0;
-  --bg-light: #f7f7f7;
-  --primary: #111;
-  --primary-hover: #333;
-  --danger: #e63946;
-  --success: #2f8d46;
-}
+/* ═══════════════════════════════════════════════════
+   shared.module.css — Client-side shared styles
+   Tokens are defined in globals.css :root.
+   DO NOT redefine :root here.
+   ═══════════════════════════════════════════════════ */
 
 .page {
   padding: 1.5rem 0 4rem;
@@ -19,44 +13,40 @@
   align-items: center;
   gap: 0.4rem;
   font-size: 1rem;
-  color: var(--muted);
+  color: var(--color-muted);
   margin-bottom: 1.25rem;
   flex-wrap: wrap;
 }
 .breadcrumb a {
-  color: var(--primary);
+  color: var(--color-black);
   text-decoration: none;
   transition: color 0.2s;
 }
 .breadcrumb a:hover {
-  color: var(--primary-hover);
+  text-decoration: underline;
 }
-.breadcrumb i {
-  font-size: 0.7rem;
-}
-.breadcrumb span {
-  color: #111;
-  font-weight: 500;
-}
+.breadcrumb i  { font-size: 0.7rem; }
+.breadcrumb span { color: var(--color-black); font-weight: 500; }
 
 .sectionTitle {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #111;
+  color: var(--color-black);
   margin-bottom: 1rem;
 }
 
 .subtitle {
   font-size: 0.9rem;
-  color: #888;
+  color: var(--color-muted);
   margin: 0;
 }
 
+/* ── Tags ── */
 .tag,
 .catTag {
   display: inline-block;
-  background: #f0f0f0;
-  color: #555;
+  background: var(--color-gray-100);
+  color: var(--color-gray-600);
   font-size: 0.7rem;
   font-weight: 700;
   padding: 2px 8px;
@@ -66,61 +56,65 @@
   width: fit-content;
 }
 
+/* ── Filter row & pills ── */
 .filterRow {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
   margin-bottom: 1.75rem;
 }
+
 .filterBtn {
   padding: 0.4rem 1rem;
-  border-radius: 50px;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  color: var(--muted2);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-border);
+  background: var(--color-white);
+  color: var(--color-muted-2);
   font-size: 0.83rem;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: var(--transition-base);
   white-space: nowrap;
 }
 .filterBtn:hover {
-  border-color: var(--primary);
-  color: var(--primary);
-}
-.filterActive {
-  background: var(--primary);
-  color: #fff;
-  border-color: var(--primary);
+  border-color: var(--color-black);
+  color: var(--color-black);
 }
 
+.filterActive {
+  background: var(--color-black);
+  color: var(--color-white);
+  border-color: var(--color-black);
+}
+
+/* ── Cards ── */
 .card {
   display: flex;
   flex-direction: column;
-  border-radius: 12px;
-  border: 1px solid #f0f0f0;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-gray-100);
   overflow: hidden;
-  background: var(--surface);
+  background: var(--color-white);
   transition: box-shadow 0.2s, transform 0.2s;
 }
 .card:hover {
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.08);
   transform: translateY(-2px);
 }
+
 .cardImg {
   position: relative;
   width: 100%;
   aspect-ratio: 16 / 9;
-  background: var(--bg-light);
+  background: var(--color-surface);
   overflow: hidden;
 }
 .cardImgEl {
   object-fit: cover;
   transition: transform 0.4s ease;
 }
-.card:hover .cardImgEl {
-  transform: scale(1.04);
-}
+.card:hover .cardImgEl { transform: scale(1.04); }
+
 .cardInfo {
   padding: 1rem;
   display: flex;
@@ -128,31 +122,25 @@
   gap: 0.5rem;
 }
 
+/* ── Price ── */
 .priceRow {
   display: flex;
   align-items: baseline;
   gap: 0.4rem;
   flex-wrap: wrap;
 }
-.price {
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: var(--danger);
-}
-.oldPrice {
-  font-size: 0.76rem;
-  color: #ccc;
-  text-decoration: line-through;
-}
+.price     { font-size: 0.95rem; font-weight: 700; color: var(--color-accent); }
+.oldPrice  { font-size: 0.76rem; color: var(--color-gray-300); text-decoration: line-through; }
 
+/* ── Badges ── */
 .badge,
 .hotBadge,
 .relatedBadge {
   position: absolute;
   top: 8px;
   left: 8px;
-  background: var(--danger);
-  color: #fff;
+  background: var(--color-accent);
+  color: var(--color-white);
   font-size: 0.7rem;
   font-weight: 700;
   padding: 3px 8px;
@@ -160,22 +148,16 @@
   z-index: 1;
 }
 
+/* ── Empty state ── */
 .empty {
   text-align: center;
   padding: 3.5rem 0;
-  color: #ccc;
+  color: var(--color-gray-300);
 }
-.empty i {
-  font-size: 3rem;
-  display: block;
-  margin-bottom: 0.75rem;
-}
-.empty p {
-  font-size: 0.9rem;
-  margin: 0;
-}
+.empty i { font-size: 3rem; display: block; margin-bottom: 0.75rem; }
+.empty p { font-size: 0.9rem; margin: 0; }
 
-/* reusable button group */
+/* ── Button group ── */
 .btnGroup {
   display: flex;
   gap: 0.75rem;
@@ -183,32 +165,34 @@
 }
 
 .btnPrimary {
-  background: var(--primary);
-  color: #fff;
-  border: 1px solid var(--primary);
-  border-radius: 10px;
+  background: var(--color-black);
+  color: var(--color-white);
+  border: 1px solid var(--color-black);
+  border-radius: var(--radius-lg);
   padding: 0.55rem 0.95rem;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: var(--transition-base);
 }
-.btnPrimary:hover {
-  background: var(--primary-hover);
-}
+.btnPrimary:hover { background: var(--color-secondary); }
 
 .btnOutline {
-  background: #fff;
-  color: var(--primary);
-  border: 1px solid var(--border);
+  background: var(--color-white);
+  color: var(--color-black);
+  border: 1px solid var(--color-border);
 }
 
 .btnDanger {
-  background: var(--danger);
-  color: #fff;
+  background: var(--color-accent);
+  color: var(--color-white);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
 @media (max-width: 768px) {
-  .page {
-    padding: 1.25rem 0 3rem;
-  }
+  .page { padding: 1.25rem 0 3rem; }
 }

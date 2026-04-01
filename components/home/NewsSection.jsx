@@ -3,8 +3,8 @@ import NewsCard from "./NewsCard";
 import { newsList } from "@/data/news";
 import styles from "@/styles/client/home.module.css";
 
-export default function NewsSection() {
-  const highlighted = newsList.slice(0, 4);
+export default function NewsSection({ news }) {
+  const highlighted = news || [];
 
   return (
     <div className="container mt-5">

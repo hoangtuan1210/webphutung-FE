@@ -1,5 +1,4 @@
-"use client";
-import { useState } from "react";
+import { useState, useMemo, useCallback, memo } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Drawer from "@mui/material/Drawer";
@@ -21,12 +20,9 @@ const DRAWER_COLLAPSED = 72;
 
 const cx = (...classes) => classes.filter(Boolean).join(" ");
 
-/* ───────────────── LOGO ───────────────── */
-function Logo({ isExpanded }) {
+const Logo = memo(({ isExpanded }) => {
   return (
-    <Box
-      className={cx(styles.logoWrap, !isExpanded && styles.logoWrapCollapsed)}
-    >
+    <Box className={cx(styles.logoWrap, !isExpanded && styles.logoWrapCollapsed)}>
       <Box className={styles.logoIcon}>
         <FiBarChart2 color="#fff" size={18} />
       </Box>
@@ -37,22 +33,21 @@ function Logo({ isExpanded }) {
       )}
     </Box>
   );
-}
+});
+Logo.displayName = "Logo";
 
-/* ───────────────── SECTION LABEL ───────────────── */
-function SectionLabel({ label, isExpanded }) {
+const SectionLabel = memo(({ label, isExpanded }) => {
   if (!isExpanded) return <Box className={styles.sectionDivider} />;
   return (
     <Typography variant="overline" className={styles.sectionLabel}>
       {label}
     </Typography>
   );
-}
+});
+SectionLabel.displayName = "SectionLabel";
 
-/* ───────────────── NAV ITEM ───────────────── */
-function NavItem({ item, isExpanded, pathname }) {
+const NavItem = memo(({ item, isExpanded, pathname }) => {
   const isActive = pathname === item.href;
-
   return (
     <ListItem disablePadding className={styles.navItemOuter}>
       <ListItemButton
@@ -84,11 +79,11 @@ function NavItem({ item, isExpanded, pathname }) {
       </ListItemButton>
     </ListItem>
   );
-}
+});
+NavItem.displayName = "NavItem";
 
-/* ───────────────── NAV GROUP ───────────────── */
-function NavGroup({ item, isExpanded, pathname, expanded, onToggle }) {
-  const isOpen = expanded.includes(item.label);
+const NavGroup = memo(({ item, isExpanded, pathname, expandedGroups, onToggle }) => {
+  const isOpen = expandedGroups.includes(item.label);
   const isGroupActive = item.children?.some((c) => pathname === c.href);
 
   return (
@@ -178,9 +173,58 @@ function NavGroup({ item, isExpanded, pathname, expanded, onToggle }) {
       </Collapse>
     </Box>
   );
-}
+});
+NavGroup.displayName = "NavGroup";
 
-/* ───────────────── MAIN SIDEBAR ───────────────── */
+const DrawerContent = memo(({ isExpanded, visualWidth, pathname, expandedGroups, toggleExpand }) => (
+  <Box
+    className={styles.drawerPaper}
+    sx={{ width: isExpanded ? DRAWER_EXPANDED : visualWidth }}
+  >
+    <Box className={styles.logoRow}>
+      <Logo isExpanded={isExpanded} />
+    </Box>
+
+    <Divider sx={{ borderColor: "var(--border-color)" }} />
+
+    <Box className={styles.navBox}>
+      {MENU_SECTIONS.map((section) => (
+        <Box key={section.section}>
+          <SectionLabel label={section.section} isExpanded={isExpanded} />
+          <List disablePadding>
+            {section.items.map((item) =>
+              item.children ? (
+                <NavGroup
+                  key={item.label}
+                  item={item}
+                  isExpanded={isExpanded}
+                  pathname={pathname}
+                  expandedGroups={expandedGroups}
+                  onToggle={toggleExpand}
+                />
+              ) : (
+                <NavItem
+                  key={item.href}
+                  item={item}
+                  isExpanded={isExpanded}
+                  pathname={pathname}
+                />
+              )
+            )}
+          </List>
+        </Box>
+      ))}
+    </Box>
+
+    <Divider sx={{ borderColor: "var(--border-color)" }} />
+
+    <Typography className={styles.footer}>
+      {!isExpanded ? "v1.0" : "Version 1.0.0"}
+    </Typography>
+  </Box>
+));
+DrawerContent.displayName = "DrawerContent";
+
 export default function Sidebar({
   mobileOpen,
   onClose,
@@ -189,78 +233,32 @@ export default function Sidebar({
   setIsHovered,
 }) {
   const pathname = usePathname();
-
   const isExpanded = !collapsed || isHovered;
 
-  // ⚠️ width hiển thị (KHÔNG ảnh hưởng layout)
-  const visualWidth = collapsed
+  const visualWidth = useMemo(() => collapsed
     ? isHovered
       ? DRAWER_EXPANDED
       : DRAWER_COLLAPSED
-    : DRAWER_EXPANDED;
+    : DRAWER_EXPANDED, [collapsed, isHovered]);
 
-  // auto expand group active
-  const defaultExpanded = MENU_SECTIONS.flatMap((s) => s.items)
-    .filter((item) => item.children?.some((c) => pathname === c.href))
-    .map((item) => item.label);
+  const defaultExpanded = useMemo(() => 
+    MENU_SECTIONS.flatMap((s) => s.items)
+      .filter((item) => item.children?.some((c) => pathname === c.href))
+      .map((item) => item.label),
+    [pathname]
+  );
 
-  const [expanded, setExpanded] = useState(
+  const [expandedGroups, setExpandedGroups] = useState(
     defaultExpanded.length ? defaultExpanded : ["Dashboard"],
   );
 
-  const toggleExpand = (label) =>
-    setExpanded((prev) =>
+  const toggleExpand = useCallback((label) =>
+    setExpandedGroups((prev) =>
       prev.includes(label) ? prev.filter((i) => i !== label) : [...prev, label],
-    );
-
-  const content = (
-    <Box className={styles.drawerPaper} sx={{ width: visualWidth }}>
-      <Box className={styles.logoRow}>
-        <Logo isExpanded={isExpanded} />
-      </Box>
-
-      <Divider sx={{ borderColor: "var(--border-color)" }} />
-
-      <Box className={styles.navBox}>
-        {MENU_SECTIONS.map((section) => (
-          <Box key={section.section}>
-            <SectionLabel label={section.section} isExpanded={isExpanded} />
-            <List disablePadding>
-              {section.items.map((item) =>
-                item.children ? (
-                  <NavGroup
-                    key={item.label}
-                    item={item}
-                    isExpanded={isExpanded}
-                    pathname={pathname}
-                    expanded={expanded}
-                    onToggle={toggleExpand}
-                  />
-                ) : (
-                  <NavItem
-                    key={item.href}
-                    item={item}
-                    isExpanded={isExpanded}
-                    pathname={pathname}
-                  />
-                ),
-              )}
-            </List>
-          </Box>
-        ))}
-      </Box>
-
-      <Divider sx={{ borderColor: "var(--border-color)" }} />
-
-      <Typography className={styles.footer}>
-        {!isExpanded ? "v1.0" : "Version 1.0.0"}
-      </Typography>
-    </Box>
-  );
+    ), []);
 
   return (
     <>
-      {/* MOBILE */}
       <Drawer
         variant="temporary"
         open={mobileOpen}
@@ -274,16 +272,21 @@ export default function Sidebar({
           },
         }}
       >
-        {content}
+        <DrawerContent
+          isExpanded={true}
+          visualWidth={DRAWER_EXPANDED}
+          pathname={pathname}
+          expandedGroups={expandedGroups}
+          toggleExpand={toggleExpand}
+        />
       </Drawer>
 
-      {/* DESKTOP */}
       <Box
         onMouseEnter={() => collapsed && setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         sx={{
           display: { xs: "none", md: "block" },
-          position: "fixed", // 🔥 FIX QUAN TRỌNG
+          position: "fixed",
           top: 0,
           left: 0,
           zIndex: 1200,
@@ -302,7 +305,13 @@ export default function Sidebar({
             },
           }}
         >
-          {content}
+          <DrawerContent
+            isExpanded={isExpanded}
+            visualWidth={visualWidth}
+            pathname={pathname}
+            expandedGroups={expandedGroups}
+            toggleExpand={toggleExpand}
+          />
         </Drawer>
       </Box>
     </>

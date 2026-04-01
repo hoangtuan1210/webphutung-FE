@@ -8,12 +8,13 @@ import {
   FiChevronRight, FiMoreVertical,
   FiTrendingUp, FiTrendingDown,
   FiUsers, FiShoppingBag, FiCalendar,
-  FiChevronLeft,
+  FiChevronLeft, FiDollarSign, FiPackage,
+  FiStar, FiRefreshCw, FiArrowUpRight,
 } from "react-icons/fi";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
   Tooltip, ResponsiveContainer, AreaChart, Area,
-  LineChart, Line,
+  LineChart, Line, PieChart, Pie, Cell,
 } from "recharts";
 import AdminLayout from "@/layouts/AdminLayout";
 
@@ -44,6 +45,40 @@ const GAP        = 20;
 
 const MONTHS_VI = ["Th1","Th2","Th3","Th4","Th5","Th6","Th7","Th8","Th9","Th10","Th11","Th12"];
 const DAYS_VI   = ["CN","T2","T3","T4","T5","T6","T7"];
+
+// ─── EXTRA DATA ───────────────────────────────────────────────────────────────
+const TOP_PRODUCTS = [
+  { name: "Lốp xe Michelin Pilot Street 2", sold: 312, revenue: 265200000, trend: 18 },
+  { name: "Nhớt Motul 3000 4T 20W-50 1L",  sold: 289, revenue:  41905000, trend:  9 },
+  { name: "Đèn LED headlight 35W",          sold: 201, revenue:  37185000, trend: -4 },
+  { name: "Ắc quy Yuasa YTX7A-BS 12V",     sold: 147, revenue:  99960000, trend: 22 },
+  { name: "Bugi NGK Iridium CR8EIX",        sold: 134, revenue:  22110000, trend:  5 },
+];
+
+const RECENT_ORDERS = [
+  { id: "#ORD-10234", customer: "Nguyễn Văn A", amount: 1700000, status: "Hoàn thành",  date: "01/04/2026" },
+  { id: "#ORD-10233", customer: "Trần Thị B",   amount: 3850000, status: "Đang giao",   date: "01/04/2026" },
+  { id: "#ORD-10232", customer: "Lê Minh C",    amount:  560000, status: "Chờ duyệt",   date: "31/03/2026" },
+  { id: "#ORD-10231", customer: "Phạm Thu D",   amount: 2100000, status: "Đang xử lý",  date: "31/03/2026" },
+  { id: "#ORD-10230", customer: "Vũ Hải E",     amount:  850000, status: "Hoàn thành",  date: "30/03/2026" },
+];
+
+const ORDER_STATUS_DATA = [
+  { name: "Hoàn thành", value: 58, color: "#16a34a" },
+  { name: "Đang giao",  value: 22, color: "#2563eb" },
+  { name: "Chờ duyệt", value: 12, color: "#7c3aed" },
+  { name: "Huỷ",        value:  8, color: "#ef4444" },
+];
+
+const STATUS_CFG = {
+  "Hoàn thành": { color: "#16a34a", bg: "#f0fdf4" },
+  "Đang giao":  { color: "#2563eb", bg: "#eff6ff" },
+  "Đang xử lý": { color: "#d97706", bg: "#fffbeb" },
+  "Chờ duyệt":  { color: "#7c3aed", bg: "#f5f3ff" },
+  "Huỷ":        { color: "#ef4444", bg: "#fef2f2" },
+};
+
+const fmtVND = (n) => n.toLocaleString("vi-VN") + "₫";
 
 // ─── CARD SX ─────────────────────────────────────────────────────────────────
 const card = {
@@ -354,10 +389,12 @@ function DashboardPage() {
       >
         {/* Cột trái */}
         <Box sx={{ display: "flex", flexDirection: "column", gap: `${GAP}px` }}>
-          {/* 2 stat cards */}
-          <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: `${GAP}px` }}>
+          {/* 4 KPI stat cards */}
+          <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr 1fr", md: "repeat(4, 1fr)" }, gap: `${GAP}px` }}>
             <StatCard icon={<FiUsers size={22} color="#374151" />}      label="Khách hàng" value="3,782" pct="11.01%" up />
-            <StatCard icon={<FiShoppingBag size={22} color="#374151" />} label="Đơn hàng"   value="5,359" pct="9.05%"  up={false} />
+            <StatCard icon={<FiShoppingBag size={22} color="#374151" />} label="Đơn hàng"  value="5,359" pct="9.05%"  up={false} />
+            <StatCard icon={<FiDollarSign size={22} color="#374151" />}  label="Doanh thu" value="112M₫" pct="18.2%"  up />
+            <StatCard icon={<FiPackage size={22} color="#374151" />}     label="Sản phẩm"  value="248"   pct="4.5%"   up />
           </Box>
 
           {/* Bar chart */}
@@ -417,6 +454,104 @@ function DashboardPage() {
         </Box>
       </Box>
 
+      {/* ── Section 1.5: Bottom row — Top SP + Đơn gần đây + Pie ──────── */}
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: { xs: "1fr", lg: "1fr 1fr 360px" },
+          gap: `${GAP}px`,
+          mb: `${GAP}px`,
+          "& > *": { minWidth: 0 },
+        }}
+      >
+        {/* Top sản phẩm bán chạy */}
+        <Box sx={{ ...card, p: 2.5 }}>
+          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 2 }}>
+            <Typography sx={{ fontWeight: 700, fontSize: "0.95rem", color: "#111827" }}>Top sản phẩm bán chạy</Typography>
+            <Box component={Link} href="/admin/products"
+              sx={{ fontSize: "0.78rem", color: "#4f67f5", display: "flex", alignItems: "center", gap: 0.4, textDecoration: "none", "&:hover": { opacity: 0.8 } }}>
+              Xem tất cả <FiArrowUpRight size={13} />
+            </Box>
+          </Box>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 1.75 }}>
+            {TOP_PRODUCTS.map((p, i) => (
+              <Box key={p.name} sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                <Box sx={{ width: 26, height: 26, borderRadius: "8px", bgcolor: i === 0 ? "#fef3c7" : "#f8fafc", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                  <Typography sx={{ fontSize: "0.72rem", fontWeight: 800, color: i === 0 ? "#d97706" : "#9ca3af" }}>#{i + 1}</Typography>
+                </Box>
+                <Box sx={{ flex: 1, minWidth: 0 }}>
+                  <Typography noWrap sx={{ fontSize: "0.82rem", fontWeight: 600, color: "#111827" }}>{p.name}</Typography>
+                  <Typography sx={{ fontSize: "0.72rem", color: "#9ca3af" }}>{p.sold} đã bán · {fmtVND(p.revenue)}</Typography>
+                </Box>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 0.4, px: 1, py: 0.3, borderRadius: "20px", bgcolor: p.trend >= 0 ? "#f0fdf4" : "#fef2f2", flexShrink: 0 }}>
+                  {p.trend >= 0 ? <FiTrendingUp size={11} color="#16a34a" /> : <FiTrendingDown size={11} color="#ef4444" />}
+                  <Typography sx={{ fontSize: "0.72rem", fontWeight: 700, color: p.trend >= 0 ? "#16a34a" : "#ef4444" }}>{p.trend > 0 ? "+" : ""}{p.trend}%</Typography>
+                </Box>
+              </Box>
+            ))}
+          </Box>
+        </Box>
+
+        {/* Đơn hàng gần đây */}
+        <Box sx={{ ...card, p: 2.5 }}>
+          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 2 }}>
+            <Typography sx={{ fontWeight: 700, fontSize: "0.95rem", color: "#111827" }}>Đơn hàng gần đây</Typography>
+            <Box component={Link} href="/admin/order"
+              sx={{ fontSize: "0.78rem", color: "#4f67f5", display: "flex", alignItems: "center", gap: 0.4, textDecoration: "none", "&:hover": { opacity: 0.8 } }}>
+              Xem tất cả <FiArrowUpRight size={13} />
+            </Box>
+          </Box>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
+            {RECENT_ORDERS.map((o) => {
+              const cfg = STATUS_CFG[o.status] ?? { color: "#6b7280", bg: "#f9fafb" };
+              return (
+                <Box key={o.id} sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                  <Box sx={{ flex: 1, minWidth: 0 }}>
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                      <Typography sx={{ fontSize: "0.8rem", fontWeight: 700, color: "#4f67f5" }}>{o.id}</Typography>
+                      <Typography noWrap sx={{ fontSize: "0.78rem", color: "#6b7280" }}>· {o.customer}</Typography>
+                    </Box>
+                    <Typography sx={{ fontSize: "0.72rem", color: "#9ca3af", mt: 0.2 }}>{o.date}</Typography>
+                  </Box>
+                  <Typography sx={{ fontSize: "0.82rem", fontWeight: 700, color: "#111827", flexShrink: 0 }}>{fmtVND(o.amount)}</Typography>
+                  <Box sx={{ px: 1, py: 0.3, borderRadius: "20px", bgcolor: cfg.bg, flexShrink: 0 }}>
+                    <Typography sx={{ fontSize: "0.7rem", fontWeight: 700, color: cfg.color }}>{o.status}</Typography>
+                  </Box>
+                </Box>
+              );
+            })}
+          </Box>
+        </Box>
+
+        {/* Biểu đồ tỷ lệ đơn hàng */}
+        <Box sx={{ ...card, p: 2.5, display: "flex", flexDirection: "column" }}>
+          <Typography sx={{ fontWeight: 700, fontSize: "0.95rem", color: "#111827", mb: 0.5 }}>Tỷ lệ đơn hàng</Typography>
+          <Typography sx={{ fontSize: "0.75rem", color: "#9ca3af", mb: 2 }}>Phân bổ theo trạng thái</Typography>
+          <Box sx={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <PieChart width={170} height={170}>
+              <Pie data={ORDER_STATUS_DATA} cx={85} cy={85} innerRadius={50} outerRadius={78}
+                dataKey="value" paddingAngle={3} strokeWidth={0}>
+                {ORDER_STATUS_DATA.map((entry) => (
+                  <Cell key={entry.name} fill={entry.color} />
+                ))}
+              </Pie>
+              <Tooltip formatter={(v, n) => [`${v}%`, n]} />
+            </PieChart>
+          </Box>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 1, mt: 1 }}>
+            {ORDER_STATUS_DATA.map((s) => (
+              <Box key={s.name} sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  <Box sx={{ width: 10, height: 10, borderRadius: "3px", bgcolor: s.color, flexShrink: 0 }} />
+                  <Typography sx={{ fontSize: "0.78rem", color: "#374151" }}>{s.name}</Typography>
+                </Box>
+                <Typography sx={{ fontSize: "0.78rem", fontWeight: 700, color: "#111827" }}>{s.value}%</Typography>
+              </Box>
+            ))}
+          </Box>
+        </Box>
+      </Box>
+
       {/* ── Section 2: Statistics + tabs + date picker ──────────────────── */}
       <Box sx={{ ...card, p: 2.5 }}>
         <Box sx={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", mb: 2.5, flexWrap: "wrap", gap: 1.5 }}>
@@ -449,7 +584,6 @@ function DashboardPage() {
               ))}
             </Box>
 
-            {/* ── Date range picker ── */}
             <DateRangePicker value={dateRange} onChange={setDateRange} />
           </Box>
         </Box>

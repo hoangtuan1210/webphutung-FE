@@ -1,0 +1,186 @@
+.page {
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  padding: 2rem 0;
+}
+
+.breadcrumbs {
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.breadcrumbLink {
+  color: #6c757d;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.breadcrumbLink:hover {
+  color: #111;
+}
+
+.breadcrumbActive {
+  color: #111;
+  font-weight: 700;
+}
+
+.breadcrumbSeparator {
+  color: #dee2e6;
+  font-size: 0.7rem;
+}
+
+.sectionTitle {
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid #111;
+  padding-left: 1rem;
+}
+
+.card {
+  border: none !important;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+  border-radius: 1rem !important;
+  overflow: hidden;
+}
+
+.formLabel {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.formInput {
+  border-width: 2px !important;
+  box-shadow: none !important;
+  border-radius: 0.75rem !important;
+}
+
+.formInput:focus {
+  border-color: #111 !important;
+}
+
+.paymentOption {
+  padding: 1rem;
+  border: 2px solid #dee2e6;
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: #f8f9fa;
+}
+
+.paymentOptionActive {
+  border-color: #111 !important;
+  background-color: #fff !important;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.paymentOptionDisabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #f8f9fa;
+}
+
+.paymentRadio {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: 0;
+  cursor: inherit;
+}
+
+.confirmBtn {
+  background-color: #111 !important;
+  color: #fff !important;
+  font-weight: 700;
+  padding: 1rem;
+  border-radius: 50rem !important;
+  border: none !important;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+  transition: all 0.2s ease;
+}
+
+.confirmBtn:active {
+  transform: scale(0.98);
+}
+
+/* Order Summary */
+.summaryCard {
+  position: sticky;
+  top: 6rem;
+}
+
+.itemThumb {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  background: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  padding: 4px;
+}
+
+.thumbImg {
+  object-fit: cover;
+}
+
+.itemQty {
+  font-weight: 700;
+  color: #111;
+}
+
+.divider {
+  border-top: 1px dashed #dee2e6;
+  margin: 1.5rem 0;
+  opacity: 1;
+}
+
+.totalBox {
+  background-color: #111;
+  color: #fff;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.5rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.totalPrice {
+  color: #ffc107;
+  font-weight: 800;
+  margin: 0;
+}
+
+.securityNote {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.8125rem;
+  color: #6c757d;
+}
+
+/* Responsive */
+@media (max-width: 991.98px) {
+  .summaryCard {
+    position: static;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .page {
+    padding: 1.5rem 0;
+  }
+  
+  .sectionTitle {
+    font-size: 1.25rem;
+  }
+}
+
+.cursorPointer {
+  cursor: pointer;
+}

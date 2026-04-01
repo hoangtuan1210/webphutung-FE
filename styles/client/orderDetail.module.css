@@ -1,0 +1,165 @@
+.container {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  padding: 2rem 0;
+}
+
+.title {
+  font-weight: 800;
+  margin-bottom: 2rem;
+  font-size: 1.75rem;
+  color: #111;
+}
+
+.status {
+  padding: 0.5rem 1rem;
+  border-radius: 50rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.pending { background: #fff8e1; color: #f59e0b; }
+.shipping { background: #e0f2fe; color: #0ea5e9; }
+.completed { background: #f0fdf4; color: #22c55e; }
+.cancelled { background: #fef2f2; color: #ef4444; }
+
+.orderCard {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  padding: 2rem;
+  border: 1px solid #f0f0f0;
+}
+
+.itemList {
+  list-style: none;
+  padding: 0;
+}
+
+.item {
+  display: flex;
+  gap: 1.25rem;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid #f8f8f8;
+}
+
+.item:last-child {
+  border-bottom: none;
+}
+
+.itemImage {
+  width: 80px;
+  height: 80px;
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f7f7f7;
+  flex-shrink: 0;
+  border: 1px solid #eee;
+}
+
+.itemInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.itemName {
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+  color: #111;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.itemTotal {
+  font-weight: 700;
+  color: #111;
+  font-size: 1.05rem;
+  text-align: right;
+  min-width: 100px;
+}
+
+.timelineItem {
+  display: flex;
+  gap: 1.5rem;
+  padding-bottom: 2rem;
+  position: relative;
+}
+
+.timelineItem::before {
+  content: '';
+  position: absolute;
+  left: 15px;
+  top: 30px;
+  bottom: 0;
+  width: 2px;
+  background: #f0f0f0;
+}
+
+.timelineItem:last-child::before {
+  display: none;
+}
+
+.timelineIcon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #fff;
+  z-index: 1;
+}
+
+.customerCard {
+  border: none !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
+  border-radius: 16px !important;
+}
+
+.infoSection {
+  margin-bottom: 1.5rem;
+}
+
+.infoLabel {
+  font-size: 0.8rem;
+  color: #6c757d;
+  margin-bottom: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.infoValue {
+  font-weight: 600;
+  color: #111;
+}
+
+/* RESPONSIVE */
+@media (max-width: 767.98px) {
+  .orderCard {
+    padding: 1.25rem;
+  }
+  
+  .item {
+    gap: 1rem;
+  }
+  
+  .itemImage {
+    width: 64px;
+    height: 64px;
+  }
+  
+  .itemName {
+    font-size: 0.9rem;
+  }
+  
+  .itemTotal {
+    min-width: 80px;
+    font-size: 0.95rem;
+  }
+}

@@ -15,21 +15,15 @@ export const MENU_SECTIONS = [
     section: "Danh mục",
     items: [
       {
+        href: "/admin/dashboard",
         label: "Tổng quan",
         icon: <FiGrid />,
-        children: [
-          {
-            href: "/admin/dashboard",
-            label: "Doanh Thu",
-            icon: <FiShoppingBag />,
-          },
-        ],
       },
-      {
-        href: "/admin/profile",
-        label: "Thông tin người dùng",
-        icon: <FiUser />,
-      },
+      // {
+      //   href: "/admin/profile",
+      //   label: "Thông tin người dùng",
+      //   icon: <FiUser />,
+      // },
       {
         label: "Sản phẩm",
         icon: <FiBox />,
@@ -51,12 +45,12 @@ export const MENU_SECTIONS = [
         icon: <FiTable />,
         children: [
           {
-            href: "/admin/news/list",
+            href: "/admin/news",
             label: "Danh sách tin tức",
             icon: <FiTable />,
           },
           {
-            href: "/admin/news/create",
+            href: "/admin/news/add",
             label: "Tạo tin tức",
             icon: <FiTable />,
           },

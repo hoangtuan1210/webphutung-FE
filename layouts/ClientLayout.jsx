@@ -6,8 +6,8 @@ export default function ClientLayout({ children }) {
   return (
     <>
       <Navbar />
-        <CartDrawer />
-        <main className="container mt-4">{children}</main>
+      <CartDrawer />
+      <main>{children}</main>
       <Footer />
     </>
   );

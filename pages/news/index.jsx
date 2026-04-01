@@ -1,11 +1,12 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { newsList, categories } from "@/data/news";
-import styles from "@/styles/newsPage.module.css";
+import Head from "next/head";
+import { newsList as staticNewsList, categories } from "@/data/news";
+import styles from "@/styles/client/newsPage.module.css";
 import ClientLayout from "@/layouts/ClientLayout";
 
-export default function NewsPage() {
+export default function NewsPage({ newsList }) {
   const [activeCategory, setActiveCategory] = useState("Tất cả");
 
   const filtered =
@@ -18,6 +19,13 @@ export default function NewsPage() {
 
   return (
     <ClientLayout>
+      <Head>
+        <title>Tin tức & Blog | Phụ tùng Anh Hậu</title>
+        <meta name="description" content="Cập nhật kiến thức bảo dưỡng xe, xu hướng đồ chơi xe và các chương trình khuyến mãi mới nhất từ Phụ tùng Anh Hậu." />
+        <meta property="og:title" content="Tin tức & Blog | Phụ tùng Anh Hậu" />
+        <meta property="og:description" content="Chia sẻ kinh nghiệm độ xe và tin tức phụ tùng chính hãng." />
+      </Head>
+
       <div className={styles.page}>
         <div className="container">
           <div className={styles.header}>
@@ -125,4 +133,13 @@ export default function NewsPage() {
       </div>
     </ClientLayout>
   );
+}
+
+export async function getStaticProps() {
+  return {
+    props: {
+      newsList: staticNewsList,
+    },
+    revalidate: 3600,
+  };
 }

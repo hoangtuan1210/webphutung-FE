@@ -35,8 +35,7 @@ import {
   FiShoppingCart,
 } from "react-icons/fi";
 import AdminLayout from "@/layouts/AdminLayout";
-
-
+import styles from "../../../../styles/admin/orderDetail.module.css";
 
 // ─── CONFIGS ──────────────────────────────────────────────────────────────────
 const STATUS_CFG = {
@@ -50,36 +49,36 @@ const STATUS_CFG = {
 const TIMELINE = {
   "Hoàn thành": [
     { label: "Đơn hàng đặt", done: true },
-    { label: "Đã xác nhận", done: true },
-    { label: "Đang xử lý", done: true },
-    { label: "Đang giao", done: true },
-    { label: "Hoàn thành", done: true },
+    { label: "Đã xác nhận",  done: true },
+    { label: "Đang xử lý",   done: true },
+    { label: "Đang giao",    done: true },
+    { label: "Hoàn thành",   done: true },
   ],
   "Đang giao": [
     { label: "Đơn hàng đặt", done: true },
-    { label: "Đã xác nhận", done: true },
-    { label: "Đang xử lý", done: true },
-    { label: "Đang giao", done: true },
-    { label: "Hoàn thành", done: false },
+    { label: "Đã xác nhận",  done: true },
+    { label: "Đang xử lý",   done: true },
+    { label: "Đang giao",    done: true },
+    { label: "Hoàn thành",   done: false },
   ],
   "Đang xử lý": [
     { label: "Đơn hàng đặt", done: true },
-    { label: "Đã xác nhận", done: true },
-    { label: "Đang xử lý", done: true },
-    { label: "Đang giao", done: false },
-    { label: "Hoàn thành", done: false },
+    { label: "Đã xác nhận",  done: true },
+    { label: "Đang xử lý",   done: true },
+    { label: "Đang giao",    done: false },
+    { label: "Hoàn thành",   done: false },
   ],
   "Chờ duyệt": [
     { label: "Đơn hàng đặt", done: true },
-    { label: "Đã xác nhận", done: false },
-    { label: "Đang xử lý", done: false },
-    { label: "Đang giao", done: false },
-    { label: "Hoàn thành", done: false },
+    { label: "Đã xác nhận",  done: false },
+    { label: "Đang xử lý",   done: false },
+    { label: "Đang giao",    done: false },
+    { label: "Hoàn thành",   done: false },
   ],
   Huỷ: [
     { label: "Đơn hàng đặt", done: true },
-    { label: "Đã xác nhận", done: false },
-    { label: "Đơn bị huỷ", done: true, cancelled: true },
+    { label: "Đã xác nhận",  done: false },
+    { label: "Đơn bị huỷ",   done: true, cancelled: true },
   ],
 };
 
@@ -111,24 +110,28 @@ export default function OrderDetailPage() {
     setCurrentStatus(order.status);
   }
 
-  const cfg = STATUS_CFG[currentStatus] ?? STATUS_CFG["Chờ duyệt"];
-  const timeline = TIMELINE[currentStatus] ?? TIMELINE["Chờ duyệt"];
+  const cfg        = STATUS_CFG[currentStatus]  ?? STATUS_CFG["Chờ duyệt"];
+  const timeline   = TIMELINE[currentStatus]    ?? TIMELINE["Chờ duyệt"];
   const paymentCfg = PAYMENT_CFG[order?.payment] ?? PAYMENT_CFG["COD"];
 
   const shipping = Math.round(order?.amount * 0.03) || 0;
   const discount = currentStatus === "Hoàn thành" ? 50000 : 0;
-  const total = order ? order.amount + shipping - discount : 0;
+  const total    = order ? order.amount + shipping - discount : 0;
 
   // ─── NOT FOUND ──────────────────────────────────────────────────────────────
   if (router.isReady && !order) {
     return (
-      <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: 400, gap: 2 }}>
+      <Box className={styles.notFound}>
         <FiAlertCircle size={48} color="#e5e7eb" />
-        <Typography sx={{ color: "#9ca3af", fontSize: "1rem" }}>
+        <Typography className={styles.notFoundText}>
           Không tìm thấy đơn hàng <strong>{id}</strong>
         </Typography>
-        <Button component={Link} href="/admin/order" startIcon={<FiArrowLeft size={14} />}
-          sx={{ textTransform: "none", borderRadius: "10px", bgcolor: "#4f67f5", color: "#fff", "&:hover": { bgcolor: "#3d55e0" }, px: 2.5 }}>
+        <Button
+          component={Link}
+          href="/admin/order"
+          startIcon={<FiArrowLeft size={14} />}
+          className={styles.btnPrimary}
+        >
           Quay lại danh sách
         </Button>
       </Box>
@@ -138,109 +141,105 @@ export default function OrderDetailPage() {
   if (!order) return null;
 
   return (
-    <Box sx={{ maxWidth: 1100, mx: "auto", pb: 6 }}>
-      {/* ── Top bar ─────────────────────────────────────────────────────────── */}
-      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 3, flexWrap: "wrap", gap: 2 }}>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+    <Box className={styles.pageRoot}>
+
+      {/* ── Top bar ──────────────────────────────────────────────────────── */}
+      <Box className={styles.topBar}>
+        <Box className={styles.topBarLeft}>
           <Button
             component={Link}
             href="/admin/order"
             startIcon={<FiArrowLeft size={14} />}
-            sx={{
-              textTransform: "none",
-              fontSize: "0.82rem",
-              color: "#6b7280",
-              borderRadius: "9px",
-              border: "1px solid #e8ecf0",
-              px: 1.75,
-              py: 0.7,
-              bgcolor: "#fff",
-              "&:hover": { bgcolor: "#f8fafc", borderColor: "#cbd5e1" },
-            }}
+            className={styles.btnBack}
           >
             Quay lại
           </Button>
           <Box>
-            <Typography sx={{ fontWeight: 700, fontSize: "1.15rem", color: "#111827", lineHeight: 1.2 }}>
-              Chi tiết đơn hàng
-            </Typography>
-            <Typography sx={{ fontSize: "0.78rem", color: "#9ca3af" }}>
+            <Typography className={styles.topBarTitle}>Chi tiết đơn hàng</Typography>
+            <Typography className={styles.topBarMeta}>
               {order.id} · {order.date} {order.time}
             </Typography>
           </Box>
         </Box>
 
-        <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
-          <Button
-            startIcon={<FiPrinter size={13} />}
-            sx={{ textTransform: "none", fontSize: "0.82rem", color: "#374151", border: "1px solid #e8ecf0", borderRadius: "9px", bgcolor: "#fff", px: 1.75, py: 0.7, "&:hover": { bgcolor: "#f8fafc" } }}
-          >
+        <Box className={styles.topBarActions}>
+          <Button startIcon={<FiPrinter size={13} />} className={styles.btnSecondary}>
             In đơn
           </Button>
-          <Button
-            startIcon={<FiDownload size={13} />}
-            sx={{ textTransform: "none", fontSize: "0.82rem", color: "#374151", border: "1px solid #e8ecf0", borderRadius: "9px", bgcolor: "#fff", px: 1.75, py: 0.7, "&:hover": { bgcolor: "#f8fafc" } }}
-          >
+          <Button startIcon={<FiDownload size={13} />} className={styles.btnSecondary}>
             Xuất PDF
           </Button>
           <Button
             component={Link}
             href={`/admin/order/${id}/edit`}
             startIcon={<FiEdit2 size={13} />}
-            sx={{ textTransform: "none", fontSize: "0.82rem", color: "#fff", borderRadius: "9px", bgcolor: "#4f67f5", px: 2, py: 0.7, boxShadow: "0 2px 8px rgba(79,103,245,0.25)", "&:hover": { bgcolor: "#3d55e0" } }}
+            className={styles.btnPrimary}
           >
             Chỉnh sửa
           </Button>
         </Box>
       </Box>
 
-      {/* ── Main grid ───────────────────────────────────────────────────────── */}
-      <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", lg: "1fr 340px" }, gap: 2.5 }}>
+      {/* ── Main grid ────────────────────────────────────────────────────── */}
+      <Box className={styles.mainGrid}>
 
-        {/* ── LEFT COLUMN ─────────────────────────────────────────────────── */}
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 2.5 }}>
+        {/* ── LEFT COLUMN ────────────────────────────────────────────────── */}
+        <Box className={styles.leftColumn}>
 
           {/* Order Timeline */}
-          <Card>
+          <Box className={styles.card}>
             <CardHeader
               icon={<FiPackage size={15} />}
               title="Trạng thái đơn hàng"
               right={
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                <Box className={styles.statusActionRow}>
                   <Select
                     value={currentStatus}
                     onChange={(e) => { setCurrentStatus(e.target.value); setStatusChanged(true); }}
                     size="small"
-                    sx={{ fontSize: "0.8rem", height: 32, minWidth: 140, "& .MuiOutlinedInput-notchedOutline": { borderColor: "#e8ecf0", borderRadius: "8px" } }}
+                    sx={{
+                      fontSize: "0.8rem",
+                      height: 32,
+                      minWidth: 140,
+                      "& .MuiOutlinedInput-notchedOutline": { borderColor: "#e8ecf0", borderRadius: "8px" },
+                    }}
                   >
                     {STATUS_OPTIONS.map((s) => (
                       <MenuItem key={s} value={s} sx={{ fontSize: "0.82rem" }}>{s}</MenuItem>
                     ))}
                   </Select>
                   {statusChanged && (
-                    <Button size="small"
+                    <Button
+                      size="small"
                       onClick={() => setStatusChanged(false)}
-                      sx={{ textTransform: "none", fontSize: "0.78rem", bgcolor: "#4f67f5", color: "#fff", borderRadius: "7px", px: 1.5, py: 0.4, "&:hover": { bgcolor: "#3d55e0" } }}>
+                      className={styles.btnSave}
+                    >
                       Lưu
                     </Button>
                   )}
                 </Box>
               }
             />
-            <Box sx={{ display: "flex", alignItems: "flex-start", gap: 0, mt: 1, overflowX: "auto", pb: 1 }}>
+
+            {/* Steps */}
+            <Box className={styles.timeline}>
               {timeline.map((step, i) => (
-                <Box key={step.label} sx={{ display: "flex", flexDirection: "column", alignItems: "center", flex: 1, minWidth: 80, position: "relative" }}>
-                  {/* Line */}
+                <Box key={step.label} className={styles.timelineStep}>
+                  {/* Connector */}
                   {i < timeline.length - 1 && (
-                    <Box sx={{ position: "absolute", top: 13, left: "calc(50% + 13px)", right: "calc(-50% + 13px)", height: 2, bgcolor: step.done && timeline[i + 1]?.done ? "#4f67f5" : "#e8ecf0", zIndex: 0 }} />
+                    <Box
+                      className={styles.timelineConnector}
+                      sx={{ bgcolor: step.done && timeline[i + 1]?.done ? "#4f67f5" : "#e8ecf0" }}
+                    />
                   )}
                   {/* Dot */}
-                  <Box sx={{
-                    width: 26, height: 26, borderRadius: "50%", zIndex: 1, flexShrink: 0,
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    bgcolor: step.cancelled ? "#fef2f2" : step.done ? "#eef2ff" : "#f9fafb",
-                    border: `2px solid ${step.cancelled ? "#dc2626" : step.done ? "#4f67f5" : "#e8ecf0"}`,
-                  }}>
+                  <Box
+                    className={styles.timelineDot}
+                    sx={{
+                      bgcolor:    step.cancelled ? "#fef2f2" : step.done ? "#eef2ff" : "#f9fafb",
+                      border:     `2px solid ${step.cancelled ? "#dc2626" : step.done ? "#4f67f5" : "#e8ecf0"}`,
+                    }}
+                  >
                     {step.cancelled
                       ? <FiXCircle size={12} color="#dc2626" />
                       : step.done
@@ -248,152 +247,174 @@ export default function OrderDetailPage() {
                         : <Box sx={{ width: 8, height: 8, borderRadius: "50%", bgcolor: "#d1d5db" }} />
                     }
                   </Box>
-                  <Typography sx={{ fontSize: "0.68rem", color: step.done ? "#374151" : "#9ca3af", fontWeight: step.done ? 600 : 400, mt: 0.75, textAlign: "center", lineHeight: 1.3 }}>
+                  <Typography
+                    className={`${styles.timelineLabel} ${step.done ? styles.timelineLabelDone : styles.timelineLabelPending}`}
+                  >
                     {step.label}
                   </Typography>
                 </Box>
               ))}
             </Box>
 
-            {/* Current status badge */}
-            <Box sx={{ mt: 2, pt: 2, borderTop: "1px solid #f1f5f9", display: "flex", alignItems: "center", gap: 1.5 }}>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 0.75, px: 1.25, py: 0.5, borderRadius: "20px", bgcolor: cfg.bg, border: `1px solid ${cfg.border}`, color: cfg.color, fontSize: "0.78rem", fontWeight: 600 }}>
+            {/* Footer badge */}
+            <Box className={styles.timelineFooter}>
+              <Box
+                className={styles.statusBadge}
+                sx={{ bgcolor: cfg.bg, border: `1px solid ${cfg.border}`, color: cfg.color }}
+              >
                 {cfg.icon}
                 {currentStatus}
               </Box>
               {order.note && (
-                <Typography sx={{ fontSize: "0.78rem", color: "#9ca3af", fontStyle: "italic" }}>
+                <Typography className={styles.timelineNote}>
                   Ghi chú: {order.note}
                 </Typography>
               )}
             </Box>
-          </Card>
+          </Box>
 
           {/* Products */}
-          <Card>
+          <Box className={styles.card}>
             <CardHeader icon={<FiShoppingCart size={15} />} title="Sản phẩm đặt hàng" />
-            <TableContainer sx={{ mt: 0.5 }}>
-              <Table size="small">
-                <TableHead>
-                  <TableRow sx={{ "& th": { fontSize: "0.75rem", color: "#9ca3af", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.03em", borderBottom: "1px solid #f1f5f9", py: 1.25, bgcolor: "#fafbfc" } }}>
-                    <TableCell>Sản phẩm</TableCell>
-                    <TableCell align="center">Số lượng</TableCell>
-                    <TableCell align="right">Đơn giá</TableCell>
-                    <TableCell align="right">Thành tiền</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  <TableRow sx={{ "& td": { borderBottom: "1px solid #f9fafb", py: 1.5 } }}>
-                    <TableCell>
-                      <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-                        <Box sx={{ width: 40, height: 40, borderRadius: "8px", bgcolor: "#eef2ff", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                          <FiPackage size={16} color="#4f67f5" />
+            <Box className={styles.tableWrapper}>
+              <TableContainer>
+                <Table size="small">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell className={styles.tableHeadCell}>Sản phẩm</TableCell>
+                      <TableCell className={styles.tableHeadCell} align="center">Số lượng</TableCell>
+                      <TableCell className={styles.tableHeadCell} align="right">Đơn giá</TableCell>
+                      <TableCell className={styles.tableHeadCell} align="right">Thành tiền</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell className={styles.tableBodyCell}>
+                        <Box className={styles.productCell}>
+                          <Box className={styles.productIcon}>
+                            <FiPackage size={16} color="#4f67f5" />
+                          </Box>
+                          <Box>
+                            <Typography className={styles.productName}>{order.product}</Typography>
+                            <Typography className={styles.productSku}>SKU: {order.id}-01</Typography>
+                          </Box>
                         </Box>
-                        <Box>
-                          <Typography sx={{ fontSize: "0.85rem", fontWeight: 600, color: "#111827" }}>{order.product}</Typography>
-                          <Typography sx={{ fontSize: "0.72rem", color: "#9ca3af" }}>SKU: {order.id}-01</Typography>
-                        </Box>
-                      </Box>
-                    </TableCell>
-                    <TableCell align="center">
-                      <Box sx={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 28, height: 28, borderRadius: "7px", bgcolor: "#f9fafb", border: "1px solid #e8ecf0", fontSize: "0.82rem", fontWeight: 600, color: "#374151" }}>
-                        {order.qty}
-                      </Box>
-                    </TableCell>
-                    <TableCell align="right">
-                      <Typography sx={{ fontSize: "0.85rem", color: "#6b7280" }}>{fmtVND(order.unitPrice)}</Typography>
-                    </TableCell>
-                    <TableCell align="right">
-                      <Typography sx={{ fontSize: "0.85rem", fontWeight: 700, color: "#111827" }}>{fmtVND(order.unitPrice * order.qty)}</Typography>
-                    </TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </TableContainer>
+                      </TableCell>
+                      <TableCell className={styles.tableBodyCell} align="center">
+                        <Box className={styles.qtyBadge}>{order.qty}</Box>
+                      </TableCell>
+                      <TableCell className={styles.tableBodyCell} align="right">
+                        <Typography sx={{ fontSize: "0.85rem", color: "#6b7280" }}>
+                          {fmtVND(order.unitPrice)}
+                        </Typography>
+                      </TableCell>
+                      <TableCell className={styles.tableBodyCell} align="right">
+                        <Typography sx={{ fontSize: "0.85rem", fontWeight: 700, color: "#111827" }}>
+                          {fmtVND(order.unitPrice * order.qty)}
+                        </Typography>
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Box>
 
             {/* Summary */}
-            <Box sx={{ mt: 2, borderTop: "1px solid #f1f5f9", pt: 2, display: "flex", flexDirection: "column", gap: 1 }}>
-              <SummaryRow label="Tạm tính" value={fmtVND(order.amount)} />
+            <Box className={styles.summarySection}>
+              <SummaryRow label="Tạm tính"       value={fmtVND(order.amount)} />
               <SummaryRow label="Phí vận chuyển" value={`+${fmtVND(shipping)}`} color="#6b7280" />
               {discount > 0 && <SummaryRow label="Giảm giá" value={`-${fmtVND(discount)}`} color="#16a34a" />}
               <Divider sx={{ my: 0.5, borderColor: "#f1f5f9" }} />
               <SummaryRow label="Tổng cộng" value={fmtVND(total)} bold />
             </Box>
-          </Card>
+          </Box>
 
           {/* Payment */}
-          <Card>
+          <Box className={styles.card}>
             <CardHeader icon={<FiCreditCard size={15} />} title="Thông tin thanh toán" />
-            <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 2, mt: 1 }}>
+            <Box className={styles.paymentGrid}>
               <InfoItem label="Phương thức">
-                <Box sx={{ display: "inline-flex", alignItems: "center", gap: 0.5, px: 1.25, py: 0.4, borderRadius: "20px", bgcolor: paymentCfg.bg, border: `1px solid ${paymentCfg.border}`, color: paymentCfg.color, fontSize: "0.8rem", fontWeight: 600 }}>
+                <Box
+                  className={styles.paymentBadge}
+                  sx={{ bgcolor: paymentCfg.bg, border: `1px solid ${paymentCfg.border}`, color: paymentCfg.color }}
+                >
                   <FiCreditCard size={12} />
                   {order.payment}
                 </Box>
               </InfoItem>
               <InfoItem label="Trạng thái TT">
-                <Box sx={{ display: "inline-flex", alignItems: "center", gap: 0.5, px: 1.25, py: 0.4, borderRadius: "20px", bgcolor: currentStatus === "Hoàn thành" ? "#f0fdf4" : "#fff7ed", border: `1px solid ${currentStatus === "Hoàn thành" ? "#bbf7d0" : "#fed7aa"}`, color: currentStatus === "Hoàn thành" ? "#16a34a" : "#ea580c", fontSize: "0.8rem", fontWeight: 600 }}>
-                  {currentStatus === "Hoàn thành" ? <><FiCheckCircle size={12} /> Đã thanh toán</> : <><FiClock size={12} /> Chưa thanh toán</>}
+                <Box
+                  className={styles.paymentBadge}
+                  sx={{
+                    bgcolor: currentStatus === "Hoàn thành" ? "#f0fdf4" : "#fff7ed",
+                    border:  `1px solid ${currentStatus === "Hoàn thành" ? "#bbf7d0" : "#fed7aa"}`,
+                    color:   currentStatus === "Hoàn thành" ? "#16a34a" : "#ea580c",
+                  }}
+                >
+                  {currentStatus === "Hoàn thành"
+                    ? <><FiCheckCircle size={12} /> Đã thanh toán</>
+                    : <><FiClock size={12} /> Chưa thanh toán</>
+                  }
                 </Box>
               </InfoItem>
               <InfoItem label="Tổng tiền" value={fmtVND(total)} bold />
-              <InfoItem label="Mã đơn" value={order.id} mono />
+              <InfoItem label="Mã đơn"    value={order.id}       mono />
             </Box>
-          </Card>
+          </Box>
         </Box>
 
-        {/* ── RIGHT COLUMN ────────────────────────────────────────────────── */}
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 2.5 }}>
+        {/* ── RIGHT COLUMN ───────────────────────────────────────────────── */}
+        <Box className={styles.rightColumn}>
 
           {/* Customer */}
-          <Card>
+          <Box className={styles.card}>
             <CardHeader icon={<FiUser size={15} />} title="Khách hàng" />
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mt: 1.5, mb: 2 }}>
+            <Box className={styles.customerHeader}>
               <Avatar sx={{ width: 44, height: 44, bgcolor: "#eef2ff", color: "#4f67f5", fontSize: "1rem", fontWeight: 700 }}>
                 {order.customer[0]}
               </Avatar>
               <Box>
-                <Typography sx={{ fontWeight: 700, fontSize: "0.95rem", color: "#111827" }}>{order.customer}</Typography>
-                <Typography sx={{ fontSize: "0.75rem", color: "#9ca3af" }}>Khách hàng</Typography>
+                <Typography className={styles.customerName}>{order.customer}</Typography>
+                <Typography className={styles.customerRole}>Khách hàng</Typography>
               </Box>
             </Box>
-            <Divider sx={{ borderColor: "#f1f5f9", mb: 2 }} />
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
+            <Divider sx={{ borderColor: "#f1f5f9" }} />
+            <Box className={styles.contactList}>
               <ContactRow icon={<FiPhone size={13} />} label={order.phone} />
-              <ContactRow icon={<FiMail size={13} />} label={order.email} />
+              <ContactRow icon={<FiMail size={13} />}  label={order.email} />
               <ContactRow icon={<FiMapPin size={13} />} label={order.address} />
             </Box>
-          </Card>
+          </Box>
 
           {/* Delivery */}
-          <Card>
+          <Box className={styles.card}>
             <CardHeader icon={<FiTruck size={15} />} title="Giao hàng" />
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1.5 }}>
+            <Box className={styles.deliveryList}>
               <InfoItem label="Địa chỉ nhận">
-                <Typography sx={{ fontSize: "0.82rem", color: "#374151", lineHeight: 1.5 }}>{order.address}</Typography>
+                <Typography sx={{ fontSize: "0.82rem", color: "#374151", lineHeight: 1.5 }}>
+                  {order.address}
+                </Typography>
               </InfoItem>
-              <InfoItem label="Ngày đặt" value={`${order.date} lúc ${order.time}`} />
+              <InfoItem label="Ngày đặt"    value={`${order.date} lúc ${order.time}`} />
               <InfoItem label="Dự kiến giao" value={estimateDelivery(order.date)} />
               {order.note && (
-                <Box sx={{ p: 1.5, bgcolor: "#fffbeb", border: "1px solid #fde68a", borderRadius: "10px" }}>
-                  <Typography sx={{ fontSize: "0.75rem", fontWeight: 600, color: "#92400e", mb: 0.5 }}>Ghi chú</Typography>
-                  <Typography sx={{ fontSize: "0.8rem", color: "#78350f" }}>{order.note}</Typography>
+                <Box className={styles.noteBox}>
+                  <Typography className={styles.noteTitle}>Ghi chú</Typography>
+                  <Typography className={styles.noteText}>{order.note}</Typography>
                 </Box>
               )}
             </Box>
-          </Card>
+          </Box>
 
           {/* Quick actions */}
-          <Card sx={{ bgcolor: "#fafbfc" }}>
-            <Typography sx={{ fontSize: "0.78rem", fontWeight: 700, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.05em", mb: 1.5 }}>
-              Thao tác nhanh
-            </Typography>
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+          <Box className={`${styles.card} ${styles.cardGray}`}>
+            <Typography className={styles.quickActionsTitle}>Thao tác nhanh</Typography>
+            <Box className={styles.actionList}>
               {[
-                { label: "Xác nhận đơn hàng", color: "#4f67f5", disabled: currentStatus !== "Chờ duyệt" },
-                { label: "Đánh dấu đang giao", color: "#2563eb", disabled: currentStatus !== "Đang xử lý" },
-                { label: "Hoàn thành đơn", color: "#16a34a", disabled: currentStatus !== "Đang giao" },
-                { label: "Huỷ đơn hàng", color: "#dc2626", disabled: currentStatus === "Hoàn thành" || currentStatus === "Huỷ" },
+                { label: "Xác nhận đơn hàng",    color: "#4f67f5", disabled: currentStatus !== "Chờ duyệt" },
+                { label: "Đánh dấu đang giao",   color: "#2563eb", disabled: currentStatus !== "Đang xử lý" },
+                { label: "Hoàn thành đơn",        color: "#16a34a", disabled: currentStatus !== "Đang giao" },
+                { label: "Huỷ đơn hàng",          color: "#dc2626", disabled: currentStatus === "Hoàn thành" || currentStatus === "Huỷ" },
               ].map((action) => (
                 <Button
                   key={action.label}
@@ -405,27 +426,27 @@ export default function OrderDetailPage() {
                     fontWeight: 500,
                     borderRadius: "9px",
                     py: 0.9,
-                    color: action.disabled ? "#9ca3af" : action.color,
+                    px: 2,
+                    justifyContent: "flex-start",
+                    color:   action.disabled ? "#9ca3af" : action.color,
                     bgcolor: action.disabled ? "#f3f4f6" : `${action.color}10`,
-                    border: `1px solid ${action.disabled ? "#e5e7eb" : `${action.color}30`}`,
+                    border:  `1px solid ${action.disabled ? "#e5e7eb" : `${action.color}30`}`,
                     "&:hover": { bgcolor: action.disabled ? "#f3f4f6" : `${action.color}20` },
                     "&.Mui-disabled": { color: "#9ca3af", bgcolor: "#f3f4f6" },
-                    justifyContent: "flex-start",
-                    px: 2,
                   }}
                 >
                   {action.label}
                 </Button>
               ))}
             </Box>
-          </Card>
+          </Box>
         </Box>
       </Box>
     </Box>
   );
 }
 
-
+// ─── HELPERS ──────────────────────────────────────────────────────────────────
 function estimateDelivery(dateStr) {
   try {
     const [d, m, y] = dateStr.split("/").map(Number);
@@ -434,22 +455,13 @@ function estimateDelivery(dateStr) {
   } catch { return "N/A"; }
 }
 
-function Card({ children, sx = {} }) {
-  return (
-    <Box sx={{ bgcolor: "#fff", borderRadius: "14px", border: "1px solid #f1f5f9", p: 2.5, boxShadow: "0 1px 6px rgba(0,0,0,0.04)", ...sx }}>
-      {children}
-    </Box>
-  );
-}
-
+// ─── SUB-COMPONENTS ───────────────────────────────────────────────────────────
 function CardHeader({ icon, title, right }) {
   return (
-    <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 2 }}>
-      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-        <Box sx={{ width: 28, height: 28, borderRadius: "8px", bgcolor: "#eef2ff", color: "#4f67f5", display: "flex", alignItems: "center", justifyContent: "center" }}>
-          {icon}
-        </Box>
-        <Typography sx={{ fontWeight: 700, fontSize: "0.9rem", color: "#111827" }}>{title}</Typography>
+    <Box className={styles.cardHeader}>
+      <Box className={styles.cardHeaderLeft}>
+        <Box className={styles.cardHeaderIcon}>{icon}</Box>
+        <Typography className={styles.cardHeaderTitle}>{title}</Typography>
       </Box>
       {right}
     </Box>
@@ -458,9 +470,12 @@ function CardHeader({ icon, title, right }) {
 
 function SummaryRow({ label, value, bold, color }) {
   return (
-    <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-      <Typography sx={{ fontSize: "0.82rem", color: "#6b7280" }}>{label}</Typography>
-      <Typography sx={{ fontSize: bold ? "0.95rem" : "0.82rem", fontWeight: bold ? 700 : 500, color: color ?? (bold ? "#111827" : "#374151") }}>
+    <Box className={styles.summaryRow}>
+      <Typography className={styles.summaryLabel}>{label}</Typography>
+      <Typography
+        className={bold ? styles.summaryValueBold : styles.summaryValue}
+        sx={color ? { color } : {}}
+      >
         {value}
       </Typography>
     </Box>
@@ -469,12 +484,12 @@ function SummaryRow({ label, value, bold, color }) {
 
 function InfoItem({ label, value, bold, mono, children }) {
   return (
-    <Box>
-      <Typography sx={{ fontSize: "0.72rem", color: "#9ca3af", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em", mb: 0.4 }}>
-        {label}
-      </Typography>
+    <Box className={styles.infoItem}>
+      <Typography className={styles.infoLabel}>{label}</Typography>
       {children ?? (
-        <Typography sx={{ fontSize: "0.85rem", fontWeight: bold ? 700 : 500, color: "#111827", fontFamily: mono ? "monospace" : "inherit" }}>
+        <Typography
+          className={`${styles.infoValue} ${bold ? styles.infoValueBold : ""} ${mono ? styles.infoValueMono : ""}`}
+        >
           {value}
         </Typography>
       )}
@@ -484,9 +499,9 @@ function InfoItem({ label, value, bold, mono, children }) {
 
 function ContactRow({ icon, label }) {
   return (
-    <Box sx={{ display: "flex", alignItems: "flex-start", gap: 1.25 }}>
-      <Box sx={{ color: "#4f67f5", flexShrink: 0, mt: "1px" }}>{icon}</Box>
-      <Typography sx={{ fontSize: "0.82rem", color: "#374151", lineHeight: 1.5, wordBreak: "break-word" }}>{label}</Typography>
+    <Box className={styles.contactRow}>
+      <Box className={styles.contactIcon}>{icon}</Box>
+      <Typography className={styles.contactLabel}>{label}</Typography>
     </Box>
   );
 }

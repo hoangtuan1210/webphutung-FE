@@ -1,0 +1,149 @@
+
+.page        { composes: page        from "./admin.module.css"; }
+.pageHeader  { composes: pageHeader  from "./admin.module.css"; }
+.pageTitle   { composes: pageTitle   from "./admin.module.css"; }
+.pageSub     { composes: pageSub     from "./admin.module.css"; }
+
+.statsRow    { composes: statsRow    from "./admin.module.css"; }
+.statCard    { composes: statCard    from "./admin.module.css"; }
+.statIcon    { composes: statIcon    from "./admin.module.css"; }
+.statValue   { composes: statValue   from "./admin.module.css"; }
+.statLabel   { composes: statLabel   from "./admin.module.css"; }
+
+.toolbar        { composes: toolbar        from "./admin.module.css"; }
+.searchBox      { composes: searchBox      from "./admin.module.css"; }
+.searchIcon     { composes: searchIcon     from "./admin.module.css"; }
+.searchInput    { composes: searchInput    from "./admin.module.css"; }
+.filters        { composes: filters        from "./admin.module.css"; }
+.filterWrap     { composes: filterWrap     from "./admin.module.css"; }
+.filterIcon     { composes: filterIcon     from "./admin.module.css"; }
+.filterSelect   { composes: filterSelect   from "./admin.module.css"; }
+
+.tableWrap      { composes: tableWrap      from "./admin.module.css"; }
+.tableContainer { composes: tableContainer from "./admin.module.css"; }
+.tableHead      { composes: tableHead      from "./admin.module.css"; }
+.thCell         { composes: thCell         from "./admin.module.css"; }
+.tableRow       { composes: tableRow       from "./admin.module.css"; }
+.tdCell         { composes: tdCell         from "./admin.module.css"; }
+.rowIndex       { composes: rowIndex       from "./admin.module.css"; }
+
+.chip           { composes: chip           from "./admin.module.css"; }
+.chipPublished  { composes: chipPublished  from "./admin.module.css"; }
+.chipDraft      { composes: chipDraft      from "./admin.module.css"; }
+.chipHidden     { composes: chipHidden     from "./admin.module.css"; }
+
+.actions        { composes: actions        from "./admin.module.css"; }
+.actionEdit     { composes: actionEdit     from "./admin.module.css"; }
+.actionDelete   { composes: actionDelete   from "./admin.module.css"; }
+
+.emptyCell      { composes: emptyCell      from "./admin.module.css"; }
+.emptyState     { composes: emptyState     from "./admin.module.css"; }
+
+.btnAdd         { composes: btnAdd         from "./admin.module.css"; }
+
+.btnCancel      { composes: btnCancel      from "./admin.module.css"; }
+.btnSave        { composes: btnSave        from "./admin.module.css"; }
+.btnDelete      { composes: btnDelete      from "./admin.module.css"; }
+
+.drawer         { composes: drawer         from "./admin.module.css"; }
+.drawerHeader   { composes: drawerHeader   from "./admin.module.css"; }
+.drawerTitle    { composes: drawerTitle    from "./admin.module.css"; }
+.drawerSub      { composes: drawerSub      from "./admin.module.css"; }
+.drawerClose    { composes: drawerClose    from "./admin.module.css"; }
+.drawerBody     { composes: drawerBody     from "./admin.module.css"; }
+.drawerFooter   { composes: drawerFooter   from "./admin.module.css"; }
+
+.formGroup      { composes: formGroup      from "./admin.module.css"; }
+.formRow        { composes: formRow        from "./admin.module.css"; }
+.formLabel      { composes: formLabel      from "./admin.module.css"; }
+.required       { composes: required       from "./admin.module.css"; }
+.formInput      { composes: formInput      from "./admin.module.css"; }
+.formSelect     { composes: formSelect     from "./admin.module.css"; }
+.formTextarea   { composes: formTextarea   from "./admin.module.css"; }
+
+.thumbSection          { composes: thumbSection          from "./admin.module.css"; }
+.thumbPreview          { composes: thumbPreview          from "./admin.module.css"; }
+.thumbImg              { composes: thumbImg              from "./admin.module.css"; }
+.thumbPlaceholder      { composes: thumbPlaceholder      from "./admin.module.css"; }
+.thumbPlaceholderText  { composes: thumbPlaceholderText  from "./admin.module.css"; }
+
+.deleteDialog    { composes: deleteDialog   from "./admin.module.css"; }
+.deleteContent   { composes: deleteContent  from "./admin.module.css"; }
+.deleteIconWrap  { composes: deleteIconWrap from "./admin.module.css"; }
+.deleteTitle     { composes: deleteTitle    from "./admin.module.css"; }
+.deleteDesc      { composes: deleteDesc     from "./admin.module.css"; }
+.deleteActions   { composes: deleteActions  from "./admin.module.css"; }
+
+
+.newsInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.newsThumbnail {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+  flex-shrink: 0;
+  border: var(--admin-card-border);
+}
+
+.newsMeta { min-width: 0; }
+
+.newsTitle {
+  font-size: 0.84rem !important;
+  font-weight: 600 !important;
+  color: var(--color-admin-text) !important;
+  line-height: 1.35 !important;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.newsAuthor {
+  font-size: 0.72rem !important;
+  color: var(--color-admin-text-muted) !important;
+  margin-top: 2px !important;
+}
+
+.catBadge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--color-admin-blue);
+  background: var(--color-admin-blue-light);
+  border-radius: var(--radius-sm);
+  padding: 3px 9px;
+  white-space: nowrap;
+}
+
+.viewsWrap {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.viewsIcon { color: var(--color-admin-text-muted); }
+
+.viewsText {
+  font-size: 0.8rem !important;
+  color: var(--color-gray-700) !important;
+  font-weight: 500 !important;
+}
+
+.dateText {
+  font-size: 0.78rem !important;
+  color: var(--color-admin-text-sub) !important;
+}
+
+@media (max-width: 599px) {
+  .thCell:nth-child(5),
+  .tdCell:nth-child(5),
+  .thCell:nth-child(6),
+  .tdCell:nth-child(6) {
+    display: none;
+  }
+}
