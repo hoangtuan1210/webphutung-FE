@@ -29,7 +29,6 @@ import { useRouter } from "next/router";
 
 const PAGE_SIZE = 8;
 
-/* ─── Stat card config ─── */
 const STAT_CARDS = (stats) => [
   { label: "Tổng bài viết", value: stats.total, color: "#3641f5", bg: "#eef2ff", icon: <FiFileText size={18} /> },
   { label: "Đã đăng", value: stats.published, color: "#059669", bg: "#d1fae5", icon: <FiCheckCircle size={18} /> },
@@ -37,7 +36,6 @@ const STAT_CARDS = (stats) => [
   { label: "Đang ẩn", value: stats.hidden, color: "#6b7280", bg: "#f3f4f6", icon: <FiEyeOff size={18} /> },
 ];
 
-/* ─── SORT HEADER ─── */
 const SortHeader = memo(({ label, sortKey, currentSort, onSort }) => {
   const active = currentSort?.key === sortKey;
   const asc = currentSort?.dir === "asc";

@@ -7,9 +7,8 @@ import { toSlug } from "@/utils/slug";
 import { MOCK_PRODUCTS } from "@/data/product";
 import { toast } from "react-hot-toast";
 
-export default function DetailProduct({ slug }) {
-  const product =
-    MOCK_PRODUCTS.find((p) => toSlug(p.name) === slug) ?? MOCK_PRODUCTS[0];
+export default function DetailProduct({ productData }) {
+  const product = productData || MOCK_PRODUCTS[0];
 
   const [activeImg, setActiveImg] = useState(0);
   const [qty, setQty] = useState(1);

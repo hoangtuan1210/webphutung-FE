@@ -4,6 +4,14 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
+        <meta charSet="UTF-8" />
+        <meta
+          name="description"
+          content="Phụ tùng ô tô chính hãng, giá tốt, giao hàng toàn quốc"
+        />
+        <meta name="keywords" content="phụ tùng ô tô, phụ tùng xe hơi, phụ tùng chính hãng, phụ tùng giá tốt, phụ tùng giao hàng toàn quốc" />
+        <meta name="author" content="Phụ tùng ô tô chính hãng" />
+
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link

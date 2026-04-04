@@ -1,6 +1,5 @@
 import Link from "next/link";
 import NewsCard from "./NewsCard";
-import { newsList } from "@/data/news";
 import styles from "@/styles/client/home.module.css";
 
 export default function NewsSection({ news }) {

@@ -12,6 +12,7 @@ import { newsList } from "@/data/news";
 export default function Home({ news }) {
   return (
     <ClientLayout>
+  
       <Head>
         <title>Phụ tùng xe máy - xe điện chính hãng</title>
         <meta name="description" content="Chuyên cung cấp phụ tùng xe máy, xe điện chính hãng, đồ chơi xe cao cấp. Giao hàng toàn quốc, bảo hành uy tín tại Phụ tùng Anh Hậu." />

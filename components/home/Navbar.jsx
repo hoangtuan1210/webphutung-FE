@@ -11,31 +11,66 @@ import { MOCK_PRODUCTS } from "@/data/product";
 
 export default function Navbar() {
   const router = useRouter();
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [topBannerVisible, setTopBannerVisible] = useState(true);
-
-  // Search Suggestion Logic
-  const [searchQuery, setSearchQuery] = useState("");
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const searchRef = useRef(null);
-  const mobileSearchRef = useRef(null);
-
   const cart = useCart();
   const totalQty = cart?.totalQty ?? 0;
   const setIsOpen = cart?.setIsOpen;
 
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [topBannerVisible, setTopBannerVisible] = useState(true);
+  const [categories, setCategories] = useState([]);
+  const [activeDropdown, setActiveDropdown] = useState(null);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isMobileProductsOpen, setIsMobileProductsOpen] = useState(false);
+
+  // Refs
+  const searchRef = useRef(null);
+  const mobileSearchRef = useRef(null);
+  const desktopNavRef = useRef(null);
+  const userRef = useRef(null);
+
+  const currentUser = {
+    name: "Quý khách",
+    avatar: "/default-avatar.png"
+  };
+
+  // Fetch Categories
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch("/api/categories");
+        const data = await res.json();
+        setCategories(data);
+      } catch (err) {
+        console.error("Failed to fetch categories:", err);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  // Handlers
   const toggleSearch = useCallback(() => {
     setIsSearchOpen((p) => !p);
     setSearchQuery("");
     setShowSuggestions(false);
   }, []);
+
   const toggleMobileMenu = useCallback(() => setIsMobileMenuOpen((p) => !p), []);
-  const toggleDropdown = useCallback(() => setIsDropdownOpen((p) => !p), []);
-  const closeDropdown = useCallback(() => setIsDropdownOpen(false), []);
   const closeMobileMenu = useCallback(() => setIsMobileMenuOpen(false), []);
 
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/products?search=${searchQuery}`);
+      setShowSuggestions(false);
+      setIsSearchOpen(false);
+    }
+  };
+
+  // Suggestions Logic
   const suggestions = useMemo(() => {
     if (!searchQuery.trim()) return [];
     const q = searchQuery.toLowerCase();
@@ -46,34 +81,18 @@ export default function Navbar() {
     ).slice(0, 6);
   }, [searchQuery]);
 
+  // Global Click & Scroll Handlers
   useEffect(() => {
     const handleClickOutside = (e) => {
-      // Dropdown menu close
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        closeDropdown();
-      }
-      // Suggestions close
-      if (searchRef.current && !searchRef.current.contains(e.target)) {
-        setShowSuggestions(false);
-      }
-      if (mobileSearchRef.current && !mobileSearchRef.current.contains(e.target)) {
-        // setShowSuggestions(false);
-      }
+      if (searchRef.current && !searchRef.current.contains(e.target)) setShowSuggestions(false);
+      if (desktopNavRef.current && !desktopNavRef.current.contains(e.target)) setActiveDropdown(null);
+      if (userRef.current && !userRef.current.contains(e.target)) setIsUserMenuOpen(false);
     };
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [closeDropdown]);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const isTop = window.scrollY === 0;
-      setTopBannerVisible(isTop);
-    };
+    const handleScroll = () => setTopBannerVisible(window.scrollY === 0);
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
-  useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 992) {
         setIsMobileMenuOpen(false);
@@ -81,20 +100,13 @@ export default function Navbar() {
       }
     };
     window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
-
-  const dropdownRef = useRef(null);
-
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      // Navigate to products with search query
-      // router.push(`/products?search=${searchQuery}`);
-      setShowSuggestions(false);
-      setIsSearchOpen(false);
-    }
-  };
 
   const renderSuggestions = () => {
     if (!showSuggestions || !searchQuery.trim()) return null;
@@ -134,14 +146,10 @@ export default function Navbar() {
 
   return (
     <div className={styles.navbarWrapper}>
-
-      <div
-        className={`${styles.topBanner} ${topBannerVisible ? styles.topBannerVisible : ""}`}
-      >
+      <div className={`${styles.topBanner} ${topBannerVisible ? styles.topBannerVisible : ""}`}>
         <div className={styles.topBannerContent}>
           <span className={styles.topBannerItem}>
-            <i className="bi bi-lightning-charge-fill" /> Phụ tùng xe máy - xe
-            điện chính hãng
+            <i className="bi bi-lightning-charge-fill" /> Phụ tùng xe máy - xe điện chính hãng
           </span>
         </div>
       </div>
@@ -149,102 +157,117 @@ export default function Navbar() {
       <nav className={styles.navbar}>
         <div className={styles.navContainer}>
           <Link href="/" className={styles.logo}>
-            <Image
-              src="/logo.png"
-              alt="Logo"
-              width={140}
-              height={45}
-              priority
-              className={styles.logoImg}
-            />
+            <Image src="/logo.png" alt="Logo" width={140} height={45} priority className={styles.logoImg} />
           </Link>
 
-          <div className={styles.searchWrapper} ref={searchRef}>
+          {/* Search Optimization - Moved out of rightIcons */}
+          <div className={styles.searchContainer} ref={searchRef}>
             <form className={styles.searchDesktop} onSubmit={handleSearchSubmit}>
-              <input
-                className={styles.searchInput}
-                type="text"
-                placeholder="Tìm sản phẩm..."
-                value={searchQuery}
-                onChange={(e) => {
-                  setSearchQuery(e.target.value);
-                  setShowSuggestions(true);
-                }}
-                onFocus={() => setShowSuggestions(true)}
-              />
-              <button className={styles.searchBtn} type="submit">
-                <i className="bi bi-search" />
-              </button>
+              <div className={styles.searchInputWrapper}>
+                <i className={`bi bi-search ${styles.searchIconInside}`} />
+                <input
+                  className={styles.searchInput}
+                  type="text"
+                  placeholder="Tìm kiếm phụ tùng, đồ chơi xe..."
+                  value={searchQuery}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    setShowSuggestions(true);
+                  }}
+                  onFocus={() => setShowSuggestions(true)}
+                />
+                {searchQuery && (
+                  <button type="button" className={styles.clearSearchBtn} onClick={() => setSearchQuery("")}>
+                    <i className="bi bi-x-circle-fill" />
+                  </button>
+                )}
+              </div>
             </form>
             {renderSuggestions()}
           </div>
 
+          <div className={styles.desktopNavWrapper} ref={desktopNavRef}>
+            <ul className={styles.desktopNavList}>
+              {NAV_ITEMS.filter(item => item.label !== "Đơn hàng").map((item, i) => (
+                <li
+                  key={i}
+                  className={styles.desktopNavItem}
+                  onMouseEnter={() => item.label === "Sản phẩm" && setActiveDropdown(item.label)}
+                  onMouseLeave={() => item.label === "Sản phẩm" && setActiveDropdown(null)}
+                >
+                  <Link href={item.href} className={`${styles.desktopNavLink} ${activeDropdown === item.label ? styles.active : ""}`}>
+                    {item.label}
+                    {item.label === "Sản phẩm" && <i className={`bi bi-chevron-down ${styles.chevron}`} />}
+                  </Link>
+
+                  {item.label === "Sản phẩm" && (
+                    <div className={`${styles.categoryDropdown} ${activeDropdown === "Sản phẩm" ? styles.categoryDropdownOpen : ""}`}>
+                      <div className={styles.categoryInner}>
+                        <div className={styles.categoryGrid}>
+                          {categories.map((cat) => (
+                            <Link key={cat.id} href={`/products?category=${cat.name}`} className={styles.categoryLink} onClick={() => setActiveDropdown(null)}>
+                              {cat.name}
+                            </Link>
+                          ))}
+                          <Link href="/products" className={`${styles.categoryLink} ${styles.viewAllCategories}`} onClick={() => setActiveDropdown(null)}>
+                            Xem tất cả sản phẩm <i className="bi bi-arrow-right" />
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+
           <div className={styles.rightIcons}>
-            <button
-              className={`${styles.iconBtn} ${styles.searchToggle}`}
-              onClick={toggleSearch}
-              aria-label="Tìm kiếm"
-            >
+            <button className={`${styles.iconBtn} ${styles.searchToggle}`} onClick={toggleSearch} aria-label="Tìm kiếm">
               <i className="bi bi-search" />
             </button>
 
-            <div className={styles.dropdownWrapper} ref={dropdownRef}>
-              <button
-                className={`${styles.iconBtn}`}
-                onClick={toggleDropdown}
-                aria-label="Menu"
-                aria-expanded={isDropdownOpen}
-              >
-                <i
-                  className={`bi ${isDropdownOpen ? "bi-x-lg" : "bi-list"} fs-5`}
-                />
-              </button>
-              <ul
-                className={`${styles.dropdownMenu} ${isDropdownOpen ? styles.dropdownMenuOpen : ""}`}
-              >
-                {NAV_ITEMS.map((item, i) => (
-                  <li key={i}>
-                    <Link
-                      href={item.href}
-                      className={styles.dropdownItem}
-                      onClick={closeDropdown}
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <button
-              className={`${styles.iconBtn} ${styles.cartBtn}`}
-              onClick={() => setIsOpen?.(true)}
-              aria-label="Giỏ hàng"
-            >
+            <button className={`${styles.iconBtn} ${styles.cartBtn}`} onClick={() => setIsOpen?.(true)} aria-label="Giỏ hàng">
               <i className="bi bi-cart3" />
-              {totalQty > 0 && (
-                <span className={styles.cartBadge}>
-                  {totalQty > 99 ? "99+" : totalQty}
-                </span>
-              )}
+              {totalQty > 0 && <span className={styles.cartBadge}>{totalQty > 99 ? "99+" : totalQty}</span>}
             </button>
 
-            <button
-              className={`${styles.iconBtn} ${styles.hamburger}`}
-              onClick={toggleMobileMenu}
-              aria-label="Menu"
-            >
-              <i
-                className={`bi ${isMobileMenuOpen ? "bi-x-lg" : "bi-list"} fs-5`}
-              />
+            {/* Profile Avatar Dropdown */}
+            <div className={styles.userMenuWrapper} ref={userRef}>
+              <button className={styles.avatarBtn} onClick={() => setIsUserMenuOpen(!isUserMenuOpen)} aria-label="Tài khoản">
+                <div className={styles.avatarImgWrapper}>
+                  <Image src={currentUser.avatar || "/default-avatar.png"} alt="Avatar" width={32} height={32} />
+                </div>
+              </button>
+
+              <div className={`${styles.userDropdown} ${isUserMenuOpen ? styles.userDropdownOpen : ""}`}>
+                <div className={styles.userInfo}>
+                  <p className={styles.userName}>{currentUser.name}</p>
+                  <p className={styles.userRole}>Thành viên</p>
+                </div>
+                <div className={styles.userLinks}>
+                  <Link href="/profile" className={styles.userLink} onClick={() => setIsUserMenuOpen(false)}>
+                    <i className="bi bi-person" /> Thông tin tài khoản
+                  </Link>
+                  <Link href="/order" className={styles.userLink} onClick={() => setIsUserMenuOpen(false)}>
+                    <i className="bi bi-box-seam" /> Đơn hàng của tôi
+                  </Link>
+                  <div className={styles.userDivider} />
+                  <button className={`${styles.userLink} ${styles.logoutBtn}`}>
+                    <i className="bi bi-box-arrow-right" /> Đăng xuất
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <button className={`${styles.iconBtn} ${styles.hamburger}`} onClick={toggleMobileMenu} aria-label="Menu">
+              <i className={`bi ${isMobileMenuOpen ? "bi-x-lg" : "bi-list"} fs-5`} />
             </button>
           </div>
         </div>
       </nav>
 
-      <div
-        className={`${styles.mobileSearch} ${isSearchOpen ? styles.mobileSearchOpen : ""}`}
-      >
+      {/* Mobile Search */}
+      <div className={`${styles.mobileSearch} ${isSearchOpen ? styles.mobileSearchOpen : ""}`}>
         <div className={styles.mobileSearchInner} ref={mobileSearchRef}>
           <form className={styles.mobileSearchForm} onSubmit={handleSearchSubmit}>
             <input
@@ -259,34 +282,38 @@ export default function Navbar() {
               onFocus={() => setShowSuggestions(true)}
               autoFocus
             />
-            <button className={styles.searchBtn} type="submit">
-              <i className="bi bi-search" />
-            </button>
-            <button
-              className={styles.closeSearch}
-              type="button"
-              onClick={() => setIsSearchOpen(false)}
-            >
-              <i className="bi bi-x-lg" />
-            </button>
+            <button className={styles.searchBtn} type="submit"><i className="bi bi-search" /></button>
+            <button className={styles.closeSearch} type="button" onClick={() => setIsSearchOpen(false)}><i className="bi bi-x-lg" /></button>
           </form>
           {renderSuggestions()}
         </div>
       </div>
 
-      <div
-        className={`${styles.mobileMenu} ${isMobileMenuOpen ? styles.mobileMenuOpen : ""}`}
-      >
+      {/* Mobile Menu */}
+      <div className={`${styles.mobileMenu} ${isMobileMenuOpen ? styles.mobileMenuOpen : ""}`}>
         <ul className={styles.mobileNavList}>
           {NAV_ITEMS.map((item, i) => (
             <li key={i} className={styles.mobileNavItem}>
-              <Link
-                href={item.href}
-                className={styles.mobileNavLink}
-                onClick={closeMobileMenu}
-              >
-                {item.label}
-              </Link>
+              {item.label === "Sản phẩm" ? (
+                <>
+                  <div className={styles.mobileNavLink} onClick={() => setIsMobileProductsOpen(!isMobileProductsOpen)} style={{ justifyContent: 'space-between' }}>
+                    <span>{item.label}</span>
+                    <i className={`bi bi-chevron-${isMobileProductsOpen ? 'up' : 'down'}`} />
+                  </div>
+                  <div className={`${styles.mobileSubMenu} ${isMobileProductsOpen ? styles.mobileSubMenuOpen : ""}`}>
+                    {categories.map((cat) => (
+                      <Link key={cat.id} href={`/products?category=${cat.name}`} className={styles.mobileSubNavLink} onClick={closeMobileMenu}>
+                        {cat.name}
+                      </Link>
+                    ))}
+                    <Link href="/products" className={`${styles.mobileSubNavLink} ${styles.viewAllMobile}`} onClick={closeMobileMenu}>Tất cả sản phẩm</Link>
+                  </div>
+                </>
+              ) : (
+                <Link href={item.label === "Đơn hàng" ? "/order" : item.href} className={styles.mobileNavLink} onClick={closeMobileMenu}>
+                  {item.label}
+                </Link>
+              )}
             </li>
           ))}
         </ul>

@@ -20,12 +20,19 @@ export default function NewsDetailPage({ article }) {
   return (
     <ClientLayout>
       <Head>
-        <title>{article.title} | Phụ tùng Anh Hậu</title>
+        <title>{article.title} | Shop Phụ Tùng</title>
         <meta name="description" content={article.excerpt} />
-        <meta property="og:title" content={article.title} />
+
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content={`${article.title} | Shop Phụ Tùng`} />
         <meta property="og:description" content={article.excerpt} />
         <meta property="og:image" content={article.image} />
-        <meta property="og:type" content="article" />
+        <meta property="og:url" content={`https://shopphutung.com/news/${article.slug}`} />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={article.title} />
+        <meta name="twitter:description" content={article.excerpt} />
+        <meta name="twitter:image" content={article.image} />
       </Head>
       <DetailNews article={article} />
     </ClientLayout>
@@ -33,24 +40,13 @@ export default function NewsDetailPage({ article }) {
 }
 
 
-export async function getStaticPaths() {
-  const paths = newsList.map((item) => ({
-    params: { slug: item.slug },
-  }));
 
-  return {
-    paths,
-    fallback: false,
-  };
-}
-
-export async function getStaticProps({ params }) {
+export async function getServerSideProps({ params }) {
   const article = newsList.find((item) => item.slug === params.slug);
 
   return {
     props: {
       article: article || null,
     },
-    revalidate: 3600,
   };
 }

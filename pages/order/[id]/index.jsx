@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
 import ClientLayout from "@/layouts/ClientLayout";
-import styles from "@/styles/client/orderDetail.module.css";
+import styles from "@/styles/client/orderDetail.module.c                                                                                               ss";
 
 const MOCK_ORDERS = [
   {

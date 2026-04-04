@@ -31,7 +31,7 @@ const SLIDES = [
 
 export default function BannerCarousel() {
   return (
-    <div className="container mt-4">
+    <div className="banner-full-width p-0 ">
       <div
         id="bannerCarousel"
         className="carousel slide"
@@ -51,18 +51,19 @@ export default function BannerCarousel() {
           ))}
         </div>
 
-        <div className="carousel-inner rounded-3 overflow-hidden">
+        <div className="carousel-inner overflow-hidden">
           {SLIDES.map((slide, i) => (
             <div key={i} className={`carousel-item ${i === 0 ? "active" : ""}`}>
               <Image
                 src={slide.src}
-                width={1200}
-                height={400}
+                width={1920}
+                height={720}
+                quality={90}
                 alt={slide.title}
                 priority={i === 0}
                 style={{
                   width: "100%",
-                  height: "clamp(220px, 38vw, 460px)",
+                  height: "clamp(300px, 40vw, 550px)",
                   objectFit: "cover",
                 }}
               />

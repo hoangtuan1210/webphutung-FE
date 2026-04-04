@@ -283,7 +283,7 @@
   flex: 1;
 }
 .cardNameLink:hover .cardName {
-  color: #e63946;
+  color: var(--color-primary);
 }
 
 .priceRow {
@@ -292,6 +292,7 @@
 }
 .price {
   composes: price from "../shared.module.css";
+  color: var(--color-primary);
 }
 .oldPrice {
   composes: oldPrice from "../shared.module.css";
@@ -318,7 +319,10 @@
   font-size: 0.8rem;
 }
 .addBtn:hover {
-  background: var(--primary-hover);
+  cursor: pointer;
+  background: var(--color-black) !important;
+  color: #fff !important;
+  opacity: 1;
 }
 
 /* LIST */
@@ -370,7 +374,7 @@
   line-height: 1.4;
 }
 .cardNameLink:hover .listName {
-  color: #e63946;
+  color: var(--color-primary);
 }
 .listDesc {
   font-size: 0.8rem;
@@ -400,7 +404,8 @@
   gap: 0.25rem;
 }
 .detailBtn:hover {
-  color: #111;
+  color: var(--color-primary);
+  opacity: 0.8;
 }
 
 /* EMPTY */
