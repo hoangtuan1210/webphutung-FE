@@ -13,7 +13,6 @@ const STATUS_MAP = {
   cancelled: "Đã hủy",
 };
 
-// ✅ Normalize order từ API → cấu trúc component dùng
 function normalizeOrder(raw) {
   if (!raw) return null;
 
@@ -66,7 +65,7 @@ export default function OrderDetail({ orderData, error }) {
   }
 
   const order = orderData;
-
+  
   return (
     <ClientLayout>
       <div className={styles.container}>
