@@ -117,7 +117,6 @@ export default function ProductsComponent({
         </div>
 
         <div className={styles.mainContent}>
-          {/* Sidebar */}
           <aside className={styles.sidebar}>
             <div className={styles.sidebarCard}>
               <h2 className={styles.sidebarTitle}>
@@ -128,7 +127,7 @@ export default function ProductsComponent({
                   className={`${styles.categoryItem} ${!categoryId ? styles.categoryActive : ""}`}
                   onClick={() =>
                     handleFilterChange({
-                      categoryId: cat.id,
+                      categoryId: "",
                     })
                   }
                 >

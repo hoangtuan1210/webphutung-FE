@@ -5,6 +5,4 @@ export const orderService = {
     const query = new URLSearchParams(params).toString();
     return api.get(`/orders?${query}`);
   },
-
-
 };
