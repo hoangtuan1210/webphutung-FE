@@ -4,18 +4,18 @@ import ProductCard from "./ProductCard";
 import styles from "@/styles/client/home.module.css";
 import { MOCK_PRODUCTS } from "@/data/product";
 
-export default function ProductSection() {
+export default function ProductSection({ products: apiProducts = [], title = "Sản phẩm nổi bật" }) {
   const products = useMemo(() => {
-    return MOCK_PRODUCTS.slice(0, 8).map(p => ({
+    const list = apiProducts.length > 0 ? apiProducts : MOCK_PRODUCTS.slice(0, 8);
+    return list.map(p => ({
       ...p,
-      image: p.images?.[0] || "/placeholder.jpg"
+      image: p.images?.[0]?.url || p.image || "/placeholder.jpg"
     }));
-  }, []);
+  }, [apiProducts]);
 
   return (
     <div className="container mt-5" id="products">
-      <h3 className={styles.productTitle}>Sản phẩm nổi bật</h3>
-
+      <h3 className={styles.productTitle}>{title}</h3> {/* ✅ dynamic title */}
       <div className="row g-4">
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />

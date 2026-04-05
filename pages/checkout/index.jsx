@@ -88,13 +88,6 @@ export default function Checkout() {
           <nav className={styles.breadcrumbs}>
             <Link href="/" className={styles.breadcrumbLink}>Trang chủ</Link>
             <i className={`bi bi-chevron-right ${styles.breadcrumbSeparator}`}></i>
-            <span 
-              className={`${styles.breadcrumbLink} ${styles.cursorPointer}`} 
-              onClick={() => setIsOpen(true)}
-            >
-              Giỏ hàng
-            </span>
-            <i className={`bi bi-chevron-right ${styles.breadcrumbSeparator}`}></i>
             <span className={styles.breadcrumbActive}>Thanh toán</span>
           </nav>
 
@@ -209,7 +202,6 @@ export default function Checkout() {
               </div>
             </div>
 
-            {/* Right: Order Summary */}
             <div className="col-lg-5">
               <div className={`${styles.card} ${styles.summaryCard} card`}>
                 <div className="card-header bg-white border-0 p-4 pb-0">
@@ -245,10 +237,10 @@ export default function Checkout() {
                   </div>
 
                   <div className={styles.totalBox}>
-                    <h5 className="mb-0">Tổng tiền</h5>
+                    <h5 className="mb-0" style={{ color: "#fff"}}>Tổng tiền</h5>
                     <h4 className={styles.totalPrice}>{selectedTotalPrice.toLocaleString("vi-VN")}đ</h4>
                   </div>
-                  
+
                   <div className={styles.securityNote}>
                     <p className="mb-0">
                       <i className="bi bi-shield-check text-success"></i> Đơn hàng được bảo mật & an toàn

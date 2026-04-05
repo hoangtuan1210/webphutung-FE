@@ -3,9 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import styles from "../../styles/client/detailProduct.module.css";
 import { useCart } from "@/context/CartContext";
-import { toSlug } from "@/utils/slug";
 import { MOCK_PRODUCTS } from "@/data/product";
-import { toast } from "react-hot-toast";
 
 export default function DetailProduct({ productData }) {
   const product = productData || MOCK_PRODUCTS[0];
@@ -13,37 +11,40 @@ export default function DetailProduct({ productData }) {
   const [activeImg, setActiveImg] = useState(0);
   const [qty, setQty] = useState(1);
   const [activeTab, setActiveTab] = useState("desc");
-  const images = product.images ?? [product.image];
   const { addToCart, setIsOpen } = useCart();
 
+  const images = (product.images ?? []).map(img =>
+    typeof img === "string" ? img : img.url
+  );
+  const fallbackImg = "/placeholder.jpg";
+
+  const price = parseFloat(product.price) || 0;
+  const comparePrice = parseFloat(product.comparePrice) || 0;
+
+  const categoryName = product.category?.name ?? product.category ?? "";
+  const categorySlug = product.category?.slug ?? "";
+
+  const stock = product.stockQuantity ?? product.stock ?? 0;
+
+  const description = product.description ?? product.desc ?? "";
+
+  const specs = product.specs ?? [];
+  const descDetails = product.descDetails ?? [];
+  const descImages = product.descImages ?? [];
+
   const related = MOCK_PRODUCTS
-    .filter((p) => p.category === product.category && p.id !== product.id)
+    .filter((p) => p.category === categoryName && p.id !== product.id)
     .slice(0, 4);
 
-  const handleAddToCart = () => {
-    addToCart(
-      {
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        image: images[0],
-      },
-      qty,
-    );
+  const cartItem = {
+    id: product.id,
+    name: product.name,
+    price,
+    image: images[0] || fallbackImg,
   };
 
-  const handleBuyNow = () => {
-    addToCart(
-      {
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        image: images[0],
-      },
-      qty,
-    );
-    setIsOpen(true);
-  };
+  const handleAddToCart = () => addToCart(cartItem, qty);
+  const handleBuyNow = () => { addToCart(cartItem, qty); setIsOpen(true); };
 
   return (
     <div className={styles.page}>
@@ -53,6 +54,12 @@ export default function DetailProduct({ productData }) {
           <i className="bi bi-chevron-right" />
           <Link href="/products">Sản phẩm</Link>
           <i className="bi bi-chevron-right" />
+          {categorySlug && (
+            <>
+              <Link href={`/products?category=${categorySlug}`}>{categoryName}</Link>
+              <i className="bi bi-chevron-right" />
+            </>
+          )}
           <span>{product.name}</span>
         </nav>
 
@@ -60,7 +67,7 @@ export default function DetailProduct({ productData }) {
           <div className={styles.gallery}>
             <div className={styles.mainImg}>
               <Image
-                src={product.images[activeImg]}
+                src={images[activeImg] || fallbackImg}
                 fill
                 alt={product.name}
                 className={styles.mainImgEl}
@@ -72,14 +79,14 @@ export default function DetailProduct({ productData }) {
             </div>
 
             <div className={styles.thumbs}>
-              {product.images.map((img, i) => (
+              {images.map((img, i) => (
                 <button
                   key={i}
                   className={`${styles.thumb} ${activeImg === i ? styles.thumbActive : ""}`}
                   onClick={() => setActiveImg(i)}
                 >
                   <Image
-                    src={img}
+                    src={img || fallbackImg}
                     fill
                     alt={`thumb ${i}`}
                     className={styles.thumbImg}
@@ -92,24 +99,24 @@ export default function DetailProduct({ productData }) {
 
           <div className={styles.info}>
             <p className={styles.category}>
-              <i className="bi bi-grid" /> {product.category}
+              <i className="bi bi-grid" /> {categoryName}
             </p>
 
             <h1 className={styles.name}>{product.name}</h1>
 
             <div className={styles.priceRow}>
               <span className={styles.price}>
-                {product.price.toLocaleString("vi-VN")}đ
+                {price.toLocaleString("vi-VN")}đ
               </span>
-              {product.oldPrice && (
-                <span className={styles.oldPrice}>
-                  {product.oldPrice.toLocaleString("vi-VN")}đ
-                </span>
-              )}
-              {product.oldPrice && (
-                <span className={styles.discount}>
-                  -{Math.round((1 - product.price / product.oldPrice) * 100)}%
-                </span>
+              {comparePrice > 0 && (
+                <>
+                  <span className={styles.oldPrice}>
+                    {comparePrice.toLocaleString("vi-VN")}đ
+                  </span>
+                  <span className={styles.discount}>
+                    -{Math.round((1 - price / comparePrice) * 100)}%
+                  </span>
+                </>
               )}
             </div>
 
@@ -118,8 +125,7 @@ export default function DetailProduct({ productData }) {
                 <i className="bi bi-upc-scan" /> Mã SP: <b>{product.sku}</b>
               </span>
               <span className={styles.metaItem}>
-                <i className="bi bi-box-seam" /> Còn <b>{product.stock}</b> sản
-                phẩm
+                <i className="bi bi-box-seam" /> Còn <b>{stock}</b> sản phẩm
               </span>
             </div>
 
@@ -128,19 +134,9 @@ export default function DetailProduct({ productData }) {
             <div className={styles.qtyRow}>
               <span className={styles.qtyLabel}>Số lượng</span>
               <div className={styles.qtyControl}>
-                <button
-                  className={styles.qtyBtn}
-                  onClick={() => setQty((q) => Math.max(1, q - 1))}
-                >
-                  −
-                </button>
+                <button className={styles.qtyBtn} onClick={() => setQty(q => Math.max(1, q - 1))}>−</button>
                 <span className={styles.qtyNum}>{qty}</span>
-                <button
-                  className={styles.qtyBtn}
-                  onClick={() => setQty((q) => q + 1)}
-                >
-                  +
-                </button>
+                <button className={styles.qtyBtn} onClick={() => setQty(q => Math.min(stock, q + 1))}>+</button>
               </div>
             </div>
 
@@ -148,35 +144,19 @@ export default function DetailProduct({ productData }) {
               <button className={styles.btnCart} onClick={handleAddToCart}>
                 <i className="bi bi-cart3" /> Thêm vào giỏ
               </button>
-              <button
-                className={styles.btnBuy}
-                onClick={handleBuyNow}
-              >
+              <button className={styles.btnBuy} onClick={handleBuyNow}>
                 Mua ngay
               </button>
             </div>
 
             <div className={styles.guarantees}>
-              <div className={styles.guarantee}>
-                <i className="bi bi-shield-check" />
-                <span>Hàng chính hãng 100%</span>
-              </div>
-              <div className={styles.guarantee}>
-                <i className="bi bi-arrow-repeat" />
-                <span>Đổi trả trong 7 ngày</span>
-              </div>
-              <div className={styles.guarantee}>
-                <i className="bi bi-truck" />
-                <span>Giao hàng toàn quốc</span>
-              </div>
-              <div className={styles.guarantee}>
-                <i className="bi bi-headset" />
-                <span>Hỗ trợ 24/7</span>
-              </div>
+              <div className={styles.guarantee}><i className="bi bi-shield-check" /><span>Hàng chính hãng 100%</span></div>
+              <div className={styles.guarantee}><i className="bi bi-arrow-repeat" /><span>Đổi trả trong 7 ngày</span></div>
+              <div className={styles.guarantee}><i className="bi bi-truck" /><span>Giao hàng toàn quốc</span></div>
+              <div className={styles.guarantee}><i className="bi bi-headset" /><span>Hỗ trợ 24/7</span></div>
             </div>
           </div>
         </div>
-
 
         <div className={styles.tabs}>
           <div className={styles.tabList}>
@@ -197,15 +177,15 @@ export default function DetailProduct({ productData }) {
           <div className={styles.tabContent}>
             {activeTab === "desc" && (
               <div className={styles.descContent}>
-                <p className={styles.descText}>{product.desc}</p>
+                <p className={styles.descText}>{description}</p>
 
-                {product.descDetails?.length > 0 && (
+                {descDetails.length > 0 && (
                   <div className={styles.descHighlights}>
                     <h6 className={styles.descSubtitle}>
                       <i className="bi bi-stars" /> Điểm nổi bật
                     </h6>
                     <ul className={styles.highlightList}>
-                      {product.descDetails.map((point, i) => (
+                      {descDetails.map((point, i) => (
                         <li key={i}>
                           <i className="bi bi-check-circle-fill" />
                           <span>{point}</span>
@@ -215,19 +195,13 @@ export default function DetailProduct({ productData }) {
                   </div>
                 )}
 
-                {product.descImages?.length > 0 && (
+                {descImages.length > 0 && (
                   <div>
                     <h6 className={styles.descSubtitle}>Hình ảnh thực tế</h6>
                     <div className={styles.descImgGrid}>
-                      {product.descImages.map((img, i) => (
+                      {descImages.map((img, i) => (
                         <div key={i} className={styles.descImgWrap}>
-                          <Image
-                            src={img}
-                            fill
-                            alt={`Hình ảnh ${i + 1}`}
-                            className={styles.descImg}
-                            sizes="(max-width: 768px) 100vw, 50vw"
-                          />
+                          <Image src={img} fill alt={`Hình ảnh ${i + 1}`} className={styles.descImg} sizes="(max-width: 768px) 100vw, 50vw" />
                         </div>
                       ))}
                     </div>
@@ -235,17 +209,22 @@ export default function DetailProduct({ productData }) {
                 )}
               </div>
             )}
+
             {activeTab === "specs" && (
-              <table className={styles.specTable}>
-                <tbody>
-                  {product.specs.map((s, i) => (
-                    <tr key={i}>
-                      <td className={styles.specLabel}>{s.label}</td>
-                      <td className={styles.specValue}>{s.value}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              specs.length > 0 ? (
+                <table className={styles.specTable}>
+                  <tbody>
+                    {specs.map((s, i) => (
+                      <tr key={i}>
+                        <td className={styles.specLabel}>{s.label}</td>
+                        <td className={styles.specValue}>{s.value}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <p className="text-muted">Chưa có thông số kỹ thuật.</p>
+              )
             )}
           </div>
         </div>
@@ -254,42 +233,38 @@ export default function DetailProduct({ productData }) {
           <div className={styles.related}>
             <h4 className={styles.relatedTitle}>Sản phẩm cùng loại</h4>
             <div className="row g-3">
-              {related.map((item) => (
-                <div key={item.id} className="col-6 col-md-3">
-                  <Link
-                    href={`/detail-product/${toSlug(item.name)}`}
-                    className={styles.relatedCard}
-                  >
-                    <div className={styles.relatedImg}>
-                      <Image
-                        src={item.images[0]}
-                        fill
-                        alt={item.name}
-                        className={styles.relatedImgEl}
-                        sizes="(max-width: 576px) 50vw, 25vw"
-                      />
-                      {item.badge && (
-                        <span className={styles.relatedBadge}>
-                          {item.badge}
-                        </span>
-                      )}
-                    </div>
-                    <div className={styles.relatedInfo}>
-                      <p className={styles.relatedName}>{item.name}</p>
-                      <div className={styles.relatedPriceRow}>
-                        <span className={styles.relatedPrice}>
-                          {item.price.toLocaleString("vi-VN")}đ
-                        </span>
-                        {item.oldPrice && (
-                          <span className={styles.relatedOldPrice}>
-                            {item.oldPrice.toLocaleString("vi-VN")}đ
-                          </span>
-                        )}
+              {related.map((item) => {
+                const itemImages = (item.images ?? []).map(img => typeof img === "string" ? img : img.url);
+                const itemPrice = parseFloat(item.price) || 0;
+                const itemOldPrice = parseFloat(item.comparePrice ?? item.oldPrice) || 0;
+
+                return (
+                  <div key={item.id} className="col-6 col-md-3">
+                    {/* ✅ dùng item.slug thay vì toSlug(item.name) */}
+                    <Link href={`/products/${item.slug}`} className={styles.relatedCard}>
+                      <div className={styles.relatedImg}>
+                        <Image
+                          src={itemImages[0] || fallbackImg}
+                          fill
+                          alt={item.name}
+                          className={styles.relatedImgEl}
+                          sizes="(max-width: 576px) 50vw, 25vw"
+                        />
+                        {item.badge && <span className={styles.relatedBadge}>{item.badge}</span>}
                       </div>
-                    </div>
-                  </Link>
-                </div>
-              ))}
+                      <div className={styles.relatedInfo}>
+                        <p className={styles.relatedName}>{item.name}</p>
+                        <div className={styles.relatedPriceRow}>
+                          <span className={styles.relatedPrice}>{itemPrice.toLocaleString("vi-VN")}đ</span>
+                          {itemOldPrice > 0 && (
+                            <span className={styles.relatedOldPrice}>{itemOldPrice.toLocaleString("vi-VN")}đ</span>
+                          )}
+                        </div>
+                      </div>
+                    </Link>
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}

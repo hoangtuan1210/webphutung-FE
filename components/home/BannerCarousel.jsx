@@ -2,34 +2,20 @@ import Image from "next/image";
 import styles from "@/styles/client/banner.module.css";
 import Link from "next/link";
 
-const SLIDES = [
-  {
-    src: "/banner-1.jpg",
-    tag: "Hàng mới về",
-    title: "Phụ tùng chính hãng\nchất lượng cao",
-    desc: "Đa dạng phụ tùng xe máy, xe điện các thương hiệu lớn",
-    btn: "Xem ngay",
-    href: "/products",
-  },
-  {
-    src: "/banner-2.jpg",
-    tag: "Ưu đãi tháng này",
-    title: "Giảm đến 30%\nđồ chơi xe",
-    desc: "Hàng ngàn sản phẩm độ xe giá tốt, giao hàng toàn quốc",
-    btn: "Mua ngay",
-    href: "/products",
-  },
-  {
-    src: "/banner-3.jpg",
-    tag: "Bảo hành 12 tháng",
-    title: "Linh kiện xe điện\nchính hãng",
-    desc: "Cam kết 100% hàng xịn, đổi trả trong 7 ngày",
-    btn: "Khám phá",
-    href: "/products",
-  },
-];
 
-export default function BannerCarousel() {
+export default function BannerCarousel({ banners = [] }) {
+  const slidesToUse = banners.length > 0
+    ? banners.map(b => ({
+      src: b.image,
+      tag: b.title,
+      title: b.title,
+      desc: b.description ,
+      btn: "Xem ngay",
+      href: b.link || "/products"
+    }))
+    : [];
+
+
   return (
     <div className="banner-full-width p-0 ">
       <div
@@ -39,7 +25,7 @@ export default function BannerCarousel() {
         data-bs-interval="5000"
       >
         <div className="carousel-indicators">
-          {SLIDES.map((_, i) => (
+          {slidesToUse.map((_, i) => (
             <button
               key={i}
               type="button"
@@ -52,7 +38,7 @@ export default function BannerCarousel() {
         </div>
 
         <div className="carousel-inner overflow-hidden">
-          {SLIDES.map((slide, i) => (
+          {slidesToUse.map((slide, i) => (
             <div key={i} className={`carousel-item ${i === 0 ? "active" : ""}`}>
               <Image
                 src={slide.src}

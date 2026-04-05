@@ -13,7 +13,7 @@ export const newsList = [
     views: 1250,
     hot: true,
     content: `
-      <p>Trong tháng 3/2026 vừa qua, thị trường phụ tùng xe máy chứng kiến sự bùng nổ của các dòng đồ chơi xe cao cấp. Dưới đây là danh sách những sản phẩm được săn đón nhiều nhất tại cửa hàng Anh Hậu.</p>
+      <p>Trong tháng 3/2026 vừa qua, thị trường phụ tùng xe máy chứng kiến sự bùng nổ của các dòng đồ chơi xe cao cấp. Dưới đây là danh sách những sản phẩm được săn đón nhiều nhất tại cửa hàng .</p>
       <h4>1. Phuộc Ohlins chính hãng</h4>
       <p>Không quá bất ngờ khi Ohlins vẫn giữ vững ngôi vương. Với khả năng vận hành êm ái và thiết kế đẳng cấp, đây là sự lựa chọn hàng đầu cho các dòng xe SH, Exciter và Winner.</p>
       <img src="/tin-tuc-1.jpg" alt="Phuộc Ohlins" />
@@ -21,7 +21,7 @@ export const newsList = [
       <p>Giúp hành trình ga ngắn hơn, xe vọt nhanh hơn. Sản phẩm này đặc biệt được các bạn trẻ yêu thích phong cách thể thao ưa chuộng.</p>
       <h4>3. Đĩa phanh Brembo</h4>
       <p>Đảm bảo an toàn tuyệt đối với hiệu năng phanh vượt trội. Thiết kế CNC tinh xảo giúp làm nổi bật dàn chân của mọi loại xe.</p>
-      <p>Hãy liên hệ ngay với Phụ tùng Anh Hậu để được tư vấn và lắp đặt trực tiếp nhé!</p>
+      <p>Hãy liên hệ ngay với Phụ tùng Shop để được tư vấn và lắp đặt trực tiếp nhé!</p>
     `
   },
   {
@@ -63,7 +63,7 @@ export const newsList = [
       <p>Ốp carbon không chỉ giúp xe nhẹ hơn mà còn mang lại vẻ ngoài cực kỳ sang trọng. Từ dè trước, ốp hông đến tay dắt sau đều được bọc Carbon tinh xảo.</p>
       <h4>Màu sắc Anodized tối giản</h4>
       <p>Các chi tiết nhôm CNC màu đen, xám titan hoặc vàng mờ đang thay thế dần các màu xanh đỏ tím vàng truyền thống. Xu hướng này giúp xe trông cứng cáp và thanh lịch hơn.</p>
-      <p>Đến với Anh Hậu để cập nhật những phụ kiện theo xu hướng mới nhất 2026!</p>
+      <p>Đến với Shop để cập nhật những phụ kiện theo xu hướng mới nhất 2026!</p>
     `
   },
   {

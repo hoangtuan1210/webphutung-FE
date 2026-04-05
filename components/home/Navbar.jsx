@@ -7,7 +7,8 @@ import { useRouter } from "next/navigation";
 import styles from "../../styles/client/navbar.module.css";
 import { useCart } from "@/context/CartContext";
 import { NAV_ITEMS } from "@/section/navbar_item";
-import { MOCK_PRODUCTS } from "@/data/product";
+import { categoryService } from "@/services/categoryService";
+import { productService } from "@/services/productService"; 
 
 export default function Navbar() {
   const router = useRouter();
@@ -16,6 +17,8 @@ export default function Navbar() {
   const setIsOpen = cart?.setIsOpen;
 
   const [searchQuery, setSearchQuery] = useState("");
+  const [suggestions, setSuggestions] = useState([]); 
+  const [loadingSearch, setLoadingSearch] = useState(false); // ✅ loading
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
@@ -26,24 +29,22 @@ export default function Navbar() {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isMobileProductsOpen, setIsMobileProductsOpen] = useState(false);
 
-  // Refs
   const searchRef = useRef(null);
   const mobileSearchRef = useRef(null);
   const desktopNavRef = useRef(null);
   const userRef = useRef(null);
 
   const currentUser = {
-    name: "Quý khách",
-    avatar: "/default-avatar.png"
+    name: "Nguyễn Hoàng Tuấn",
+    avatar: "/default-avatar.png",
   };
 
-  // Fetch Categories
+  // ================= FETCH CATEGORY =================
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await fetch("/api/categories");
-        const data = await res.json();
-        setCategories(data);
+        const res = await categoryService.getCategories();
+        setCategories(res.data || []);
       } catch (err) {
         console.error("Failed to fetch categories:", err);
       }
@@ -51,7 +52,34 @@ export default function Navbar() {
     fetchCategories();
   }, []);
 
-  // Handlers
+  useEffect(() => {
+    if (!searchQuery.trim() || searchQuery.length < 2) {
+      setSuggestions([]);
+      return;
+    }
+
+    const debounce = setTimeout(async () => {
+      try {
+        setLoadingSearch(true);
+
+        const res = await productService.getProducts({
+          limit: 6,
+          search: searchQuery, 
+        });
+
+        setSuggestions(res.data?.data?.data || []);
+      } catch (err) {
+        console.error("Search error:", err);
+        setSuggestions([]);
+      } finally {
+        setLoadingSearch(false);
+      }
+    }, 400);
+
+    return () => clearTimeout(debounce);
+  }, [searchQuery]);
+
+  // ================= HANDLER =================
   const toggleSearch = useCallback(() => {
     setIsSearchOpen((p) => !p);
     setSearchQuery("");
@@ -70,24 +98,14 @@ export default function Navbar() {
     }
   };
 
-  // Suggestions Logic
-  const suggestions = useMemo(() => {
-    if (!searchQuery.trim()) return [];
-    const q = searchQuery.toLowerCase();
-    return MOCK_PRODUCTS.filter(p =>
-      p.name.toLowerCase().includes(q) ||
-      p.category.toLowerCase().includes(q) ||
-      p.brand?.toLowerCase().includes(q)
-    ).slice(0, 6);
-  }, [searchQuery]);
-
-  // Global Click & Scroll Handlers
+  // ================= CLICK OUTSIDE =================
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (searchRef.current && !searchRef.current.contains(e.target)) setShowSuggestions(false);
       if (desktopNavRef.current && !desktopNavRef.current.contains(e.target)) setActiveDropdown(null);
       if (userRef.current && !userRef.current.contains(e.target)) setIsUserMenuOpen(false);
     };
+
     document.addEventListener("mousedown", handleClickOutside);
 
     const handleScroll = () => setTopBannerVisible(window.scrollY === 0);
@@ -108,12 +126,15 @@ export default function Navbar() {
     };
   }, []);
 
+  // ================= RENDER SUGGEST =================
   const renderSuggestions = () => {
     if (!showSuggestions || !searchQuery.trim()) return null;
 
     return (
       <div className={styles.suggestionList}>
-        {suggestions.length > 0 ? (
+        {loadingSearch ? (
+          <div className={styles.noResult}>Đang tìm...</div>
+        ) : suggestions.length > 0 ? (
           <>
             <div className={styles.suggestionHeader}>Sản phẩm gợi ý</div>
             {suggestions.map((p) => (
@@ -128,11 +149,17 @@ export default function Navbar() {
                 }}
               >
                 <div className={styles.suggestionImage}>
-                  <img src={p.images?.[0] || "/placeholder.jpg"} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <img
+                    src={p.images?.[0]?.url || "/placeholder.jpg"} // ✅ fix
+                    alt={p.name}
+                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                  />
                 </div>
                 <div className={styles.suggestionInfo}>
                   <span className={styles.suggestionName}>{p.name}</span>
-                  <span className={styles.suggestionPrice}>{p.price.toLocaleString("vi-VN")}₫</span>
+                  <span className={styles.suggestionPrice}>
+                    {Number(p.price).toLocaleString("vi-VN")}₫
+                  </span>
                 </div>
               </Link>
             ))}
@@ -144,6 +171,7 @@ export default function Navbar() {
     );
   };
 
+  // ================= JSX =================
   return (
     <div className={styles.navbarWrapper}>
       <div className={`${styles.topBanner} ${topBannerVisible ? styles.topBannerVisible : ""}`}>
@@ -160,7 +188,7 @@ export default function Navbar() {
             <Image src="/logo.png" alt="Logo" width={140} height={45} priority className={styles.logoImg} />
           </Link>
 
-          {/* Search Optimization - Moved out of rightIcons */}
+          {/* SEARCH */}
           <div className={styles.searchContainer} ref={searchRef}>
             <form className={styles.searchDesktop} onSubmit={handleSearchSubmit}>
               <div className={styles.searchInputWrapper}>
@@ -186,6 +214,7 @@ export default function Navbar() {
             {renderSuggestions()}
           </div>
 
+
           <div className={styles.desktopNavWrapper} ref={desktopNavRef}>
             <ul className={styles.desktopNavList}>
               {NAV_ITEMS.filter(item => item.label !== "Đơn hàng").map((item, i) => (
@@ -205,7 +234,7 @@ export default function Navbar() {
                       <div className={styles.categoryInner}>
                         <div className={styles.categoryGrid}>
                           {categories.map((cat) => (
-                            <Link key={cat.id} href={`/products?category=${cat.name}`} className={styles.categoryLink} onClick={() => setActiveDropdown(null)}>
+                            <Link key={cat.id} href={`/products?categoryId=${cat.id}`} className={styles.categoryLink} onClick={() => setActiveDropdown(null)}>
                               {cat.name}
                             </Link>
                           ))}
@@ -242,7 +271,7 @@ export default function Navbar() {
               <div className={`${styles.userDropdown} ${isUserMenuOpen ? styles.userDropdownOpen : ""}`}>
                 <div className={styles.userInfo}>
                   <p className={styles.userName}>{currentUser.name}</p>
-                  <p className={styles.userRole}>Thành viên</p>
+                  <p className={styles.userRole}>Khách hàng</p>
                 </div>
                 <div className={styles.userLinks}>
                   <Link href="/profile" className={styles.userLink} onClick={() => setIsUserMenuOpen(false)}>
@@ -302,7 +331,7 @@ export default function Navbar() {
                   </div>
                   <div className={`${styles.mobileSubMenu} ${isMobileProductsOpen ? styles.mobileSubMenuOpen : ""}`}>
                     {categories.map((cat) => (
-                      <Link key={cat.id} href={`/products?category=${cat.name}`} className={styles.mobileSubNavLink} onClick={closeMobileMenu}>
+                      <Link key={cat.id} href={`/products?categoryId=${cat.id}`} className={styles.mobileSubNavLink} onClick={closeMobileMenu}>
                         {cat.name}
                       </Link>
                     ))}

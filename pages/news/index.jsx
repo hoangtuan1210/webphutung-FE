@@ -20,9 +20,9 @@ export default function NewsPage({ newsList }) {
   return (
     <ClientLayout>
       <Head>
-        <title>Tin tức & Blog | Phụ tùng Anh Hậu</title>
-        <meta name="description" content="Cập nhật kiến thức bảo dưỡng xe, xu hướng đồ chơi xe và các chương trình khuyến mãi mới nhất từ Phụ tùng Anh Hậu." />
-        <meta property="og:title" content="Tin tức & Blog | Phụ tùng Anh Hậu" />
+        <title>Tin tức & Blog | Phụ tùng Shop</title>
+        <meta name="description" content="Cập nhật kiến thức bảo dưỡng xe, xu hướng đồ chơi xe và các chương trình khuyến mãi mới nhất từ Phụ tùng Shop." />
+        <meta property="og:title" content="Tin tức & Blog | Phụ tùng Shop" />
         <meta property="og:description" content="Chia sẻ kinh nghiệm độ xe và tin tức phụ tùng chính hãng." />
       </Head>
 

@@ -13,7 +13,7 @@ export default function Footer() {
           <div className={styles.logo}>
             <Image
               src="/logo.png"
-              alt="Anh Hậu Logo"
+              alt="Logo"
               width={160}
               height={50}
               className={styles.logoImg}

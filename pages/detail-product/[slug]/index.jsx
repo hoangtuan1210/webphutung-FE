@@ -1,15 +1,14 @@
 import Head from "next/head";
 import DetailProduct from "@/components/product/DetailProduct";
 import ClientLayout from "@/layouts/ClientLayout";
-import { MOCK_PRODUCTS } from "@/data/product";
-import { toSlug } from "@/utils/slug";
+import { productService } from "@/services/productService";
 
 export default function DetailProductPage({ product }) {
   if (!product) return <div className="p-5 text-center">Sản phẩm không tồn tại</div>;
 
-  const pageTitle = `${product.name} | Phụ tùng Anh Hậu`;
-  const pageDesc = product.desc?.substring(0, 160) || "Phụ tùng chính hãng, chất lượng cao.";
-  const pageImage = product.images?.[0] || "/logo.png";
+  const pageTitle = `${product.name} | Phụ tùng Shop`;
+  const pageDesc = product.metaDescription || product.description?.substring(0, 160) || "Phụ tùng chính hãng, chất lượng cao.";
+  const pageImage = product.images?.[0]?.url || "/logo.png";
 
   return (
     <ClientLayout>
@@ -21,7 +20,7 @@ export default function DetailProductPage({ product }) {
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={pageDesc} />
         <meta property="og:image" content={pageImage} />
-        <meta property="og:url" content={`https://phutunganhhau.com/detail-product/${toSlug(product.name)}`} />
+        <meta property="og:url" content={`https://api-feichi.htechp.com/api/products/slug/${product.slug}`} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={pageDesc} />
@@ -35,10 +34,20 @@ export default function DetailProductPage({ product }) {
 
 export async function getServerSideProps({ params }) {
   const { slug } = params;
-  const product = MOCK_PRODUCTS.find((p) => toSlug(p.name) === slug) || null;
-  return {
-    props: {
-      product,
-    },
-  };
+  
+  try {
+    const res = await productService.getProductBySlug(slug);
+    return {
+      props: {
+        product: res.data || null,
+      },
+    };
+  } catch (error) {
+    console.error("Product Detail Fetch Error:", error);
+    return {
+      props: {
+        product: null,
+      },
+    };
+  }
 }

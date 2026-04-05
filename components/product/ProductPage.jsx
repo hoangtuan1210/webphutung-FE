@@ -1,85 +1,99 @@
 import { useState, useMemo, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { MOCK_PRODUCTS } from "@/data/product";
-import { toSlug } from "@/utils/slug";
 import { useCart } from "@/context/CartContext";
 import styles from "@/styles/admin/productPage.module.css";
 
 const SORT_OPTIONS = [
-  { value: "default", label: "Mặc định" },
-  { value: "price-asc", label: "Giá tăng dần" },
-  { value: "price-desc", label: "Giá giảm dần" },
-  { value: "name-asc", label: "Tên A → Z" },
+  { value: "newest", label: "Mới nhất" },
+  { value: "price_asc", label: "Giá tăng dần" },
+  { value: "price_desc", label: "Giá giảm dần" },
+  { value: "name_asc", label: "Tên A → Z" },
+  { value: "name_desc", label: "Tên Z → A" },
 ];
-
-export default function ProductsComponent() {
+export default function ProductsComponent({
+  initialProducts = [],
+  categories = [],
+  totalCount = 0,
+}) {
+  const router = useRouter();
   const { addToCart } = useCart();
-  const [activeCategory, setActiveCategory] = useState("Tất cả");
-  const [activeBrand, setActiveBrand] = useState("Tất cả");
-  const [sortBy, setSortBy] = useState("default");
-  const [search, setSearch] = useState("");
+  const {
+    categoryId,
+    search: urlSearch,
+    sortBy: urlSortBy,
+    sortOrder: urlSortOrder,
+    page: urlPage,
+  } = router.query;
+
+  const [products, setProducts] = useState(
+    initialProducts.length > 0 ? initialProducts : MOCK_PRODUCTS
+  );
+  const [total, setTotal] = useState(
+    totalCount || MOCK_PRODUCTS.length
+  );
   const [viewMode, setViewMode] = useState("grid");
-  const [currentPage, setCurrentPage] = useState(1);
-  const PAGE_SIZE = 8;
 
-  const dynamicCategories = useMemo(() => {
-    const categories = Array.from(new Set(MOCK_PRODUCTS.map((p) => p.category)));
-    return ["Tất cả", ...categories];
-  }, []);
-
-  const dynamicBrands = useMemo(() => {
-    const brands = Array.from(new Set(MOCK_PRODUCTS.filter(p => !!p.brand).map(p => p.brand)));
-    return ["Tất cả", ...brands];
-  }, []);
-
-  const filtered = useMemo(() => {
-    let list = [...MOCK_PRODUCTS];
-
-    if (activeCategory !== "Tất cả") {
-      list = list.filter((p) => p.category === activeCategory);
-    }
-
-    if (activeBrand !== "Tất cả") {
-      list = list.filter((p) => p.brand === activeBrand);
-    }
-
-    if (search.trim()) {
-      const q = search.toLowerCase();
-      list = list.filter((p) =>
-        p.name.toLowerCase().includes(q) ||
-        p.category.toLowerCase().includes(q) ||
-        p.brand?.toLowerCase().includes(q)
-      );
-    }
-
-    switch (sortBy) {
-      case "price-asc":
-        list.sort((a, b) => a.price - b.price);
-        break;
-      case "price-desc":
-        list.sort((a, b) => b.price - a.price);
-        break;
-      case "name-asc":
-        list.sort((a, b) => a.name.localeCompare(b.name));
-        break;
-    }
-
-    return list;
-  }, [activeCategory, sortBy, search]);
+  const PAGE_SIZE = 12;
 
   useEffect(() => {
-    setCurrentPage(1);
-  }, [activeCategory, activeBrand, sortBy, search]);
+    if (initialProducts.length > 0) {
+      setProducts(initialProducts);
+      setTotal(totalCount);
+    }
+  }, [initialProducts, totalCount]);
 
-  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-  const hasMore = currentPage < totalPages;
-  const pagedProducts = filtered.slice(
-    (currentPage - 1) * PAGE_SIZE,
-    currentPage * PAGE_SIZE,
-  );
+  const handleFilterChange = (updates) => {
+    router.push(
+      {
+        pathname: router.pathname,
+        query: { ...router.query, ...updates, page: 1 },
+      },
+      undefined,
+      { shallow: false }
+    );
+  };
 
+  const handlePageChange = (newPage) => {
+    router.push(
+      {
+        pathname: router.pathname,
+        query: { ...router.query, page: newPage },
+      },
+      undefined,
+      { shallow: false }
+    );
+  };
+
+  const activeCategory = useMemo(() => {
+    if (!categoryId) return "Tất cả";
+    const cat = categories.find((c) => c.id === categoryId);
+    return cat ? cat.name : "Tất cả";
+  }, [categoryId, categories]);
+
+  const currentPage = parseInt(urlPage || "1");
+  const totalPages = Math.ceil(total / PAGE_SIZE);
   const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
+
+  const normalizeProduct = (product) => {
+    const images = (product.images ?? []).map((img) =>
+      typeof img === "string" ? img : img.url
+    );
+    const price = parseFloat(product.price) || 0;
+    const comparePrice = parseFloat(product.comparePrice ?? product.oldPrice) || 0;
+    const categoryName = product.category?.name ?? product.category ?? "";
+    const categorySlug = product.category?.slug ?? "";
+    const image = images[0] || product.image || "/placeholder.jpg";
+
+    return { ...product, images, price, comparePrice, categoryName, categorySlug, image };
+  };
+
+  const normalizedProducts = useMemo(
+    () => products.map(normalizeProduct),
+    [products]
+  );
 
   return (
     <div className={styles.page}>
@@ -94,59 +108,45 @@ export default function ProductsComponent() {
           <div>
             <h1 className={styles.title}>Sản phẩm</h1>
             <p className={styles.count}>
-              Tìm thấy <b>{filtered.length}</b> sản phẩm
+              Tìm thấy <b>{total}</b> sản phẩm
+              {activeCategory !== "Tất cả" && (
+                <> trong danh mục <b>{activeCategory}</b></>
+              )}
             </p>
           </div>
         </div>
 
         <div className={styles.mainContent}>
+          {/* Sidebar */}
           <aside className={styles.sidebar}>
             <div className={styles.sidebarCard}>
               <h2 className={styles.sidebarTitle}>
                 <i className="bi bi-grid-fill" /> Danh mục
               </h2>
               <div className={styles.categoryList}>
-                {dynamicCategories.map((cat) => (
+                <div
+                  className={`${styles.categoryItem} ${!categoryId ? styles.categoryActive : ""}`}
+                  onClick={() =>
+                    handleFilterChange({
+                      categoryId: cat.id,
+                    })
+                  }
+                >
+                  <span>Tất cả</span>
+                </div>
+                {categories.map((cat) => (
                   <div
-                    key={cat}
-                    className={`${styles.categoryItem} ${activeCategory === cat ? styles.categoryActive : ""}`}
-                    onClick={() => setActiveCategory(cat)}
+                    key={cat.id}
+                    className={`${styles.categoryItem} ${categoryId === cat.id ? styles.categoryActive : ""}`}
+                    onClick={() => handleFilterChange({ categoryId: cat.id })}
                   >
-                    <span>{cat}</span>
-                    <span className={styles.filterCount}>
-                      {cat === "Tất cả"
-                        ? MOCK_PRODUCTS.length
-                        : MOCK_PRODUCTS.filter((p) => p.category === cat).length}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className={styles.sidebarCard}>
-              <h2 className={styles.sidebarTitle}>
-                <i className="bi bi-funnel-fill" /> Thương hiệu
-              </h2>
-              <div className={styles.categoryList}>
-                {dynamicBrands.map((brand) => (
-                  <div
-                    key={brand}
-                    className={`${styles.categoryItem} ${activeBrand === brand ? styles.categoryActive : ""}`}
-                    onClick={() => setActiveBrand(brand)}
-                  >
-                    <span>{brand}</span>
-                    <span className={styles.filterCount}>
-                      {brand === "Tất cả"
-                        ? MOCK_PRODUCTS.length
-                        : MOCK_PRODUCTS.filter((p) => p.brand === brand).length}
-                    </span>
+                    <span>{cat.name}</span>
                   </div>
                 ))}
               </div>
             </div>
           </aside>
 
-          {/* Products Area */}
           <div className={styles.productsArea}>
             <div className={styles.toolbar}>
               <div className={styles.searchWrap}>
@@ -155,24 +155,24 @@ export default function ProductsComponent() {
                   type="text"
                   placeholder="Tìm sản phẩm..."
                   className={styles.searchInput}
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
+                  defaultValue={urlSearch || ""}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleFilterChange({ search: e.target.value });
+                    }
+                  }}
+                  onBlur={(e) => handleFilterChange({ search: e.target.value })}
                 />
-                {search && (
-                  <button
-                    className={styles.clearSearch}
-                    onClick={() => setSearch("")}
-                  >
-                    <i className="bi bi-x-lg" />
-                  </button>
-                )}
               </div>
 
               <div className={styles.toolbarRight}>
                 <select
                   className={styles.sortSelect}
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
+                  value={`${urlSortBy || "createdAt"}-${urlSortOrder || "DESC"}`}
+                  onChange={(e) => {
+                    const [sortBy, sortOrder] = e.target.value.split("-");
+                    handleFilterChange({ sortBy, sortOrder });
+                  }}
                 >
                   {SORT_OPTIONS.map((opt) => (
                     <option key={opt.value} value={opt.value}>
@@ -185,14 +185,12 @@ export default function ProductsComponent() {
                   <button
                     className={`${styles.viewBtn} ${viewMode === "grid" ? styles.viewBtnActive : ""}`}
                     onClick={() => setViewMode("grid")}
-                    aria-label="Dạng lưới"
                   >
                     <i className="bi bi-grid" />
                   </button>
                   <button
                     className={`${styles.viewBtn} ${viewMode === "list" ? styles.viewBtnActive : ""}`}
                     onClick={() => setViewMode("list")}
-                    aria-label="Dạng danh sách"
                   >
                     <i className="bi bi-list-ul" />
                   </button>
@@ -200,15 +198,12 @@ export default function ProductsComponent() {
               </div>
             </div>
 
-            {filtered.length === 0 ? (
+            {normalizedProducts.length === 0 ? (
               <div className={styles.empty}>
                 <i className="bi bi-search" />
                 <p>Không tìm thấy sản phẩm nào</p>
                 <button
-                  onClick={() => {
-                    setSearch("");
-                    setActiveCategory("Tất cả");
-                  }}
+                  onClick={() => router.push("/products")}
                   className={styles.resetBtn}
                 >
                   Xoá bộ lọc
@@ -216,31 +211,33 @@ export default function ProductsComponent() {
               </div>
             ) : viewMode === "grid" ? (
               <div className={styles.grid}>
-                {pagedProducts.map((product) => (
+                {normalizedProducts.map((product) => (
                   <div key={product.id} className={styles.gridItem}>
                     <div className={styles.card}>
                       <Link
-                        href={`/detail-product/${toSlug(product.name)}`}
+                        href={`/detail-product/${product.slug}`}
                         className={styles.cardImgLink}
                       >
                         <div className={styles.cardImg}>
                           <Image
-                            src={product.images[0]}
+                            src={product.image}
                             fill
                             alt={product.name}
                             className={styles.cardImgEl}
                             sizes="(max-width: 576px) 50vw, (max-width: 992px) 33vw, 25vw"
                           />
-                          {product.badge && (
-                            <span className={styles.badge}>{product.badge}</span>
+                          {product.comparePrice > 0 && (
+                            <span className={styles.badgeDiscount}>
+                              -{Math.round((1 - product.price / product.comparePrice) * 100)}%
+                            </span>
                           )}
                         </div>
                       </Link>
 
                       <div className={styles.cardInfo}>
-                        <span className={styles.catTag}>{product.category}</span>
+                        <span className={styles.catTag}>{product.categoryName}</span>
                         <Link
-                          href={`/detail-product/${toSlug(product.name)}`}
+                          href={`/detail-product/${product.slug}`}
                           className={styles.cardNameLink}
                         >
                           <h3 className={styles.cardName}>{product.name}</h3>
@@ -249,9 +246,9 @@ export default function ProductsComponent() {
                           <span className={styles.price}>
                             {product.price.toLocaleString("vi-VN")}đ
                           </span>
-                          {product.oldPrice && (
+                          {product.comparePrice > 0 && (
                             <span className={styles.oldPrice}>
-                              {product.oldPrice.toLocaleString("vi-VN")}đ
+                              {product.comparePrice.toLocaleString("vi-VN")}đ
                             </span>
                           )}
                         </div>
@@ -263,9 +260,9 @@ export default function ProductsComponent() {
                                 id: product.id,
                                 name: product.name,
                                 price: product.price,
-                                image: product.images[0],
+                                image: product.image,
                               },
-                              1,
+                              1
                             )
                           }
                         >
@@ -278,36 +275,35 @@ export default function ProductsComponent() {
               </div>
             ) : (
               <div className={styles.list}>
-                {pagedProducts.map((product) => (
+                {normalizedProducts.map((product) => (
                   <div key={product.id} className={styles.listItem}>
                     <Link
-                      href={`/detail-product/${toSlug(product.name)}`}
+                      href={`/detail-product/${product.slug}`}
                       className={styles.listImgLink}
                     >
                       <div className={styles.listImg}>
                         <Image
-                          src={product.images[0]}
+                          src={product.image}
                           fill
                           alt={product.name}
                           className={styles.listImgEl}
                           sizes="120px"
                         />
-                        {product.badge && (
-                          <span className={styles.badge}>{product.badge}</span>
-                        )}
                       </div>
                     </Link>
 
                     <div className={styles.listInfo}>
-                      <span className={styles.catTag}>{product.category}</span>
+                      <span className={styles.catTag}>{product.categoryName}</span>
                       <Link
-                        href={`/detail-product/${toSlug(product.name)}`}
+                        href={`/detail-product/${product.slug}`}
                         className={styles.cardNameLink}
                       >
                         <h3 className={styles.listName}>{product.name}</h3>
                       </Link>
-                      {product.desc && (
-                        <p className={styles.listDesc}>{product.desc}</p>
+                      {product.description && (
+                        <p className={styles.listDesc}>
+                          {product.description.substring(0, 150)}...
+                        </p>
                       )}
                     </div>
 
@@ -316,9 +312,9 @@ export default function ProductsComponent() {
                         <span className={styles.price}>
                           {product.price.toLocaleString("vi-VN")}đ
                         </span>
-                        {product.oldPrice && (
+                        {product.comparePrice > 0 && (
                           <span className={styles.oldPrice}>
-                            {product.oldPrice.toLocaleString("vi-VN")}đ
+                            {product.comparePrice.toLocaleString("vi-VN")}đ
                           </span>
                         )}
                       </div>
@@ -330,50 +326,53 @@ export default function ProductsComponent() {
                               id: product.id,
                               name: product.name,
                               price: product.price,
-                              image: product.images[0],
+                              image: product.image,
                             },
-                            1,
+                            1
                           )
                         }
                       >
                         <i className="bi bi-cart3" /> Thêm vào giỏ
                       </button>
-                      <Link
-                        href={`/detail-product/${toSlug(product.name)}`}
-                        className={styles.detailBtn}
-                      >
-                        Xem chi tiết <i className="bi bi-arrow-right" />
-                      </Link>
                     </div>
                   </div>
                 ))}
               </div>
             )}
 
-            {filtered.length > 0 && (
+            {/* Pagination */}
+            {totalPages > 1 && (
               <div className={styles.paginationArea}>
-                {hasMore && (
-                  <button
-                    className={styles.loadMoreBtn}
-                    onClick={() =>
-                      setCurrentPage((p) => Math.min(totalPages, p + 1))
-                    }
-                  >
-                    Xem thêm
-                  </button>
-                )}
-
                 <div className={styles.pageLinks}>
+                  <button
+                    className={styles.pageLink}
+                    disabled={currentPage === 1}
+                    onClick={() => handlePageChange(currentPage - 1)}
+                  >
+                    <i className="bi bi-chevron-left" />
+                  </button>
+
                   {pageNumbers.map((page) => (
                     <button
                       key={page}
                       className={`${styles.pageLink} ${page === currentPage ? styles.pageLinkActive : ""}`}
-                      onClick={() => setCurrentPage(page)}
+                      onClick={() => handlePageChange(page)}
                     >
                       {page}
                     </button>
                   ))}
+
+                  <button
+                    className={styles.pageLink}
+                    disabled={currentPage === totalPages}
+                    onClick={() => handlePageChange(currentPage + 1)}
+                  >
+                    <i className="bi bi-chevron-right" />
+                  </button>
                 </div>
+                <p className={styles.pageInfo}>
+                  Trang {currentPage} / {totalPages}
+                </p>
               </div>
             )}
           </div>
