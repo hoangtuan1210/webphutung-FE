@@ -1,4 +1,4 @@
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://api-feichi.htechp.com/api";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL ;
 
 export const fetcher = async (url, options = {}) => {
   const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;

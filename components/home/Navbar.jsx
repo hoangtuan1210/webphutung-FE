@@ -8,7 +8,7 @@ import styles from "../../styles/client/navbar.module.css";
 import { useCart } from "@/context/CartContext";
 import { NAV_ITEMS } from "@/section/navbar_item";
 import { categoryService } from "@/services/categoryService";
-import { productService } from "@/services/productService"; 
+import { productService } from "@/services/productService";
 
 export default function Navbar() {
   const router = useRouter();
@@ -17,7 +17,7 @@ export default function Navbar() {
   const setIsOpen = cart?.setIsOpen;
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [suggestions, setSuggestions] = useState([]); 
+  const [suggestions, setSuggestions] = useState([]);
   const [loadingSearch, setLoadingSearch] = useState(false); // ✅ loading
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -39,7 +39,6 @@ export default function Navbar() {
     avatar: "/default-avatar.png",
   };
 
-  // ================= FETCH CATEGORY =================
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -64,7 +63,7 @@ export default function Navbar() {
 
         const res = await productService.getProducts({
           limit: 6,
-          search: searchQuery, 
+          search: searchQuery,
         });
 
         setSuggestions(res.data?.data?.data || []);

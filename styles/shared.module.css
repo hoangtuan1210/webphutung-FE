@@ -166,7 +166,7 @@
   cursor: pointer;
   transition: var(--transition-base);
 }
-.btnPrimary:hover { background: var(--color-secondary); }
+.btnPrimary:hover { background: var(--color-gray-dark); }
 
 .btnOutline {
   background: var(--color-white);

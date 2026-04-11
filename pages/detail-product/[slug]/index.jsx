@@ -20,7 +20,7 @@ export default function DetailProductPage({ product }) {
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={pageDesc} />
         <meta property="og:image" content={pageImage} />
-        <meta property="og:url" content={`https://api-feichi.htechp.com/api/products/slug/${product.slug}`} />
+        <meta property="og:url" content={`https://api-tmdt.librasoft.vn/api/products/slug/${product.slug}`} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={pageDesc} />

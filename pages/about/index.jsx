@@ -1,4 +1,5 @@
 import ClientLayout from "@/layouts/ClientLayout";
+import styles from "@/styles/client/about.module.css";
 
 export default function About() {
   return (
@@ -17,7 +18,7 @@ export default function About() {
             </p>
           </section>
 
-          <section style={{ marginBottom: '2rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', alignItems: 'center' }}>
+          <section className={styles.gridSection}>
             <div>
               <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111', marginBottom: '0.6rem' }}>
                 Sứ mệnh
@@ -37,7 +38,7 @@ export default function About() {
             </div>
           </section>
 
-          <section style={{ marginBottom: '2rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', alignItems: 'center' }}>
+          <section className={styles.gridSection}>
             <div style={{ borderRadius: '10px', overflow: 'hidden', boxShadow: '0 8px 20px rgba(0,0,0,0.08)' }}>
               <img
                 src="/cum-tang-toc.jpg"
@@ -58,16 +59,7 @@ export default function About() {
               </ul>
             </div>
           </section>
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111', marginBottom: '0.6rem' }}>
-              Giá trị cốt lõi
-            </h2>
-            <ul style={{ listStyle: 'disc inside', color: '#555', lineHeight: 1.7 }}>
-              <li>Chất lượng: Sản phẩm được kiểm định khắt khe, bảo hành rõ ràng.</li>
-              <li>Uy tín: Chăm sóc khách hàng tận tâm, xử lý yêu cầu nhanh chóng.</li>
-              <li>Giá cả công bằng: Tối ưu giá bán, thường xuyên khuyến mại.</li>
-              <li>Đa dạng: Phụ tùng cho cả xe máy xăng và xe điện, từ bánh xe đến ắc quy.</li>
-              <li>Tiện lợi: Giao hàng nhanh, hỗ trợ lắp đặt (nếu có) và tư vấn kỹ thuật.</li>
-            </ul>
+
 
           <section>
             <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111', marginBottom: '0.6rem' }}>

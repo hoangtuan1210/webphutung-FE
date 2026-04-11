@@ -1,5 +1,6 @@
 import styles from "@/styles/client/home.module.css";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function WhyChooseUs({ imageSrc }) {
   return (
@@ -36,7 +37,9 @@ export default function WhyChooseUs({ imageSrc }) {
             </ul>
             
             <div className="mt-4">
-               <button className={styles.btnSecondaryOutline}>Tìm hiểu về chúng tôi</button>
+               <Link href="/about">
+                 <button className={styles.btnSecondaryOutline}>Tìm hiểu về chúng tôi</button>
+               </Link>
             </div>
           </div>
         </div>
