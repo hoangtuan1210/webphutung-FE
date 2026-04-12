@@ -1,37 +1,37 @@
 :root {
-  --color-primary:       #e63946;    
-  --color-primary-dark:  #c52d37;
+  --color-primary: #e63946;
+  --color-primary-dark: #c52d37;
   --color-primary-light: #fef2f2;
-  --color-primary-glow:  rgba(230, 57, 70, 0.15);
+  --color-primary-glow: rgba(230, 57, 70, 0.15);
 
-  --color-black:         #111111;   
-  --color-dark:          #1a1a1a;
-  --color-gray-dark:     #333333;
-  --color-gray:          #666666;
-  --color-gray-light:    #f5f5f5;
-  --color-white:         #ffffff;
+  --color-black: #111111;
+  --color-dark: #1a1a1a;
+  --color-gray-dark: #333333;
+  --color-gray: #666666;
+  --color-gray-light: #f5f5f5;
+  --color-white: #ffffff;
 
-  --color-success:       #10b981;
-  --color-warning:       #f59e0b;
-  --color-danger:        #ef4444;
-  --color-info:          #3b82f6;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+  --color-info: #3b82f6;
 
-  --background:          var(--color-white);
-  --foreground:          var(--color-black);
-  --border-color:        #eeeeee;
-  --card-shadow:         0 8px 30px rgba(0, 0, 0, 0.05);
-  --section-bg:          #fafafa;
+  --background: var(--color-white);
+  --foreground: var(--color-black);
+  --border-color: #eeeeee;
+  --card-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+  --section-bg: #fafafa;
 
-  --color-admin-blue:    #2563eb;
-  --color-admin-bg:      #f8f9fc;
+  --color-admin-blue: #2563eb;
+  --color-admin-bg: #f8f9fc;
 
-  --font-main:           'Be Vietnam Pro', sans-serif;
-  --font-heading:        'Outfit', sans-serif;
+  --font-main: 'Be Vietnam Pro', sans-serif;
+  --font-heading: 'Montserrat', sans-serif;
 
-  --radius-sm:           6px;
-  --radius-md:           12px;
-  --radius-lg:           20px;
-  --radius-pill:         100px;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-pill: 100px;
 }
 
 * {
@@ -40,7 +40,8 @@
   margin: 0;
 }
 
-html, body {
+html,
+body {
   max-width: 100vw;
   overflow-x: hidden;
 
@@ -54,7 +55,12 @@ body {
   line-height: 1.6;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-heading);
   font-weight: 700;
   color: var(--color-black);
@@ -71,33 +77,45 @@ ul {
   list-style: none;
 }
 
-/* ─── GLOBAL UTILITIES ────────────────────────────────────────────── */
-.text-primary { color: var(--color-primary); }
-.bg-primary { background-color: var(--color-primary); }
-.bg-dark { background-color: var(--color-black); }
+html {
+  scroll-behavior: smooth;
+}
 
-/* Buttons Overwrite to Red/Black Tone */
+::selection {
+  background-color: var(--color-primary);
+  color: #fff;
+}
+
+.text-primary { color: var(--color-primary); }
+.bg-primary   { background-color: var(--color-primary); }
+.bg-dark      { background-color: var(--color-black); }
+
 .btn-primary {
   background-color: var(--color-primary) !important;
   border-color: var(--color-primary) !important;
   color: white !important;
+  font-weight: 700 !important;
 }
+
 .btn-primary:hover {
   background-color: var(--color-primary-dark) !important;
   box-shadow: 0 4px 15px var(--color-primary-glow);
+  transform: translateY(-1px);
 }
 
 .btn-dark {
   background-color: var(--color-black) !important;
   color: white !important;
-  transition: all 0.3s;
+  transition: all 0.3s ease;
 }
+
 .btn-dark:hover {
   background-color: #333 !important;
 }
 
 main {
   padding-top: 6.5rem;
+  min-height: 50vh;
 }
 
 @media (max-width: 991px) {
@@ -106,10 +124,9 @@ main {
   }
 }
 
-/* ─── SHARED COMPONENTS (NEWS/PRODUCT/ETC) ────────────────────────────────────────────── */
 .sectionTitle {
-  font-size: clamp(1.5rem, 4vw, 2.2rem);
-  margin-bottom: 2.5rem;
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  margin-bottom: 2.2rem;
   font-weight: 800;
   position: relative;
   display: inline-block;
@@ -118,24 +135,24 @@ main {
 .sectionTitle::after {
   content: "";
   position: absolute;
-  bottom: -8px;
+  bottom: -6px;
   left: 0;
-  width: 50px;
-  height: 4px;
+  width: 40px;
+  height: 3px;
   background-color: var(--color-primary);
   border-radius: 2px;
 }
 
-/* Card Improvements */
-.newsCard, .productCard {
+.newsCard,
+.productCard {
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
 }
 
-.newsCard:hover, .productCard:hover {
+.newsCard:hover,
+.productCard:hover {
   transform: translateY(-8px);
 }
 
-/* ─── BOOTSTRAP OVERRIDES ──────────────────────────────────────────── */
 .container {
   max-width: 1240px;
 }

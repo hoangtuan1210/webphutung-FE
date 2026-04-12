@@ -2,11 +2,10 @@ import React, { useMemo } from "react";
 import Link from "next/link";
 import ProductCard from "./ProductCard";
 import styles from "@/styles/client/home.module.css";
-import { MOCK_PRODUCTS } from "@/data/product";
 
 export default function ProductSection({ products: apiProducts = [], title = "Sản phẩm nổi bật" }) {
   const products = useMemo(() => {
-    const list = apiProducts.length > 0 ? apiProducts : MOCK_PRODUCTS.slice(0, 8);
+    const list = apiProducts || [];
     return list.map(p => ({
       ...p,
       image: p.images?.[0]?.url || p.image || "/placeholder.jpg"
@@ -15,7 +14,7 @@ export default function ProductSection({ products: apiProducts = [], title = "S�
 
   return (
     <div className="container mt-5" id="products">
-      <h3 className={styles.productTitle}>{title}</h3> {/* ✅ dynamic title */}
+      <h3 className={styles.productTitle}>{title}</h3>
       <div className="row g-4">
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />

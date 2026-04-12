@@ -1,8 +1,7 @@
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL ;
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const fetcher = async (url, options = {}) => {
   const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-  
   const headers = {
     "Content-Type": "application/json",
     ...options.headers,

@@ -6,36 +6,14 @@
   composes: breadcrumb from "../shared.module.css";
 }
 
-.breadcrumb a {
-  color: #666;
-  text-decoration: none;
-  transition: color 0.2s;
-}
-
-.breadcrumb a:hover {
-  color: #111;
-}
-
-.breadcrumb i {
-  font-size: 0.7rem;
-}
-
-.breadcrumb span {
-  color: #111;
-  font-weight: 500;
-}
-
-/* ===================== MAIN LAYOUT ===================== */
 .main {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  /* Set to 5:5 split */
   gap: 3.5rem;
   margin-bottom: 3.5rem;
   align-items: start;
 }
 
-/* ===================== GALLERY ===================== */
 .gallery {
   display: flex;
   flex-direction: column;
@@ -95,7 +73,6 @@
   padding: 3px;
 }
 
-/* ===================== THÔNG TIN ===================== */
 .info {
   display: flex;
   flex-direction: column;
@@ -618,7 +595,6 @@
 
   .breadcrumb {
     font-size: 0.76rem;
-    margin-top: 3rem;
   }
 
   .breadcrumb span {

@@ -8,7 +8,6 @@ export default function Footer() {
     <footer className={styles.footer}>
       <div className={styles.container}>
 
-        {/* CỘT 1 — Logo + mô tả */}
         <div className={styles.brand}>
           <div className={styles.logo}>
             <Image
@@ -20,47 +19,47 @@ export default function Footer() {
             />
           </div>
           <p className={styles.desc}>
-            Chúng tôi cung cấp xe máy, xe điện chính hãng, chất lượng cao.
-            Cam kết giá tốt, dịch vụ tận tâm và bảo hành chu đáo.
+            Chuyên cung cấp phụ tùng xe máy, đồ chơi xe và phụ kiện xe điện chính hãng. 
+            Uy tín tạo nên thương hiệu - Chất lượng khẳng định vị thế.
           </p>
         </div>
 
-        {/* CỘT 2 — Quy định */}
         <div className={styles.col}>
-          <h4 className={styles.colTitle}>Quy định</h4>
+          <h4 className={styles.colTitle}>Hỗ trợ khách hàng</h4>
           <ul className={styles.linkList}>
-            <li><Link href="#">Chính sách quy định chung</Link></li>
-            <li><Link href="#">Chính sách bảo mật</Link></li>
-            <li><Link href="#">Chính sách bảo hành</Link></li>
-            <li><Link href="#">Hình thức thanh toán</Link></li>
-            <li><Link href="#">Chính sách giao nhận - cài đặt</Link></li>
-            <li><Link href="#">Quy trình làm việc</Link></li>
+            <li><Link href="/about">Giới thiệu về cửa hàng</Link></li>
+            <li><Link href="/privacy-policy">Chính sách bảo mật</Link></li>
+            <li><Link href="/warranty-policy">Chính sách bảo hành</Link></li>
+            <li><Link href="/return-policy">Chính sách đổi trả</Link></li>
+            <li><Link href="/payment-policy">Phương thức thanh toán</Link></li>
+            <li><Link href="/shipping-policy">Vận chuyển & Giao nhận</Link></li>
           </ul>
         </div>
 
-        {/* CỘT 3 — Link nhanh */}
         <div className={styles.col}>
-          <h4 className={styles.colTitle}>Link nhanh</h4>
+          <h4 className={styles.colTitle}>Liên kết nhanh</h4>
           <ul className={styles.linkList}>
-            <li><Link href="#">Blogs</Link></li>
-            <li><Link href="/news">Tin tức</Link></li>
-            <li><Link href="/about">Liên hệ</Link></li>
-            <li><Link href="#">Tuyển dụng</Link></li>
-            <li><Link href="/about">Thông tin về chúng tôi</Link></li>
+            <li><Link href="/">Trang chủ</Link></li>
+            <li><Link href="/products">Sản phẩm</Link></li>
+            <li><Link href="/news">Tin tức mới nhất</Link></li>
+            <li><Link href="/about">Liên hệ hỗ trợ</Link></li>
           </ul>
         </div>
 
-        {/* CỘT 4 — Liên hệ */}
         <div className={styles.col}>
-          <h4 className={styles.colTitle}>Liên hệ</h4>
+          <h4 className={styles.colTitle}>Thông tin liên hệ</h4>
           <ul className={styles.contactList}>
             <li>
+              <i className="bi bi-geo-alt" />
+              <span>123 Đường Giải Phóng, Hai Bà Trưng, Hà Nội</span>
+            </li>
+            <li>
               <i className="bi bi-telephone" />
-              <span>0862 701 467</span>
+              <span>Hotline: 0862 701 467</span>
             </li>
             <li>
               <i className="bi bi-envelope" />
-              <span>myshop@gmail.com</span>
+              <span>Email: support@webphutung.com</span>
             </li>
           </ul>
 
@@ -80,7 +79,7 @@ export default function Footer() {
       </div>
 
       <div className={styles.bottom}>
-        <p>© 2026 MyShop Store. All rights reserved.</p>
+        <p>© 2026 Web Phụ Tùng Xe Máy. Tất cả quyền được bảo lưu.</p>
       </div>
     </footer>
   );

@@ -26,6 +26,10 @@ export const userService = {
     return api.post("/addresses", data);
   },
 
+  getAddressById: (id) => {
+    return api.get(`/addresses/${id}`);
+  },
+
   updateAddress: (id, data) => {
     return api.put(`/addresses/${id}`, data);
   },

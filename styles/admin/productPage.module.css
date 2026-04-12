@@ -1,23 +1,10 @@
 .page {
   composes: page from "../shared.module.css";
+  padding-top: 1.5rem;
 }
 
 .breadcrumb {
   composes: breadcrumb from "../shared.module.css";
-}
-.breadcrumb a {
-  color: var(--color-secondary);
-  text-decoration: none;
-}
-.breadcrumb a:hover {
-  color: var(--color-black);
-}
-.breadcrumb i {
-  font-size: 0.7rem;
-}
-.breadcrumb span {
-  color: var(--color-black);
-  font-weight: 500;
 }
 
 .header {
@@ -599,7 +586,11 @@
     grid-template-columns: 1fr;
   }
   .sidebar {
-    display: none; /* Hide sidebar on mobile for now, or move to top */
+    display: none; 
+  }
+  .breadcrumb {
+    margin-top: 3.5rem;
+    font-size: 0.85rem;
   }
   .grid {
     grid-template-columns: repeat(2, 1fr);

@@ -8,13 +8,8 @@ import { authService } from "@/services/authService";
 function getPasswordStrength(password) {
     if (!password) return null;
     if (password.length < 6) return "weak";
-    const hasUpper = /[A-Z]/.test(password);
-    const hasNumber = /[0-9]/.test(password);
-    const hasSpecial = /[!@#$%^&*]/.test(password);
-    const score = [hasUpper, hasNumber, hasSpecial].filter(Boolean).length;
-    if (score <= 1) return "weak";
-    if (score === 2) return "fair";
-    return "strong";
+    if (password.length >= 10) return "strong";
+    return "fair";
 }
 
 const STRENGTH_LABEL = {
@@ -45,7 +40,6 @@ export default function RegisterPage() {
         const newErrors = {};
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const phoneRegex = /^(\+84|0)[3|5|7|8|9][0-9]{8}$/;
-        const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$/;
 
         if (!form.firstName.trim()) newErrors.firstName = "Vui lòng nhập tên";
         if (!form.lastName.trim()) newErrors.lastName = "Vui lòng nhập họ";
@@ -53,8 +47,8 @@ export default function RegisterPage() {
         else if (!emailRegex.test(form.email)) newErrors.email = "Email không hợp lệ";
         if (form.phone && !phoneRegex.test(form.phone)) newErrors.phone = "Số điện thoại không hợp lệ";
         if (!form.password) newErrors.password = "Vui lòng nhập mật khẩu";
-        else if (!passwordRegex.test(form.password))
-            newErrors.password = "Tối thiểu 8 ký tự, có chữ hoa, số và ký tự đặc biệt";
+        else if (form.password.length < 6)
+            newErrors.password = "Mật khẩu phải có ít nhất 6 ký tự";
         if (!form.confirmPassword) newErrors.confirmPassword = "Vui lòng xác nhận mật khẩu";
         else if (form.password !== form.confirmPassword)
             newErrors.confirmPassword = "Mật khẩu không khớp";
@@ -208,7 +202,7 @@ export default function RegisterPage() {
                                 <>
                                     <div className={`${styles.strengthBar} ${STRENGTH_LABEL[strength].cls}`} />
                                     <p className={styles.passwordHint}>
-                                        Độ mạnh: <b>{STRENGTH_LABEL[strength].label}</b> — Tối thiểu 8 ký tự, chữ hoa, số và ký tự đặc biệt (!@#$%^&*)
+                                        Độ mạnh: <b>{STRENGTH_LABEL[strength].label}</b> — Mật khẩu nên có ít nhất 6 ký tự.
                                     </p>
                                 </>
                             )}

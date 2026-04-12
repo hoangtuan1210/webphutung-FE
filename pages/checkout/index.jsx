@@ -6,6 +6,8 @@ import { toast } from "react-hot-toast";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import styles from "@/styles/client/checkout.module.css";
+import { checkoutService } from "@/services/checkoutService";
+import { userService } from "@/services/userService";
 
 export default function Checkout() {
   const { selectedItems, selectedTotalPrice, clearCart, setIsOpen } = useCart();
@@ -44,7 +46,7 @@ export default function Checkout() {
     }
   };
 
-  const handleOrder = (e) => {
+  const handleOrder = async (e) => {
     e.preventDefault();
     if (selectedItems.length === 0) {
       toast.error("Vui lòng chọn sản phẩm để thanh toán!");
@@ -56,11 +58,96 @@ export default function Checkout() {
       return;
     }
 
-    toast.success("Đặt hàng thành công! Đang chuyển đến đơn hàng của bạn...");
-    clearCart();
-    setTimeout(() => {
-      router.push("/order");
-    }, 1500);
+    const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    let orderId = null;
+
+    try {
+      if (token) {
+        let validAddressId = "";
+        
+        try {
+           const addrRes = await userService.getAddresses();
+           if (addrRes.data && addrRes.data.length > 0) {
+              const defaultAddr = addrRes.data.find(a => a.isDefault) || addrRes.data[0];
+              validAddressId = defaultAddr.id;
+           } else {
+              // Tạo mới một địa chỉ từ thông tin form
+              const createRes = await userService.createAddress({
+                  fullName: form.name,
+                  phone: form.phone,
+                  addressLine1: form.address,
+                  addressLine2: form.note || "",
+                  city: "Thành phố Hồ Chí Minh",
+                  state: "Hồ Chí Minh",
+                  postalCode: "700000",
+                  country: "VN",
+                  isDefault: true
+              });
+              if (createRes.data?.id) validAddressId = createRes.data.id;
+              if (createRes.data?.data?.id) validAddressId = createRes.data.data.id;
+           }
+        } catch (error) {
+           console.error("Lỗi địa chỉ:", error);
+        }
+
+        if (!validAddressId) {
+           toast.error("Không thể tạo hoặc tìm thấy địa chỉ người dùng!");
+           return;
+        }
+
+        const authPayload = {
+          addressId: validAddressId,
+          items: selectedItems.map(item => ({
+            productId: item.id.toString(),
+            quantity: item.qty
+          })),
+          couponCode: "",
+          deliveryDate: new Date().toISOString(),
+          deliverySlot: "",
+          customerNotes: form.note
+        };
+        const res = await checkoutService.createOrder(authPayload);
+        orderId = res.data?.id || res.data?.data?.id;
+      } else {
+        const guestPayload = {
+          email: form.email || "guest@example.com",
+          fullName: form.name,
+          phoneNumber: form.phone,
+          address: {
+            fullName: form.name,
+            phoneNumber: form.phone,
+            streetAddress: form.address,
+            ward: "",
+            district: "",
+            city: "",
+            postalCode: ""
+          },
+          items: selectedItems.map(item => ({
+            productId: item.id.toString(),
+            quantity: item.qty
+          })),
+          couponCode: "",
+          paymentMethod: form.payment,
+          deliveryDate: new Date().toISOString(),
+          deliverySlot: "",
+          customerNotes: form.note
+        };
+        const res = await checkoutService.createGuestOrder(guestPayload);
+        orderId = res.data?.id || res.data?.data?.id;
+      }
+
+      toast.success("Đặt hàng thành công! Vui lòng kiểm tra email của bạn.");
+      clearCart();
+      setTimeout(() => {
+        if (orderId) {
+          router.push(`/order/${orderId}`);
+        } else {
+          router.push("/profile");
+        }
+      }, 1500);
+    } catch (error) {
+      toast.error(error.message || "Đã có lỗi xảy ra khi đặt hàng.");
+    }
   };
 
   if (selectedItems.length === 0) {

@@ -6,21 +6,31 @@
 .breadcrumb {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
-  font-size: 1rem;
-  color: var(--color-muted);
-  margin-bottom: 1.25rem;
+  gap: 0.45rem;
+  font-size: 0.95rem;
+  color: var(--color-gray);
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
   flex-wrap: wrap;
 }
+
+@media (max-width: 991px) {
+  .breadcrumb {
+    margin-top: 3.5rem;
+    font-size: 0.85rem;
+  }
+}
+
 .breadcrumb a {
   color: var(--color-black);
   text-decoration: none;
-  transition: color 0.2s;
+  transition: var(--transition-base);
 }
 .breadcrumb a:hover {
+  color: var(--color-primary);
   text-decoration: underline;
 }
-.breadcrumb i  { font-size: 0.7rem; }
+.breadcrumb i  { font-size: 0.7rem; color: #ccc; }
 .breadcrumb span { color: var(--color-black); font-weight: 500; }
 
 .sectionTitle {

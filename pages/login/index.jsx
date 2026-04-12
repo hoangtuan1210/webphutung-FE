@@ -42,6 +42,12 @@ export default function LoginPage() {
             });
 
             if (res?.success) {
+                if (res.data?.accessToken) {
+                    localStorage.setItem("token", res.data.accessToken);
+                }
+                if (res.data?.user) {
+                    localStorage.setItem("user", JSON.stringify(res.data.user));
+                }
                 toast.success("Đăng nhập thành công!");
                 router.push("/");
             } else {

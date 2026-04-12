@@ -2,7 +2,7 @@ export const newsList = [
   {
     id: 1,
     slug: "top-phu-tung-ban-chay-thang-3",
-    title: "Top phụ tùng xe máy bán chạy nhất tháng 3/2026, giúp xe vận hành êm ái và an toàn, bạn đã sở hữu chưa, hahahah",
+    title: "Top phụ tùng xe máy bán chạy nhất tháng 3/2026, giúp xe vận hành êm ái và an toàn, bạn đã sở hữu chưa, nếu chưa hãy mua ngay nhé !",
     excerpt: "Điểm qua những sản phẩm phụ tùng, đồ chơi xe được khách hàng tin tưởng lựa chọn nhiều nhất trong tháng vừa qua.",
     image: "/tin-tuc-1.jpg",
     category: "Tin tức",

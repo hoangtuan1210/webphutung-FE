@@ -2,7 +2,6 @@ import { useState, useMemo, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { MOCK_PRODUCTS } from "@/data/product";
 import { useCart } from "@/context/CartContext";
 import styles from "@/styles/admin/productPage.module.css";
 
@@ -29,10 +28,10 @@ export default function ProductsComponent({
   } = router.query;
 
   const [products, setProducts] = useState(
-    initialProducts.length > 0 ? initialProducts : MOCK_PRODUCTS
+    initialProducts || []
   );
   const [total, setTotal] = useState(
-    totalCount || MOCK_PRODUCTS.length
+    totalCount || 0
   );
   const [viewMode, setViewMode] = useState("grid");
 
@@ -369,9 +368,7 @@ export default function ProductsComponent({
                     <i className="bi bi-chevron-right" />
                   </button>
                 </div>
-                <p className={styles.pageInfo}>
-                  Trang {currentPage} / {totalPages}
-                </p>
+
               </div>
             )}
           </div>

@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import styles from "../../styles/client/navbar.module.css";
 import { useCart } from "@/context/CartContext";
 import { NAV_ITEMS } from "@/section/navbar_item";
@@ -16,69 +16,101 @@ export default function Navbar() {
   const totalQty = cart?.totalQty ?? 0;
   const setIsOpen = cart?.setIsOpen;
 
+  const [currentUser, setCurrentUser] = useState(null);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
-  const [loadingSearch, setLoadingSearch] = useState(false); // ✅ loading
+  const [loadingSearch, setLoadingSearch] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [topBannerVisible, setTopBannerVisible] = useState(true);
   const [categories, setCategories] = useState([]);
   const [activeDropdown, setActiveDropdown] = useState(null);
-  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileProductsOpen, setIsMobileProductsOpen] = useState(false);
+  const [topBannerVisible, setTopBannerVisible] = useState(true);
 
   const searchRef = useRef(null);
   const mobileSearchRef = useRef(null);
   const desktopNavRef = useRef(null);
   const userRef = useRef(null);
 
-  const currentUser = {
-    name: "Nguyễn Hoàng Tuấn",
-    avatar: "/default-avatar.png",
-  };
-
   useEffect(() => {
-    const fetchCategories = async () => {
+    const fetchInitialData = async () => {
+      const stored = localStorage.getItem("user");
+      if (stored) {
+        try {
+          const u = JSON.parse(stored);
+          setCurrentUser({
+            name: `${u.lastName || ""} ${u.firstName || ""}`.trim() || u.email || "Tài khoản",
+            avatar: u.avatar || "/default-avatar.png",
+          });
+        } catch (e) {}
+      }
+      
       try {
         const res = await categoryService.getCategories();
-        setCategories(res.data || []);
-      } catch (err) {
-        console.error("Failed to fetch categories:", err);
+        setCategories(res.data?.slice(0, 8) || []);
+      } catch (err) {}
+    };
+
+    fetchInitialData();
+
+    const handleClickOutside = (e) => {
+      if (searchRef.current && !searchRef.current.contains(e.target)) setShowSuggestions(false);
+      if (desktopNavRef.current && !desktopNavRef.current.contains(e.target)) setActiveDropdown(null);
+      if (userRef.current && !userRef.current.contains(e.target)) setIsUserMenuOpen(false);
+    };
+
+    const handleScroll = () => setTopBannerVisible(window.scrollY === 0);
+    const handleResize = () => {
+      if (window.innerWidth >= 992) {
+        setIsMobileMenuOpen(false);
+        setIsSearchOpen(false);
       }
     };
-    fetchCategories();
+
+    document.addEventListener("mousedown", handleClickOutside);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
   useEffect(() => {
     if (!searchQuery.trim() || searchQuery.length < 2) {
       setSuggestions([]);
+      setShowSuggestions(false);
       return;
     }
 
     const debounce = setTimeout(async () => {
       try {
         setLoadingSearch(true);
+        setShowSuggestions(true);
+        const res = await productService.getProducts({ limit: 6, search: searchQuery });
 
-        const res = await productService.getProducts({
-          limit: 6,
-          search: searchQuery,
-        });
+        let list = [];
+        if (Array.isArray(res?.data)) list = res.data;
+        else if (Array.isArray(res?.data?.data)) list = res.data.data;
+        else if (Array.isArray(res?.data?.data?.data)) list = res.data.data.data;
 
-        setSuggestions(res.data?.data?.data || []);
+        setSuggestions(list);
       } catch (err) {
-        console.error("Search error:", err);
         setSuggestions([]);
       } finally {
         setLoadingSearch(false);
       }
-    }, 400);
+    }, 350);
 
     return () => clearTimeout(debounce);
   }, [searchQuery]);
 
-  // ================= HANDLER =================
   const toggleSearch = useCallback(() => {
     setIsSearchOpen((p) => !p);
     setSearchQuery("");
@@ -90,42 +122,15 @@ export default function Navbar() {
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    if (searchQuery.trim()) {
-      router.push(`/products?search=${searchQuery}`);
+    const q = searchQuery.trim();
+    if (q) {
+      router.push(`/products?search=${encodeURIComponent(q)}`);
       setShowSuggestions(false);
       setIsSearchOpen(false);
+      setSearchQuery("");
     }
   };
 
-  // ================= CLICK OUTSIDE =================
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (searchRef.current && !searchRef.current.contains(e.target)) setShowSuggestions(false);
-      if (desktopNavRef.current && !desktopNavRef.current.contains(e.target)) setActiveDropdown(null);
-      if (userRef.current && !userRef.current.contains(e.target)) setIsUserMenuOpen(false);
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-
-    const handleScroll = () => setTopBannerVisible(window.scrollY === 0);
-    window.addEventListener("scroll", handleScroll, { passive: true });
-
-    const handleResize = () => {
-      if (window.innerWidth >= 992) {
-        setIsMobileMenuOpen(false);
-        setIsSearchOpen(false);
-      }
-    };
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  // ================= RENDER SUGGEST =================
   const renderSuggestions = () => {
     if (!showSuggestions || !searchQuery.trim()) return null;
 
@@ -170,7 +175,6 @@ export default function Navbar() {
     );
   };
 
-  // ================= JSX =================
   return (
     <div className={styles.navbarWrapper}>
       <div className={`${styles.topBanner} ${topBannerVisible ? styles.topBannerVisible : ""}`}>
@@ -187,21 +191,32 @@ export default function Navbar() {
             <Image src="/logo.png" alt="Logo" width={140} height={45} priority className={styles.logoImg} />
           </Link>
 
-          {/* SEARCH */}
           <div className={styles.searchContainer} ref={searchRef}>
             <form className={styles.searchDesktop} onSubmit={handleSearchSubmit}>
               <div className={styles.searchInputWrapper}>
                 <i className={`bi bi-search ${styles.searchIconInside}`} />
                 <input
-                  className={styles.searchInput}
-                  type="text"
-                  placeholder="Tìm kiếm phụ tùng, đồ chơi xe..."
-                  value={searchQuery}
-                  onChange={(e) => {
-                    setSearchQuery(e.target.value);
-                    setShowSuggestions(true);
-                  }}
-                  onFocus={() => setShowSuggestions(true)}
+                   className={styles.searchInput}
+                   type="text"
+                   placeholder="Tìm kiếm phụ tùng, đồ chơi xe..."
+                   value={searchQuery}
+                   onChange={(e) => {
+                     setSearchQuery(e.target.value);
+                     if (e.target.value.trim().length >= 2) {
+                       setShowSuggestions(true);
+                     } else {
+                       setShowSuggestions(false);
+                     }
+                   }}
+                   onFocus={() => {
+                     if (searchQuery.trim().length >= 2) setShowSuggestions(true);
+                   }}
+                   onKeyDown={(e) => {
+                     if (e.key === "Escape") {
+                       setShowSuggestions(false);
+                       setSearchQuery("");
+                     }
+                   }}
                 />
                 {searchQuery && (
                   <button type="button" className={styles.clearSearchBtn} onClick={() => setSearchQuery("")}>
@@ -259,33 +274,54 @@ export default function Navbar() {
               {totalQty > 0 && <span className={styles.cartBadge}>{totalQty > 99 ? "99+" : totalQty}</span>}
             </button>
 
-            {/* Profile Avatar Dropdown */}
-            <div className={styles.userMenuWrapper} ref={userRef}>
-              <button className={styles.avatarBtn} onClick={() => setIsUserMenuOpen(!isUserMenuOpen)} aria-label="Tài khoản">
-                <div className={styles.avatarImgWrapper}>
-                  <Image src={currentUser.avatar || "/default-avatar.png"} alt="Avatar" width={32} height={32} />
-                </div>
-              </button>
+            {currentUser ? (
+              /* Đã đăng nhập: hiển thị avatar + dropdown */
+              <div className={styles.userMenuWrapper} ref={userRef}>
+                <button className={styles.avatarBtn} onClick={() => setIsUserMenuOpen(!isUserMenuOpen)} aria-label="Tài khoản">
+                  <div className={styles.avatarImgWrapper}>
+                    <Image src={currentUser.avatar || "/default-avatar.png"} alt="Avatar" width={32} height={32} />
+                  </div>
+                </button>
 
-              <div className={`${styles.userDropdown} ${isUserMenuOpen ? styles.userDropdownOpen : ""}`}>
-                <div className={styles.userInfo}>
-                  <p className={styles.userName}>{currentUser.name}</p>
-                  <p className={styles.userRole}>Khách hàng</p>
-                </div>
-                <div className={styles.userLinks}>
-                  <Link href="/profile" className={styles.userLink} onClick={() => setIsUserMenuOpen(false)}>
-                    <i className="bi bi-person" /> Thông tin tài khoản
-                  </Link>
-                  <Link href="/order" className={styles.userLink} onClick={() => setIsUserMenuOpen(false)}>
-                    <i className="bi bi-box-seam" /> Đơn hàng của tôi
-                  </Link>
-                  <div className={styles.userDivider} />
-                  <button className={`${styles.userLink} ${styles.logoutBtn}`}>
-                    <i className="bi bi-box-arrow-right" /> Đăng xuất
-                  </button>
+                <div className={`${styles.userDropdown} ${isUserMenuOpen ? styles.userDropdownOpen : ""}`}>
+                  <div className={styles.userInfo}>
+                    <p className={styles.userName}>{currentUser.name}</p>
+                    <p className={styles.userRole}>Khách hàng</p>
+                  </div>
+                  <div className={styles.userLinks}>
+                    <Link href="/profile" className={styles.userLink} onClick={() => setIsUserMenuOpen(false)}>
+                      <i className="bi bi-person" /> Thông tin tài khoản
+                    </Link>
+                    <Link href="/order" className={styles.userLink} onClick={() => setIsUserMenuOpen(false)}>
+                      <i className="bi bi-box-seam" /> Đơn hàng của tôi
+                    </Link>
+                    <div className={styles.userDivider} />
+                    <button
+                      className={`${styles.userLink} ${styles.logoutBtn}`}
+                      onClick={() => {
+                        localStorage.removeItem("token");
+                        localStorage.removeItem("user");
+                        setCurrentUser(null);
+                        setIsUserMenuOpen(false);
+                        window.location.href = "/";
+                      }}
+                    >
+                      <i className="bi bi-box-arrow-right" /> Đăng xuất
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
+            ) : (
+              /* Chưa đăng nhập: hiển thị nút Đăng nhập / Đăng ký */
+              <div className={styles.authButtons}>
+                <Link href="/login" className={styles.loginBtn}>
+                  Đăng nhập
+                </Link>
+                <Link href="/register" className={styles.registerBtn}>
+                  Đăng ký
+                </Link>
+              </div>
+            )}
 
             <button className={`${styles.iconBtn} ${styles.hamburger}`} onClick={toggleMobileMenu} aria-label="Menu">
               <i className={`bi ${isMobileMenuOpen ? "bi-x-lg" : "bi-list"} fs-5`} />
@@ -294,7 +330,6 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile Search */}
       <div className={`${styles.mobileSearch} ${isSearchOpen ? styles.mobileSearchOpen : ""}`}>
         <div className={styles.mobileSearchInner} ref={mobileSearchRef}>
           <form className={styles.mobileSearchForm} onSubmit={handleSearchSubmit}>
@@ -317,7 +352,6 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Menu */}
       <div className={`${styles.mobileMenu} ${isMobileMenuOpen ? styles.mobileMenuOpen : ""}`}>
         <ul className={styles.mobileNavList}>
           {NAV_ITEMS.map((item, i) => (

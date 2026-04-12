@@ -875,3 +875,53 @@
     right: -4px;
   }
 }
+
+/* ── Auth Buttons (chưa đăng nhập) ── */
+.authButtons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.loginBtn {
+  padding: 0.45rem 1rem;
+  border: 1.5px solid #111;
+  border-radius: 50px;
+  color: #111;
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.loginBtn:hover {
+  background: #111;
+  color: #fff;
+}
+
+.registerBtn {
+  padding: 0.45rem 1rem;
+  border: 1.5px solid transparent;
+  border-radius: 50px;
+  background: #e63946;
+  color: #fff;
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.registerBtn:hover {
+  background: #c1121f;
+  color: #fff;
+}
+
+@media (max-width: 576px) {
+  .loginBtn,
+  .registerBtn {
+    padding: 0.4rem 0.7rem;
+    font-size: 0.78rem;
+  }
+}

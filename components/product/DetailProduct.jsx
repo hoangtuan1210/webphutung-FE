@@ -3,10 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import styles from "../../styles/client/detailProduct.module.css";
 import { useCart } from "@/context/CartContext";
-import { MOCK_PRODUCTS } from "@/data/product";
-
 export default function DetailProduct({ productData }) {
-  const product = productData || MOCK_PRODUCTS[0];
+  const product = productData;
 
   const [activeImg, setActiveImg] = useState(0);
   const [qty, setQty] = useState(1);
@@ -32,9 +30,7 @@ export default function DetailProduct({ productData }) {
   const descDetails = product.descDetails ?? [];
   const descImages = product.descImages ?? [];
 
-  const related = MOCK_PRODUCTS
-    .filter((p) => p.category === categoryName && p.id !== product.id)
-    .slice(0, 4);
+  const related = product.relatedProducts || [];
 
   const cartItem = {
     id: product.id,
@@ -166,12 +162,12 @@ export default function DetailProduct({ productData }) {
             >
               Mô tả sản phẩm
             </button>
-            <button
+            {/* <button
               className={`${styles.tabBtn} ${activeTab === "specs" ? styles.tabActive : ""}`}
               onClick={() => setActiveTab("specs")}
             >
               Thông số kỹ thuật
-            </button>
+            </button> */}
           </div>
 
           <div className={styles.tabContent}>

@@ -1,6 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@/styles/globals.css";
 import { useEffect } from "react";
+import Head from "next/head";
 import { CartProvider } from "@/context/CartContext";
 import { Toaster } from "react-hot-toast";
 
@@ -12,6 +13,13 @@ export default function App({ Component, pageProps }) {
 
   return (
     <>
+      <Head>
+        <title>Web Phụ Tùng Xe Máy</title>
+        <meta name="description" content="Cửa hàng phụ tùng xe máy uy tín - Chất lượng cao, giá tốt nhất" />
+        <link rel="icon" href="/favicon.png" type="image/png" />
+        <link rel="shortcut icon" href="/favicon.png" type="image/png" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Head>
       <CartProvider>
         <Toaster position="top-right" toastOptions={{ duration: 2200 }} />
         {getLayout(<Component {...pageProps} />)}
@@ -19,4 +27,3 @@ export default function App({ Component, pageProps }) {
     </>
   );
 }
-  
