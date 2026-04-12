@@ -15,9 +15,9 @@ const isLoggedIn = () => {
 const normalizeApiItem = (item) => ({
   id: item.id,           // itemId trong cart (không phải productId)
   productId: item.productId,
-  name: item.productName ?? item.name ?? "Sản phẩm",
-  price: parseFloat(item.price ?? item.unitPrice ?? 0),
-  image: item.productImage ?? item.image ?? "/placeholder.jpg",
+  name: item.productName ?? item.product?.name ?? item.name ?? "Sản phẩm",
+  price: parseFloat(item.productPrice ?? item.price ?? item.unitPrice ?? item.unit_price ?? item.product?.price ?? item.product?.unitPrice ?? item.product?.unit_price ?? 0),
+  image: item.productImage ?? item.product?.image ?? item.product?.images?.[0]?.url ?? item.image ?? "/placeholder.jpg",
   qty: item.quantity ?? item.qty ?? 1,
 });
 

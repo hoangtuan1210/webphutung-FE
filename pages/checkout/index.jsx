@@ -98,7 +98,7 @@ export default function Checkout() {
         const authPayload = {
           addressId: validAddressId,
           items: selectedItems.map(item => ({
-            productId: item.id.toString(),
+            productId: (item.productId ?? item.id).toString(),
             quantity: item.qty
           })),
           couponCode: "",
@@ -123,7 +123,7 @@ export default function Checkout() {
             postalCode: ""
           },
           items: selectedItems.map(item => ({
-            productId: item.id.toString(),
+            productId: (item.productId ?? item.id).toString(),
             quantity: item.qty
           })),
           couponCode: "",

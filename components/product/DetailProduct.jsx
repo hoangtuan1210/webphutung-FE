@@ -74,7 +74,7 @@ export default function DetailProduct({ productData }) {
                 <span className={styles.badge}>{product.badge}</span>
               )}
             </div>
-gi
+
             <div className={styles.thumbs}>
               {images.map((img, i) => (
                 <button
@@ -85,7 +85,7 @@ gi
                   <Image
                     src={img || fallbackImg}
                     fill
-               gi     alt={`thumb ${i}`}
+                    alt={`thumb ${i}`}
                     className={styles.thumbImg}
                     sizes="80px"
                   />

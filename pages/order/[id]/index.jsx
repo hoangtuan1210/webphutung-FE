@@ -21,7 +21,7 @@ function normalizeOrder(raw) {
     id: item.id,
     name: item.productName ?? item.product?.name ?? item.name ?? "Sản phẩm",
     qty: item.quantity ?? item.qty ?? 1,
-    price: parseFloat(item.price ?? item.unitPrice ?? 0),
+    price: parseFloat(item.productPrice ?? item.price ?? item.unitPrice ?? item.unit_price ?? item.product?.price ?? item.product?.unitPrice ?? item.product?.unit_price ?? 0),
     image:
       item.productImage ??
       item.product?.images?.[0]?.url ??
