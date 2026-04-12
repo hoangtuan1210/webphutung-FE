@@ -19,6 +19,11 @@
   margin-bottom: 1rem;
 }
 
+.logoImg {
+  mix-blend-mode: multiply;
+  display: block;
+}
+
 .logoText {
   font-size: 1.8rem;
   font-weight: 800;

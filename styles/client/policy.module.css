@@ -1,0 +1,269 @@
+.page {
+    padding: 6rem 0;
+    background-color: #fdfdfd;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.title {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: #111;
+    text-transform: uppercase;
+    letter-spacing: -0.5px;
+    margin-bottom: 1.5rem;
+    line-height: 1.3;
+}
+
+.titleHighlight {
+    color: #e63946;
+}
+
+.intro {
+    font-size: 1.1rem;
+    color: #666;
+    line-height: 1.6;
+    max-width: 750px;
+    margin: 0 auto;
+}
+
+.contentCard {
+    background: #fff;
+    padding: 3rem;
+    border-radius: 24px;
+    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.05);
+    color: #444;
+    line-height: 1.8;
+}
+
+.section {
+    margin-bottom: 3.5rem;
+}
+
+.sectionTitle {
+    color: #111;
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.numberCircle {
+    width: 36px;
+    height: 36px;
+    background: #111;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.tableWrapper {
+    overflow-x: auto;
+    margin-bottom: 1.5rem;
+    border: 1px solid #eee;
+    border-radius: 16px;
+}
+
+/* Custom table styles to go with Bootstrap */
+.warrantyTable {
+    margin-bottom: 0 !important;
+}
+
+.warrantyTable thead th {
+    background-color: #f8f9fa;
+    border-top: none;
+    font-weight: 700;
+    color: #111;
+    padding: 1.25rem 1rem;
+}
+
+.warrantyTable tbody td {
+    padding: 1.25rem 1rem;
+    vertical-align: middle;
+}
+
+.badgeDuration {
+    background-color: #fff0f0;
+    color: #e63946;
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+
+.noteText {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #111;
+    font-weight: 600;
+}
+
+.noteText i {
+    color: #e63946;
+}
+
+.disclaimer {
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+    color: #888;
+}
+
+.iconList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.iconListItem {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    align-items: flex-start;
+}
+
+.iconListItem i {
+    font-size: 1.25rem;
+    margin-top: 2px;
+}
+
+.successIcon {
+    color: #2ecc71;
+}
+
+.errorIcon {
+    color: #e74c3c;
+}
+
+.returnsBox {
+    margin-bottom: 3.5rem;
+    padding: 2.5rem;
+    background: #fff5f5;
+    border-radius: 20px;
+    border: 2px dashed #e63946;
+}
+
+.returnsTitle {
+    color: #e63946 !important;
+}
+
+.returnsTitle .numberCircle {
+    background: #e63946;
+}
+
+.returnsHighlight {
+    font-weight: 700;
+    font-size: 1.15rem;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.processGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+}
+
+.processStep {
+    padding: 2rem 1.5rem;
+    background: #f8f9fa;
+    border-radius: 20px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.processStep:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.stepNumber {
+    width: 44px;
+    height: 44px;
+    background: #111;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.25rem;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.commitmentBox {
+    margin-top: 4rem;
+    padding: 3rem;
+    background: linear-gradient(135deg, #111 0%, #333 100%);
+    color: #fff;
+    border-radius: 24px;
+    text-align: center;
+}
+
+.commitmentTitle {
+    color: #eee;
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.commitmentIcons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 3rem;
+}
+
+.commitmentItem {
+    flex: 1 1 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.commitmentItem i {
+    font-size: 2.5rem;
+    color: #f5c518;
+}
+
+@media (max-width: 768px) {
+    .page {
+        padding: 4rem 0;
+    }
+
+    .title {
+        font-size: 1.8rem;
+    }
+
+    .contentCard {
+        padding: 1.5rem;
+    }
+
+    .sectionTitle {
+        font-size: 1.4rem;
+    }
+
+    .commitmentIcons {
+        gap: 1.5rem;
+    }
+}

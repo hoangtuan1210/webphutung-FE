@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import styles from "../../styles/client/detailProduct.module.css";
 import { useCart } from "@/context/CartContext";
+
 export default function DetailProduct({ productData }) {
   const product = productData;
 
@@ -73,7 +74,7 @@ export default function DetailProduct({ productData }) {
                 <span className={styles.badge}>{product.badge}</span>
               )}
             </div>
-
+gi
             <div className={styles.thumbs}>
               {images.map((img, i) => (
                 <button
@@ -84,7 +85,7 @@ export default function DetailProduct({ productData }) {
                   <Image
                     src={img || fallbackImg}
                     fill
-                    alt={`thumb ${i}`}
+               gi     alt={`thumb ${i}`}
                     className={styles.thumbImg}
                     sizes="80px"
                   />
@@ -237,7 +238,7 @@ export default function DetailProduct({ productData }) {
                 return (
                   <div key={item.id} className="col-6 col-md-3">
                     {/* ✅ dùng item.slug thay vì toSlug(item.name) */}
-                    <Link href={`/products/${item.slug}`} className={styles.relatedCard}>
+                    <Link href={`/detail-product/${item.slug}`} className={styles.relatedCard}>
                       <div className={styles.relatedImg}>
                         <Image
                           src={itemImages[0] || fallbackImg}

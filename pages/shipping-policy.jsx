@@ -1,31 +1,72 @@
 import ClientLayout from "@/layouts/ClientLayout";
+import Head from "next/head";
+import styles from "@/styles/client/policy.module.css";
 
 export default function ShippingPolicy() {
   return (
     <ClientLayout>
-      <main className="page" style={{ padding: '4rem 0' }}>
-        <div className="container" style={{ maxWidth: '800px', margin: '0 auto', padding: '0 1rem' }}>
-          <h1 style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: '2rem', borderBottom: '2px solid #eee', paddingBottom: '1rem' }}>
-            Vận chuyển & Giao nhận
-          </h1>
-          
-          <div style={{ lineHeight: 1.8, color: '#444' }}>
-            <section style={{ marginBottom: '2rem' }}>
-              <h2 style={{ color: '#111', fontSize: '1.5rem', marginBottom: '1rem' }}>1. Thời gian giao hàng</h2>
-              <ul style={{ listStyle: 'disc inside', paddingLeft: '1rem' }}>
-                <li><b>Khu vực nội thành:</b> Từ 1 - 2 ngày làm việc.</li>
-                <li><b>Các tỉnh thành khác:</b> Từ 3 - 5 ngày làm việc tùy vùng miền.</li>
-              </ul>
+      <Head>
+        <title>Chính sách vận chuyển | FEICHI</title>
+      </Head>
+      <main className={styles.page}>
+        <div className={styles.container}>
+          <header className={styles.header}>
+            <h1 className={styles.title}>CHÍNH SÁCH <span className={styles.titleHighlight}>VẬN CHUYỂN</span></h1>
+          </header>
+
+          <div className={styles.contentCard}>
+            <section className={styles.section}>
+              <h2 className={styles.sectionTitle}>
+                <span className={styles.numberCircle}>1</span>
+                Phạm vi và thời gian giao hàng
+              </h2>
+              <p>Chúng tôi cung cấp dịch vụ giao hàng trên toàn quốc với thời gian dự kiến như sau:</p>
+              <div className="row g-4 mb-4">
+                <div className="col-md-6">
+                  <div className="p-4 rounded-4 bg-light border h-100 text-center">
+                    <i className="bi bi-geo-alt fs-1 text-danger d-block mb-2" />
+                    <h3 className="h6 fw-bold">Khu vực nội thành</h3>
+                    <p className="small text-muted mb-0">Thời gian nhận hàng: <strong>1 – 3 ngày</strong> làm việc.</p>
+                  </div>
+                </div>
+                <div className="col-md-6">
+                  <div className="p-4 rounded-4 bg-light border h-100 text-center">
+                    <i className="bi bi-globe-central-south-asia fs-1 text-danger d-block mb-2" />
+                    <h3 className="h6 fw-bold">Các tỉnh thành khác</h3>
+                    <p className="small text-muted mb-0">Thời gian nhận hàng: <strong>3 – 7 ngày</strong> làm việc.</p>
+                  </div>
+                </div>
+              </div>
+              <p className="small fst-italic text-muted text-center">* Lưu ý: Thời gian giao hàng có thể thay đổi tùy thuộc vào điều kiện thời tiết hoặc tình trạng vận hành của đơn vị vận chuyển.</p>
             </section>
 
-            <section style={{ marginBottom: '2rem' }}>
-              <h2 style={{ color: '#111', fontSize: '1.5rem', marginBottom: '1rem' }}>2. Cước phí vận chuyển</h2>
-              <p>Phí vận chuyển được tính tự động dựa trên trọng lượng đơn hàng và địa chỉ giao hàng. Chúng tôi thường xuyên có chương trình <b>FREESHIP</b> cho đơn hàng từ 1.000.000đ trở lên.</p>
-            </section>
-
-            <section>
-              <h2 style={{ color: '#111', fontSize: '1.5rem', marginBottom: '1rem' }}>3. Kiểm tra hàng hóa</h2>
-              <p>Khách hàng khi nhận hàng có quyền kiểm tra hình thức bên ngoài của kiện hàng. Đối với các sản phẩm như ắc quy, động cơ, khuyến khích khách hàng quay clip unbox để được hỗ trợ tốt nhất nếu có sự cố.</p>
+            <section className={styles.section}>
+              <h2 className={styles.sectionTitle}>
+                <span className={styles.numberCircle}>2</span>
+                Phí vận chuyển và kiểm tra hàng
+              </h2>
+              <div className="row g-4">
+                <div className="col-lg-6">
+                  <div className={styles.returnsBox} style={{ background: '#fff', borderStyle: 'solid', borderColor: '#eee', height: '100%', margin: 0 }}>
+                    <h3 className="h6 fw-bold mb-3">Quy định phí ship</h3>
+                    <ul className={styles.iconList}>
+                      <li className={styles.iconListItem}><i className="bi bi-truck text-danger"/> Tính dựa trên khoảng cách địa lý.</li>
+                      <li className={styles.iconListItem}><i className="bi bi-box-seam text-danger"/> Dựa trên khối lượng/kích thước sản phẩm.</li>
+                      <li className={styles.iconListItem}><i className="bi bi-chat-dots text-danger"/> Phí được thông báo trước khi chốt đơn.</li>
+                    </ul>
+                  </div>
+                </div>
+                <div className="col-lg-6">
+                  <div className={styles.returnsBox} style={{ background: '#fff', borderStyle: 'solid', borderColor: '#eee', height: '100%', margin: 0 }}>
+                    <h3 className="h6 fw-bold mb-3">Quyền lợi kiểm tra</h3>
+                    <ul className={styles.iconList}>
+                      <li className={styles.iconListItem}><i className="bi bi-eye text-success"/> Kiểm tra hàng trước khi thanh toán (COD).</li>
+                      <li className={styles.iconListItem}><i className="bi bi-x-square text-danger"/> Từ chối nhận nếu phát hiện lỗi hoặc hư hỏng.</li>
+                      <li className={styles.iconListItem}><i className="bi bi-camera-video text-primary"/> Khuyến khích quay clip unbox để được hỗ trợ tốt nhất.</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
             </section>
           </div>
         </div>

@@ -856,11 +856,11 @@
     gap: 0.25rem;
   }
   .logoImg {
-    width: 110px !important;
+    width: 140px !important;
     height: auto !important;
   }
   .logo {
-    max-width: 110px;
+    max-width: 140px;
   }
   .iconBtn {
     width: 34px !important;

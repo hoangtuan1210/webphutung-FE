@@ -12,6 +12,7 @@ export default function Document() {
         <meta name="keywords" content="phụ tùng ô tô, phụ tùng xe hơi, phụ tùng chính hãng, phụ tùng giá tốt, phụ tùng giao hàng toàn quốc" />
         <meta name="author" content="Phụ tùng ô tô chính hãng" />
 
+        <link rel="icon" href="/icon_browser.jpg" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link

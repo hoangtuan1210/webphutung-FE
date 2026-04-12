@@ -139,10 +139,14 @@ export default function Checkout() {
       toast.success("Đặt hàng thành công! Vui lòng kiểm tra email của bạn.");
       clearCart();
       setTimeout(() => {
-        if (orderId) {
-          router.push(`/order/${orderId}`);
+        if (token) {
+          if (orderId) {
+            router.push(`/order/${orderId}`);
+          } else {
+            router.push("/profile");
+          }
         } else {
-          router.push("/profile");
+          router.push("/products");
         }
       }, 1500);
     } catch (error) {

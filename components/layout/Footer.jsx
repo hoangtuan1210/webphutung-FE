@@ -11,10 +11,11 @@ export default function Footer() {
         <div className={styles.brand}>
           <div className={styles.logo}>
             <Image
-              src="/logo.png"
+              src="/logo.jpg"
               alt="Logo"
-              width={160}
-              height={50}
+              width={220}
+              height={70}
+              quality={100}
               className={styles.logoImg}
             />
           </div>
@@ -51,15 +52,15 @@ export default function Footer() {
           <ul className={styles.contactList}>
             <li>
               <i className="bi bi-geo-alt" />
-              <span>123 Đường Giải Phóng, Hai Bà Trưng, Hà Nội</span>
+              <span>64 Đường 1A, KDC Vĩnh Lộc, Bình Tân, TP. HCM</span>
             </li>
             <li>
               <i className="bi bi-telephone" />
-              <span>Hotline: 0862 701 467</span>
+              <span>Hotline: 0938884300</span>
             </li>
             <li>
               <i className="bi bi-envelope" />
-              <span>Email: support@webphutung.com</span>
+              <span>Email: support@feichi.vn</span>
             </li>
           </ul>
 
@@ -79,7 +80,7 @@ export default function Footer() {
       </div>
 
       <div className={styles.bottom}>
-        <p>© 2026 Web Phụ Tùng Xe Máy. Tất cả quyền được bảo lưu.</p>
+        <p>© 2026 Công ty TNHH Thương Mại Quốc Tế FEICHI. Tất cả quyền được bảo lưu.</p>
       </div>
     </footer>
   );

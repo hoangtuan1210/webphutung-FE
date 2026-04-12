@@ -155,7 +155,7 @@ export default function Navbar() {
               >
                 <div className={styles.suggestionImage}>
                   <img
-                    src={p.images?.[0]?.url || "/placeholder.jpg"} // ✅ fix
+                    src={p.images?.[0]?.url || "/placeholder.jpg"} 
                     alt={p.name}
                     style={{ width: "100%", height: "100%", objectFit: "cover" }}
                   />
@@ -189,7 +189,7 @@ export default function Navbar() {
       <nav className={styles.navbar}>
         <div className={styles.navContainer}>
           <Link href="/" className={styles.logo}>
-            <Image src="/logo.png" alt="Logo" width={140} height={45} priority className={styles.logoImg} />
+            <Image src="/logo.jpg" alt="Logo" width={190} height={60} priority quality={100} className={styles.logoImg} />
           </Link>
 
           <div className={styles.searchContainer} ref={searchRef}>

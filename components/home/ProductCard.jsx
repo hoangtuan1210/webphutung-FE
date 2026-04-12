@@ -1,13 +1,12 @@
 import Link from "next/link";
 import Image from "next/image";
 import styles from "@/styles/client/home.module.css";
-import { toSlug } from "@/utils/slug";
 
 export default function ProductCard({ product }) {
   return (
     <div className="col-lg-4 col-md-6">
       <Link
-        href={`/detail-product/${toSlug(product.name)}`}
+        href={`/detail-product/${product.slug}`}
         className="text-decoration-none h-100"
         style={{ display: "block", color: "inherit" }}
       >

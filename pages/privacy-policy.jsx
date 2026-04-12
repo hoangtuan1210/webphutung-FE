@@ -1,34 +1,82 @@
 import ClientLayout from "@/layouts/ClientLayout";
+import Head from "next/head";
+import styles from "@/styles/client/policy.module.css";
 
 export default function PrivacyPolicy() {
   return (
     <ClientLayout>
-      <main className="page" style={{ padding: '4rem 0' }}>
-        <div className="container" style={{ maxWidth: '800px', margin: '0 auto', padding: '0 1rem' }}>
-          <h1 style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: '2rem', borderBottom: '2px solid #eee', paddingBottom: '1rem' }}>
-            Chính sách bảo mật
-          </h1>
-          
-          <div style={{ lineHeight: 1.8, color: '#444' }}>
-            <section style={{ marginBottom: '2rem' }}>
-              <h2 style={{ color: '#111', fontSize: '1.5rem', marginBottom: '1rem' }}>1. Thu thập thông tin</h2>
-              <p>Chúng tôi thu thập thông tin cá nhân của bạn khi bạn đăng ký tài khoản, đặt hàng hoặc đăng ký nhận tin từ Web Phụ Tùng. Các thông tin bao gồm: Tên, Email, Số điện thoại và Địa chỉ giao hàng.</p>
+      <Head>
+        <title>Chính sách bảo mật | FEICHI</title>
+      </Head>
+      <main className={styles.page}>
+        <div className={styles.container}>
+          <header className={styles.header}>
+            <h1 className={styles.title}>CHÍNH SÁCH <span className={styles.titleHighlight}>BẢO MẬT THÔNG TIN</span></h1>
+          </header>
+
+          <div className={styles.contentCard}>
+            <section className={styles.section}>
+              <h2 className={styles.sectionTitle}>
+                <span className={styles.numberCircle}>1</span>
+                Mục đích thu thập
+              </h2>
+              <p>FEICHI thu thập thông tin khách hàng nhằm phục vụ các mục tiêu sau:</p>
+              <ul className={styles.iconList}>
+                <li className={styles.iconListItem}><i className="bi bi-cart-check text-success"/> Xử lý đơn hàng và thanh toán.</li>
+                <li className={styles.iconListItem}><i className="bi bi-truck text-success"/> Thực hiện giao hàng và chăm sóc khách hàng.</li>
+                <li className={styles.iconListItem}><i className="bi bi-graph-up-arrow text-success"/> Nghiên cứu và cải thiện chất lượng dịch vụ.</li>
+              </ul>
             </section>
 
-            <section style={{ marginBottom: '2rem' }}>
-              <h2 style={{ color: '#111', fontSize: '1.5rem', marginBottom: '1rem' }}>2. Sử dụng thông tin</h2>
-              <p>Thông tin của bạn được sử dụng để: Xử lý đơn hàng, thông báo tình trạng vận chuyển, cung cấp các ưu đãi mới nhất và cải thiện trải nghiệm mua sắm của bạn trên website.</p>
+            <section className={styles.section}>
+              <h2 className={styles.sectionTitle}>
+                <span className={styles.numberCircle}>2</span>
+                Cam kết bảo mật & Phạm vi sử dụng
+              </h2>
+              <div className={styles.returnsBox} style={{ background: '#f8f9fa', borderStyle: 'solid', borderColor: '#eee' }}>
+                <p>Thông tin của quý khách chỉ được sử dụng nội bộ công ty:</p>
+                <ul className="mb-0">
+                  <li>Tuyệt đối không chia sẻ cho bên thứ ba khi chưa có sự đồng ý của khách hàng.</li>
+                  <li>Chỉ cung cấp cho cơ quan nhà nước có thẩm quyền khi có yêu cầu bằng văn bản.</li>
+                  <li>Dữ liệu được lưu trữ an toàn trên hệ thống kỹ thuật hiện đại.</li>
+                </ul>
+              </div>
             </section>
 
-            <section style={{ marginBottom: '2rem' }}>
-              <h2 style={{ color: '#111', fontSize: '1.5rem', marginBottom: '1rem' }}>3. Bảo mật dữ liệu</h2>
-              <p>Chúng tôi cam kết bảo mật tuyệt đối thông tin khách hàng. Thông tin được lưu trữ an toàn và chỉ cung cấp cho các bên liên quan trực tiếp đến việc xử lý đơn hàng (như đơn vị vận chuyển).</p>
+            <section className={styles.section}>
+              <h2 className={styles.sectionTitle}>
+                <span className={styles.numberCircle}>3</span>
+                Quyền lợi của khách hàng
+              </h2>
+              <ul className={styles.iconList}>
+                <li className={styles.iconListItem}>
+                  <i className="bi bi-person-gear text-primary fs-4"/>
+                  <span>Có quyền yêu cầu kiểm tra, cập nhật hoặc yêu cầu xóa thông tin cá nhân.</span>
+                </li>
+                <li className={styles.iconListItem}>
+                  <i className="bi bi-shield-exclamation text-primary fs-4"/>
+                  <span>Có quyền khiếu nại nếu phát hiện thông tin bị sử dụng sai mục đích cam kết.</span>
+                </li>
+              </ul>
             </section>
 
-            <section>
-              <h2 style={{ color: '#111', fontSize: '1.5rem', marginBottom: '1rem' }}>4. Quyền của bạn</h2>
-              <p>Bạn có quyền yêu cầu chỉnh sửa, xoá bỏ thông tin cá nhân bất kỳ lúc nào bằng cách đăng nhập vào tài khoản hoặc liên hệ trực tiếp với bộ phận hỗ trợ khách hàng của chúng tôi.</p>
-            </section>
+            <div className={styles.commitmentBox}>
+              <h2 className={styles.commitmentTitle}>AN TOÀN TUYỆT ĐỐI</h2>
+              <div className={styles.commitmentIcons}>
+                 <div className={styles.commitmentItem}>
+                  <i className="bi bi-shield-lock" />
+                  <span className="fw-bold">Bảo vệ 24/7</span>
+                </div>
+                <div className={styles.commitmentItem}>
+                  <i className="bi bi-key" />
+                  <span className="fw-bold">Mã hóa dữ liệu</span>
+                </div>
+                <div className={styles.commitmentItem}>
+                  <i className="bi bi-hand-thumbs-up" />
+                  <span className="fw-bold">Tôn trọng quyền riêng tư</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </main>
