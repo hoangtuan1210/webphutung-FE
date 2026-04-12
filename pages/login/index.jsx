@@ -42,14 +42,21 @@ export default function LoginPage() {
             });
 
             if (res?.success) {
-                if (res.data?.accessToken) {
-                    localStorage.setItem("token", res.data.accessToken);
+                const { accessToken, user } = res.data || {};
+                if (accessToken) {
+                    localStorage.setItem("token", accessToken);
                 }
-                if (res.data?.user) {
-                    localStorage.setItem("user", JSON.stringify(res.data.user));
+                if (user) {
+                    localStorage.setItem("user", JSON.stringify(user));
                 }
+
                 toast.success("Đăng nhập thành công!");
-                router.push("/");
+
+                if (user?.role === "ADMIN") {
+                    router.push("/admin/dashboard");
+                } else {
+                    router.push("/");
+                }
             } else {
                 setApiError(res?.message || "Email hoặc mật khẩu không đúng");
             }

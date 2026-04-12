@@ -15,7 +15,28 @@ export default function AdminLayout({ children }) {
   const handleToggleCollapse = useCallback(() => setCollapsed((p) => !p), []);
 
   const drawerWidth = collapsed ? 72 : 260;
+
   useEffect(() => {
+    // Kiểm tra quyền truy cập admin
+    const storedUser = localStorage.getItem("user");
+    const token = localStorage.getItem("token");
+
+    if (!token || !storedUser) {
+      window.location.href = "/login";
+      return;
+    }
+
+    try {
+      const user = JSON.parse(storedUser);
+      if (user.role !== "admin") {
+        window.location.href = "/";
+        return;
+      }
+    } catch (e) {
+      window.location.href = "/login";
+      return;
+    }
+
     const timer = setTimeout(() => {
       setLoading(false);
     }, 1000);

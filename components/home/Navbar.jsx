@@ -45,6 +45,7 @@ export default function Navbar() {
           setCurrentUser({
             name: `${u.lastName || ""} ${u.firstName || ""}`.trim() || u.email || "Tài khoản",
             avatar: u.avatar || "/default-avatar.png",
+            role: u.role,
           });
         } catch (e) {}
       }
@@ -286,9 +287,16 @@ export default function Navbar() {
                 <div className={`${styles.userDropdown} ${isUserMenuOpen ? styles.userDropdownOpen : ""}`}>
                   <div className={styles.userInfo}>
                     <p className={styles.userName}>{currentUser.name}</p>
-                    <p className={styles.userRole}>Khách hàng</p>
+                    <p className={styles.userRole}>
+                      {currentUser.role === "admin" ? "Quản trị viên" : "Khách hàng"}
+                    </p>
                   </div>
                   <div className={styles.userLinks}>
+                    {currentUser.role === "admin" && (
+                      <Link href="/admin/dashboard" className={styles.userLink} onClick={() => setIsUserMenuOpen(false)}>
+                        <i className="bi bi-speedometer2" /> Trang quản trị
+                      </Link>
+                    )}
                     <Link href="/profile" className={styles.userLink} onClick={() => setIsUserMenuOpen(false)}>
                       <i className="bi bi-person" /> Thông tin tài khoản
                     </Link>

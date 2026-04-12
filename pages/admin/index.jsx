@@ -1,11 +1,17 @@
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 import AdminLayout from "@/layouts/AdminLayout";
 
-export default function Dashboard() {
-  return(
-    <h1>Admin Dashboard</h1>
-  ) 
+export default function AdminIndex() {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.replace("/admin/dashboard");
+  }, [router]);
+
+  return null;
 }
 
-Dashboard.getLayout = function getLayout(page) {
+AdminIndex.getLayout = function getLayout(page) {
   return <AdminLayout>{page}</AdminLayout>;
 };
