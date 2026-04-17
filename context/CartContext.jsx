@@ -5,11 +5,8 @@ import { cartService } from "@/services/cartService";
 
 const CartContext = createContext(null);
 
-// Helper: kiểm tra user đã đăng nhập chưa
-const isLoggedIn = () => {
-  if (typeof window === "undefined") return false;
-  return !!localStorage.getItem("token");
-};
+// Helper: kiểm tra user đã đăng nhập chưa (luôn trả về false vì đã bỏ tính năng login cho client)
+const isLoggedIn = () => false;
 
 // Normalize item từ API response sang format nội bộ
 const normalizeApiItem = (item) => ({

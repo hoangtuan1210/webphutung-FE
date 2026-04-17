@@ -5,7 +5,6 @@ const { execSync } = require('child_process');
 
 function extractTextFromDocx(filePath) {
     try {
-        // Since I don't have adm-zip, I'll use PowerShell to extract
         const tempDir = path.join(__dirname, 'temp_docx');
         if (fs.existsSync(tempDir)) fs.rmSync(tempDir, { recursive: true, force: true });
         fs.mkdirSync(tempDir);
@@ -16,7 +15,6 @@ function extractTextFromDocx(filePath) {
         if (!fs.existsSync(xmlPath)) return "Could not find document.xml";
         
         const xml = fs.readFileSync(xmlPath, 'utf8');
-        // Simple regex to extract text from <w:t> tags
         const text = xml.match(/<w:t[^>]*>(.*?)<\/w:t>/g)
             ?.map(val => val.replace(/<[^>]+>/g, ''))
             .join(' ') || "";

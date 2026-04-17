@@ -1,6 +1,25 @@
 .page {
   composes: page from "../shared.module.css";
-  padding: 2rem 0 4rem;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding-bottom: 1rem;
+}
+
+.title {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: #111;
+  margin-bottom: 0.75rem;
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: #666;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 .filterRow {
@@ -203,7 +222,16 @@
   margin: 0;
 }
 
-@media (max-width: 767.98px) {
+@media (max-width: 991.98px) {
+  .header {
+    margin-bottom: 2rem;
+  }
+  .title {
+    font-size: 1.8rem;
+  }
+  .subtitle {
+    font-size: 0.9rem;
+  }
   .featured {
     grid-template-columns: 1fr;
   }
@@ -216,14 +244,12 @@
   .featuredTitle {
     font-size: 1.1rem;
   }
-  .title {
-    font-size: 1.4rem;
-  }
 }
 
 @media (max-width: 575.98px) {
-  .page {
-    padding: 1.25rem 0 3rem;
+  .header {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
   }
   .filterRow {
     gap: 0.4rem;

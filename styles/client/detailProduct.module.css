@@ -639,10 +639,6 @@
 }
 
 @media (max-width: 575.98px) {
-  .page {
-    padding: 1rem 0 3rem;
-  }
-
   .mainImg {
     max-height: 240px;
     aspect-ratio: 1 / 1;

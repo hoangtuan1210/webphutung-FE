@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import ClientLayout from "@/layouts/ClientLayout";
 import { userService } from "@/services/userService";
-import styles from "@/styles/client/profile.module.css";
 import Image from "next/image";
 
 export default function OrderList() {

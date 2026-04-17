@@ -16,9 +16,6 @@ export default function Navbar() {
   const totalQty = cart?.totalQty ?? 0;
   const setIsOpen = cart?.setIsOpen;
 
-  const [currentUser, setCurrentUser] = useState(null);
-  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [loadingSearch, setLoadingSearch] = useState(false);
@@ -34,22 +31,9 @@ export default function Navbar() {
   const searchRef = useRef(null);
   const mobileSearchRef = useRef(null);
   const desktopNavRef = useRef(null);
-  const userRef = useRef(null);
 
   useEffect(() => {
     const fetchInitialData = async () => {
-      const stored = localStorage.getItem("user");
-      if (stored) {
-        try {
-          const u = JSON.parse(stored);
-          setCurrentUser({
-            name: `${u.lastName || ""} ${u.firstName || ""}`.trim() || u.email || "Tài khoản",
-            avatar: u.avatar || "/default-avatar.png",
-            role: u.role,
-          });
-        } catch (e) { }
-      }
-
       try {
         const res = await categoryService.getCategories();
         setCategories(res.data?.slice(0, 8) || []);
@@ -61,7 +45,6 @@ export default function Navbar() {
     const handleClickOutside = (e) => {
       if (searchRef.current && !searchRef.current.contains(e.target)) setShowSuggestions(false);
       if (desktopNavRef.current && !desktopNavRef.current.contains(e.target)) setActiveDropdown(null);
-      if (userRef.current && !userRef.current.contains(e.target)) setIsUserMenuOpen(false);
     };
 
     let ticking = false;

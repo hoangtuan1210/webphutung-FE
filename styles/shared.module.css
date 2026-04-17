@@ -195,6 +195,22 @@
   gap: 0.75rem;
 }
 
+.layoutMain {
+  padding-top: 170px; /* Banner (60) + Nav (106) + spacing */
+}
+
+@media (max-width: 1099.98px) {
+  .layoutMain {
+    padding-top: 180px;
+  }
+}
+
+@media (max-width: 576px) {
+  .layoutMain {
+    padding-top: 140px;
+  }
+}
+
 @media (max-width: 768px) {
   .page { padding: 1.25rem 0 3rem; }
 }
