@@ -9,7 +9,7 @@ export default function WhyChooseUs({ imageSrc }) {
         <div className="col-12 col-md-6 order-2 order-md-1">
           <div className={styles.sectionHighlightContent}>
             <span className={styles.tagline}>Uy tín là vàng</span>
-            <h2 className={styles.titleEmphasized}>Tại sao nên chọn<br /><span>Phụ tùng MyShop?</span></h2>
+            <h2 className={styles.titleEmphasized}>Tại sao nên chọn<br /><span>Feichi</span></h2>
             <p className={styles.desc}>
               Chúng tôi không chỉ bán phụ tùng, chúng tôi cung cấp giải pháp an tâm tuyệt đối cho khách hàng.
               Tất cả linh kiện được kiểm tra nghiêm ngặt trước khi đến tay bạn.

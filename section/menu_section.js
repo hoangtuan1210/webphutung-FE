@@ -19,11 +19,6 @@ export const MENU_SECTIONS = [
         label: "Tổng quan",
         icon: <FiGrid />,
       },
-      // {
-      //   href: "/admin/profile",
-      //   label: "Thông tin người dùng",
-      //   icon: <FiUser />,
-      // },
       {
         label: "Sản phẩm",
         icon: <FiBox />,

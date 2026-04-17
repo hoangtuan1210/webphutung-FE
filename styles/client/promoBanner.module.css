@@ -1,0 +1,265 @@
+/* ── Promo Banner Section ── */
+.promoSection {
+  padding: 0;
+  width: 100%;
+}
+
+.promoContainer {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.promoList {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.promoLink {
+  width: 100%;
+  display: block;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.promoImage {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+
+.promoBannerSingle {
+  position: relative;
+  width: 100%;
+  border-radius: 1rem;
+  overflow: hidden;
+  display: block;
+  text-decoration: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.promoBannerSingle:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+}
+
+.promoBannerImage {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.promoBannerSingle:hover .promoBannerImage {
+  transform: scale(1.02);
+}
+
+.promoGrid {
+  display: grid;
+  gap: 1rem;
+}
+
+.promoGrid2 {
+  grid-template-columns: 1fr 1fr;
+}
+
+.promoGrid3 {
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: auto auto;
+}
+
+.promoGrid3 .promoItem:first-child {
+  grid-row: 1 / 3;
+}
+
+.promoItem {
+  position: relative;
+  border-radius: 1rem;
+  overflow: hidden;
+  display: block;
+  text-decoration: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.promoItem:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.12);
+}
+
+.promoItemImageWrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 200px;
+  overflow: hidden;
+}
+
+.promoItemImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.promoItem:hover .promoItemImage {
+  transform: scale(1.04);
+}
+
+.promoOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top,
+      rgba(0, 0, 0, 0.55) 0%,
+      rgba(0, 0, 0, 0.1) 50%,
+      transparent 100%);
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.promoItem:hover .promoOverlay,
+.promoBannerSingle:hover .promoOverlay {
+  opacity: 1;
+}
+
+.promoContent {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1.5rem;
+  z-index: 2;
+  transform: translateY(8px);
+  opacity: 0;
+  transition: transform 0.35s ease, opacity 0.35s ease;
+}
+
+.promoItem:hover .promoContent,
+.promoBannerSingle:hover .promoContent {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.promoTitle {
+  color: #fff;
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.promoDesc {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.88rem;
+  margin: 0;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* ── Badge (nếu có) ── */
+.promoBadge {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: #e63946;
+  color: #fff;
+  padding: 0.3rem 0.85rem;
+  border-radius: 50px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  z-index: 3;
+  box-shadow: 0 2px 8px rgba(230, 57, 70, 0.35);
+}
+
+/* ── Skeleton Loading ── */
+.skeleton {
+  background: linear-gradient(90deg,
+      #f0f0f0 25%,
+      #e8e8e8 50%,
+      #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 1rem;
+}
+
+.skeletonSingle {
+  width: 100%;
+  height: 300px;
+}
+
+.skeletonGrid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr 1fr;
+}
+
+.skeletonItem {
+  height: 220px;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+
+  .promoGrid2,
+  .promoGrid3 {
+    grid-template-columns: 1fr;
+  }
+
+  .promoGrid3 .promoItem:first-child {
+    grid-row: auto;
+  }
+
+  .promoItemImageWrapper {
+    min-height: 160px;
+  }
+
+  .promoContent {
+    padding: 1rem;
+  }
+
+  .promoTitle {
+    font-size: 1rem;
+  }
+
+  .skeletonSingle {
+    height: 200px;
+  }
+
+  .skeletonGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .skeletonItem {
+    height: 180px;
+  }
+}
+
+@media (max-width: 480px) {
+  .promoSection {
+    padding: 0.5rem 0;
+  }
+
+  .promoItemImageWrapper {
+    min-height: 140px;
+  }
+
+  .promoBadge {
+    top: 0.6rem;
+    left: 0.6rem;
+    font-size: 0.72rem;
+    padding: 0.25rem 0.65rem;
+  }
+}

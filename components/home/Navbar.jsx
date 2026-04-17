@@ -47,13 +47,13 @@ export default function Navbar() {
             avatar: u.avatar || "/default-avatar.png",
             role: u.role,
           });
-        } catch (e) {}
+        } catch (e) { }
       }
-      
+
       try {
         const res = await categoryService.getCategories();
         setCategories(res.data?.slice(0, 8) || []);
-      } catch (err) {}
+      } catch (err) { }
     };
 
     fetchInitialData();
@@ -64,7 +64,17 @@ export default function Navbar() {
       if (userRef.current && !userRef.current.contains(e.target)) setIsUserMenuOpen(false);
     };
 
-    const handleScroll = () => setTopBannerVisible(window.scrollY === 0);
+    let ticking = false;
+    const SCROLL_THRESHOLD = 5;
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setTopBannerVisible(window.scrollY <= SCROLL_THRESHOLD);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
     const handleResize = () => {
       if (window.innerWidth >= 992) {
         setIsMobileMenuOpen(false);
@@ -155,7 +165,7 @@ export default function Navbar() {
               >
                 <div className={styles.suggestionImage}>
                   <img
-                    src={p.images?.[0]?.url || "/placeholder.jpg"} 
+                    src={p.images?.[0]?.url || "/placeholder.jpg"}
                     alt={p.name}
                     style={{ width: "100%", height: "100%", objectFit: "cover" }}
                   />
@@ -189,7 +199,7 @@ export default function Navbar() {
       <nav className={styles.navbar}>
         <div className={styles.navContainer}>
           <Link href="/" className={styles.logo}>
-            <Image src="/logo.jpg" alt="Logo" width={190} height={60} priority quality={100} className={styles.logoImg} />
+            <Image src="/logo.jpg" alt="Logo" width={260} height={82} priority quality={100} className={styles.logoImg} />
           </Link>
 
           <div className={styles.searchContainer} ref={searchRef}>
@@ -197,27 +207,27 @@ export default function Navbar() {
               <div className={styles.searchInputWrapper}>
                 <i className={`bi bi-search ${styles.searchIconInside}`} />
                 <input
-                   className={styles.searchInput}
-                   type="text"
-                   placeholder="Tìm kiếm phụ tùng, đồ chơi xe..."
-                   value={searchQuery}
-                   onChange={(e) => {
-                     setSearchQuery(e.target.value);
-                     if (e.target.value.trim().length >= 2) {
-                       setShowSuggestions(true);
-                     } else {
-                       setShowSuggestions(false);
-                     }
-                   }}
-                   onFocus={() => {
-                     if (searchQuery.trim().length >= 2) setShowSuggestions(true);
-                   }}
-                   onKeyDown={(e) => {
-                     if (e.key === "Escape") {
-                       setShowSuggestions(false);
-                       setSearchQuery("");
-                     }
-                   }}
+                  className={styles.searchInput}
+                  type="text"
+                  placeholder="Tìm kiếm phụ tùng, đồ chơi xe..."
+                  value={searchQuery}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    if (e.target.value.trim().length >= 2) {
+                      setShowSuggestions(true);
+                    } else {
+                      setShowSuggestions(false);
+                    }
+                  }}
+                  onFocus={() => {
+                    if (searchQuery.trim().length >= 2) setShowSuggestions(true);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Escape") {
+                      setShowSuggestions(false);
+                      setSearchQuery("");
+                    }
+                  }}
                 />
                 {searchQuery && (
                   <button type="button" className={styles.clearSearchBtn} onClick={() => setSearchQuery("")}>
@@ -232,7 +242,7 @@ export default function Navbar() {
 
           <div className={styles.desktopNavWrapper} ref={desktopNavRef}>
             <ul className={styles.desktopNavList}>
-              {NAV_ITEMS.filter(item => item.label !== "Đơn hàng").map((item, i) => (
+              {NAV_ITEMS.map((item, i) => (
                 <li
                   key={i}
                   className={styles.desktopNavItem}
@@ -275,61 +285,6 @@ export default function Navbar() {
               {totalQty > 0 && <span className={styles.cartBadge}>{totalQty > 99 ? "99+" : totalQty}</span>}
             </button>
 
-            {currentUser ? (
-              /* Đã đăng nhập: hiển thị avatar + dropdown */
-              <div className={styles.userMenuWrapper} ref={userRef}>
-                <button className={styles.avatarBtn} onClick={() => setIsUserMenuOpen(!isUserMenuOpen)} aria-label="Tài khoản">
-                  <div className={styles.avatarImgWrapper}>
-                    <Image src={currentUser.avatar || "/default-avatar.png"} alt="Avatar" width={32} height={32} />
-                  </div>
-                </button>
-
-                <div className={`${styles.userDropdown} ${isUserMenuOpen ? styles.userDropdownOpen : ""}`}>
-                  <div className={styles.userInfo}>
-                    <p className={styles.userName}>{currentUser.name}</p>
-                    <p className={styles.userRole}>
-                      {currentUser.role === "admin" ? "Quản trị viên" : "Khách hàng"}
-                    </p>
-                  </div>
-                  <div className={styles.userLinks}>
-                    {currentUser.role === "admin" && (
-                      <Link href="/admin/dashboard" className={styles.userLink} onClick={() => setIsUserMenuOpen(false)}>
-                        <i className="bi bi-speedometer2" /> Trang quản trị
-                      </Link>
-                    )}
-                    <Link href="/profile" className={styles.userLink} onClick={() => setIsUserMenuOpen(false)}>
-                      <i className="bi bi-person" /> Thông tin tài khoản
-                    </Link>
-                    <Link href="/order" className={styles.userLink} onClick={() => setIsUserMenuOpen(false)}>
-                      <i className="bi bi-box-seam" /> Đơn hàng của tôi
-                    </Link>
-                    <div className={styles.userDivider} />
-                    <button
-                      className={`${styles.userLink} ${styles.logoutBtn}`}
-                      onClick={() => {
-                        localStorage.removeItem("token");
-                        localStorage.removeItem("user");
-                        setCurrentUser(null);
-                        setIsUserMenuOpen(false);
-                        window.location.href = "/";
-                      }}
-                    >
-                      <i className="bi bi-box-arrow-right" /> Đăng xuất
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              /* Chưa đăng nhập: hiển thị nút Đăng nhập / Đăng ký */
-              <div className={styles.authButtons}>
-                <Link href="/login" className={styles.loginBtn}>
-                  Đăng nhập
-                </Link>
-                <Link href="/register" className={styles.registerBtn}>
-                  Đăng ký
-                </Link>
-              </div>
-            )}
 
             <button className={`${styles.iconBtn} ${styles.hamburger}`} onClick={toggleMobileMenu} aria-label="Menu">
               <i className={`bi ${isMobileMenuOpen ? "bi-x-lg" : "bi-list"} fs-5`} />
@@ -380,7 +335,7 @@ export default function Navbar() {
                   </div>
                 </>
               ) : (
-                <Link href={item.label === "Đơn hàng" ? "/order" : item.href} className={styles.mobileNavLink} onClick={closeMobileMenu}>
+                <Link href={item.href} className={styles.mobileNavLink} onClick={closeMobileMenu}>
                   {item.label}
                 </Link>
               )}

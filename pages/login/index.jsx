@@ -88,7 +88,6 @@ export default function LoginPage() {
                     )}
 
                     <form onSubmit={handleSubmit} noValidate>
-                        {/* Email */}
                         <div className="mb-3">
                             <label className={styles.formLabel}>
                                 Email <span className="text-danger">*</span>
@@ -156,12 +155,6 @@ export default function LoginPage() {
                         </button>
                     </form>
 
-                    <div className={styles.divider}>hoặc</div>
-
-                    <p className={styles.registerLink}>
-                        Chưa có tài khoản?{" "}
-                        <Link href="/resgiter">Đăng ký ngay</Link>
-                    </p>
                 </div>
             </div>
         </div>

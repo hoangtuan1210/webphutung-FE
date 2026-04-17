@@ -237,7 +237,6 @@ export default function DetailProduct({ productData }) {
 
                 return (
                   <div key={item.id} className="col-6 col-md-3">
-                    {/* ✅ dùng item.slug thay vì toSlug(item.name) */}
                     <Link href={`/detail-product/${item.slug}`} className={styles.relatedCard}>
                       <div className={styles.relatedImg}>
                         <Image

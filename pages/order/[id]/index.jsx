@@ -30,7 +30,6 @@ function normalizeOrder(raw) {
       "/placeholder.jpg",
   }));
   
-  // Format Address explicitly since it's an object now
   let addressStr = "";
   if (raw.address && typeof raw.address === "object") {
     const { addressLine1, city, state, country } = raw.address;
@@ -63,6 +62,10 @@ export default function OrderDetail() {
   const { id } = router.query;
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    window.location.href = "/";
+  }, []);
 
   useEffect(() => {
     if (!id) return;
@@ -317,4 +320,4 @@ export default function OrderDetail() {
     </ClientLayout>
   );
 }
-
+

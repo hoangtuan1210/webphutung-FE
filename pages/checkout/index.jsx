@@ -18,10 +18,10 @@ export default function Checkout() {
     phone: "",
     email: "",
     address: "",
-    note: "",
     payment: "cod",
   });
 
+  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
   const validate = () => {
@@ -58,99 +58,46 @@ export default function Checkout() {
       return;
     }
 
-    const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    setLoading(true);
+
+    const guestPayload = {
+      email: form.email || "guest@example.com",
+      fullName: form.name,
+      phoneNumber: form.phone,
+      address: {
+        fullName: form.name,
+        phoneNumber: form.phone,
+        streetAddress: form.address,
+        ward: "",
+        district: "",
+        city: "",
+        postalCode: ""
+      },
+      items: selectedItems.map(item => ({
+        productId: (item.productId ?? item.id).toString(),
+        quantity: item.qty
+      })),
+      couponCode: "",
+      paymentMethod: form.payment,
+      deliveryDate: new Date().toISOString(),
+      deliverySlot: "",
+      customerNotes: ""
+    };
+    
     let orderId = null;
-
     try {
-      if (token) {
-        let validAddressId = "";
-        
-        try {
-           const addrRes = await userService.getAddresses();
-           if (addrRes.data && addrRes.data.length > 0) {
-              const defaultAddr = addrRes.data.find(a => a.isDefault) || addrRes.data[0];
-              validAddressId = defaultAddr.id;
-           } else {
-              // Tạo mới một địa chỉ từ thông tin form
-              const createRes = await userService.createAddress({
-                  fullName: form.name,
-                  phone: form.phone,
-                  addressLine1: form.address,
-                  addressLine2: form.note || "",
-                  city: "Thành phố Hồ Chí Minh",
-                  state: "Hồ Chí Minh",
-                  postalCode: "700000",
-                  country: "VN",
-                  isDefault: true
-              });
-              if (createRes.data?.id) validAddressId = createRes.data.id;
-              if (createRes.data?.data?.id) validAddressId = createRes.data.data.id;
-           }
-        } catch (error) {
-           console.error("Lỗi địa chỉ:", error);
-        }
-
-        if (!validAddressId) {
-           toast.error("Không thể tạo hoặc tìm thấy địa chỉ người dùng!");
-           return;
-        }
-
-        const authPayload = {
-          addressId: validAddressId,
-          items: selectedItems.map(item => ({
-            productId: (item.productId ?? item.id).toString(),
-            quantity: item.qty
-          })),
-          couponCode: "",
-          deliveryDate: new Date().toISOString(),
-          deliverySlot: "",
-          customerNotes: form.note
-        };
-        const res = await checkoutService.createOrder(authPayload);
-        orderId = res.data?.id || res.data?.data?.id;
-      } else {
-        const guestPayload = {
-          email: form.email || "guest@example.com",
-          fullName: form.name,
-          phoneNumber: form.phone,
-          address: {
-            fullName: form.name,
-            phoneNumber: form.phone,
-            streetAddress: form.address,
-            ward: "",
-            district: "",
-            city: "",
-            postalCode: ""
-          },
-          items: selectedItems.map(item => ({
-            productId: (item.productId ?? item.id).toString(),
-            quantity: item.qty
-          })),
-          couponCode: "",
-          paymentMethod: form.payment,
-          deliveryDate: new Date().toISOString(),
-          deliverySlot: "",
-          customerNotes: form.note
-        };
-        const res = await checkoutService.createGuestOrder(guestPayload);
-        orderId = res.data?.id || res.data?.data?.id;
-      }
+      const res = await checkoutService.createGuestOrder(guestPayload);
+      orderId = res.data?.id || res.data?.data?.id;
 
       toast.success("Đặt hàng thành công! Vui lòng kiểm tra email của bạn.");
       clearCart();
       setTimeout(() => {
-        if (token) {
-          if (orderId) {
-            router.push(`/order/${orderId}`);
-          } else {
-            router.push("/profile");
-          }
-        } else {
-          router.push("/products");
-        }
+        router.push("/products");
       }, 1500);
     } catch (error) {
       toast.error(error.message || "Đã có lỗi xảy ra khi đặt hàng.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -174,8 +121,30 @@ export default function Checkout() {
   return (
     <ClientLayout>
       <div className={styles.page}>
-        <div className="container">
-          {/* Breadcrumbs */}
+        <div className="container" style={{ position: "relative" }}>
+          {loading && (
+            <div 
+              style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                backgroundColor: "rgba(255, 255, 255, 0.8)",
+                zIndex: 9999,
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <div className="spinner-border text-dark" style={{ width: "3rem", height: "3rem" }} role="status">
+                <span className="visually-hidden">Đang xử lý...</span>
+              </div>
+              <p className="mt-3 fw-bold text-dark fs-5">Đang xử lý đơn hàng, vui lòng đợi...</p>
+            </div>
+          )}
+
           <nav className={styles.breadcrumbs}>
             <Link href="/" className={styles.breadcrumbLink}>Trang chủ</Link>
             <i className={`bi bi-chevron-right ${styles.breadcrumbSeparator}`}></i>
@@ -183,7 +152,6 @@ export default function Checkout() {
           </nav>
 
           <div className="row g-4">
-            {/* Left: Customer Info */}
             <div className="col-lg-7">
               <div className={`${styles.card} card`}>
                 <div className="card-body p-4">
@@ -238,17 +206,7 @@ export default function Checkout() {
                         />
                         {errors.address && <div className="invalid-feedback">{errors.address}</div>}
                       </div>
-                      <div className="col-12">
-                        <label className={styles.formLabel}>Ghi chú (Tùy chọn)</label>
-                        <textarea
-                          name="note"
-                          className={`form-control ${styles.formInput}`}
-                          rows="3"
-                          placeholder="Lời nhắn cho cửa hàng..."
-                          value={form.note}
-                          onChange={handleChange}
-                        ></textarea>
-                      </div>
+
                     </div>
 
                     <h4 className={`${styles.sectionTitle} mt-5`}>Phương thức thanh toán</h4>
@@ -285,8 +243,15 @@ export default function Checkout() {
                       </label>
                     </div>
 
-                    <button type="submit" className={`${styles.confirmBtn} btn w-100 mt-5`}>
-                      Xác nhận đặt hàng
+                    <button type="submit" disabled={loading} className={`${styles.confirmBtn} btn w-100 mt-5`}>
+                      {loading ? (
+                        <>
+                          <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                          Đang xử lý...
+                        </>
+                      ) : (
+                        "Xác nhận đặt hàng"
+                      )}
                     </button>
                   </form>
                 </div>

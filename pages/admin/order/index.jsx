@@ -18,7 +18,6 @@ import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import Avatar from "@mui/material/Avatar";
 import Drawer from "@mui/material/Drawer";
-import Divider from "@mui/material/Divider";
 import {
   FiSearch, FiDownload, FiPlus, FiMoreHorizontal,
   FiEye, FiEdit2, FiTrash2, FiArrowUp, FiArrowDown,
@@ -34,7 +33,6 @@ const STATUS_TABS = ["Tất cả", "pending", "processing", "shipping", "complet
 const PAYMENT_OPTIONS = ["Tất cả", "COD", "Chuyển khoản", "Ví điện tử"];
 const fmtVND = (n) => n.toLocaleString("vi-VN") + "₫";
 
-// ─── STATUS UI ─────────────────────────────────────────────────────────────
 const STATUS_UI = {
   completed:  { label: "Hoàn thành", color: "#16a34a", bg: "#f0fdf4", border: "#bbf7d0" },
   shipping:   { label: "Đang giao",  color: "#2563eb", bg: "#eff6ff", border: "#bfdbfe" },
@@ -86,7 +84,6 @@ const RowMenu = memo(({ id }) => {
   );
 });
 
-// ─── FILTER DRAWER ────────────────────────────────────────────────────────────
 function FilterDrawer({ open, onClose, filters, onApply }) {
   const [local, setLocal] = useState(filters);
   const set = (key, val) => setLocal((p) => ({ ...p, [key]: val }));

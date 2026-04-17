@@ -1,18 +1,54 @@
 import Image from "next/image";
-import styles from "@/styles/client/home.module.css";
+import Link from "next/link";
+import usePromotionBanner from "@/hooks/usePromotionBanner";
+import styles from "@/styles/client/promoBanner.module.css";
 
-export default function PromoBanner() {
+export default function PromoBanner({
+  initialPromotions = [],
+  position = "home_middle",
+}) {
+  const { promotions, loading } = usePromotionBanner({
+    position,
+    initialData: initialPromotions,
+    enableRefetch: true,
+  });
+
+  if (loading && (!promotions || promotions.length === 0)) {
+    return (
+      <section className={styles.promoSection}>
+        <div className={styles.promoContainer}>
+          <div className={`${styles.skeleton} ${styles.skeletonSingle}`} />
+        </div>
+      </section>
+    );
+  }
+
+  if (!promotions || promotions.length === 0) return null;
+
   return (
-    <div className="container mt-5">
-      <div className={styles.bannerWrapper}>
-        <Image
-          src="/promotion-banner.jpg"
-          width={1200}
-          height={200}
-          alt="promo banner"
-          style={{ width: "100%", height: "auto" }}
-        />
+    <section className={styles.promoSection}>
+      <div className={styles.promoContainer}>
+        <div className={styles.promoList}>
+          {promotions.map((promo) => (
+            <Link
+              key={promo.id}
+              href={promo.link || "/products"}
+              className={styles.promoLink}
+            >
+              <Image
+                src={promo.image || "/promotion-banner.jpg"}
+                width={1920}
+                height={400}
+                alt={promo.title || "Promotion banner"}
+                className={styles.promoImage}
+                style={{ width: "100%", height: "auto", display: "block", objectFit: "contain" }}
+                priority
+              />
+            </Link>
+          ))}
+        </div>
       </div>
-    </div>
+    </section>
   );
 }
+

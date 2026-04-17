@@ -19,6 +19,10 @@ export default function OrderList() {
   };
 
   useEffect(() => {
+    window.location.href = "/";
+  }, []);
+
+  useEffect(() => {
     const fetchOrders = async () => {
       try {
         const token = localStorage.getItem("token");
