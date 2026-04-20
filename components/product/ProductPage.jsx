@@ -76,6 +76,29 @@ export default function ProductsComponent({
   const totalPages = Math.ceil(total / PAGE_SIZE);
   const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
 
+  const [searchTerm, setSearchTerm] = useState(urlSearch || "");
+
+  // Đồng bộ searchTerm khi URL thay đổi (ví dụ bấm nút reset)
+  useEffect(() => {
+    setSearchTerm(urlSearch || "");
+  }, [urlSearch]);
+
+  // Debounced search logic
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      if (searchTerm !== (urlSearch || "")) {
+        handleFilterChange({ search: searchTerm });
+      }
+    }, 600);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchTerm, urlSearch]);
+
+  const handleClearSearch = () => {
+    setSearchTerm("");
+    handleFilterChange({ search: "" });
+  };
+
   const normalizeProduct = (product) => {
     const images = (product.images ?? []).map((img) =>
       typeof img === "string" ? img : img.url
@@ -105,7 +128,9 @@ export default function ProductsComponent({
 
         <div className={styles.header}>
           <div>
-            <h1 className={styles.title}>Sản phẩm</h1>
+            <h1 className={styles.title}>
+              {urlSearch ? `Kết quả cho: "${urlSearch}"` : "Tất cả sản phẩm"}
+            </h1>
             <p className={styles.count}>
               Tìm thấy <b>{total}</b> sản phẩm
               {activeCategory !== "Tất cả" && (
@@ -153,14 +178,18 @@ export default function ProductsComponent({
                   type="text"
                   placeholder="Tìm sản phẩm..."
                   className={styles.searchInput}
-                  defaultValue={urlSearch || ""}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      handleFilterChange({ search: e.target.value });
-                    }
-                  }}
-                  onBlur={(e) => handleFilterChange({ search: e.target.value })}
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                 />
+                {searchTerm && (
+                  <button 
+                    className={styles.clearSearch} 
+                    onClick={handleClearSearch}
+                    aria-label="Clear search"
+                  >
+                    <i className="bi bi-x-circle-fill" />
+                  </button>
+                )}
               </div>
 
               <div className={styles.toolbarRight}>
@@ -338,7 +367,7 @@ export default function ProductsComponent({
               </div>
             )}
 
-            {/* Pagination */}
+  
             {totalPages > 1 && (
               <div className={styles.paginationArea}>
                 <div className={styles.pageLinks}>

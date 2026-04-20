@@ -32,8 +32,8 @@
 }
 
 .desc {
-  font-size: 0.9rem;
-  color: #555;
+  font-size: 1.05rem;
+  color: #444;
   line-height: 1.7;
   margin: 0;
 }
@@ -41,10 +41,10 @@
 .col {}
 
 .colTitle {
-  font-size: 1.05rem;
+  font-size: 1.25rem;
   font-weight: 700;
   color: #111;
-  margin-bottom: 1.1rem;
+  margin-bottom: 1.15rem;
 }
 
 .linkList {
@@ -57,9 +57,9 @@
 }
 
 .linkList a {
-  color: #555;
+  color: #444;
   text-decoration: none;
-  font-size: 0.9rem;
+  font-size: 1.05rem;
   transition: color 0.2s;
 }
 .linkList a:hover { color: #111; }
@@ -77,8 +77,8 @@
   display: flex;
   align-items: flex-start;
   gap: 0.5rem;
-  font-size: 0.9rem;
-  color: #555;
+  font-size: 1.05rem;
+  color: #444;
 }
 
 .contactList i {

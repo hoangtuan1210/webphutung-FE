@@ -20,7 +20,7 @@ export default function ProductSection({ products: apiProducts = [], title = "Sá
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
-      <div className="d-flex justify-content-end mt-4">
+      <div className="d-flex justify-content-end mt-5">
         <Link href="/products" className={styles.viewMoreBtn}>
           Xem thÃªm <i className="bi bi-arrow-right" />
         </Link>

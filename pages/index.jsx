@@ -6,11 +6,9 @@ import PromoBanner from "@/components/home/PromoBanner";
 import NewsSection from "@/components/home/NewsSection";
 import FeaturesSection from "@/components/home/FeaturesSection";
 import WhyChooseUs from "@/components/home/WhyChooseUs";
-import BrandScrolling from "@/components/home/BrandScrolling";
 import { newsList } from "@/data/news";
 import { productService } from "@/services/productService";
 import { bannerService } from "@/services/bannerService";
-// export { newsList } from "@/data/news";
 
 
 export default function Home({ news, featuredProducts, trendingProducts, banners }) {
@@ -37,11 +35,9 @@ export default function Home({ news, featuredProducts, trendingProducts, banners
         title="Sản phẩm xu hướng"
       />
 
-      {/* PromoBanner: hiện dùng ảnh cứng, sau này sẽ truyền initialPromotions từ API */}
       <PromoBanner />
       <WhyChooseUs imageSrc="/about-us.png" />
       <NewsSection news={news} />
-      <BrandScrolling />
     </ClientLayout>
   );
 }
@@ -57,15 +53,11 @@ export async function getStaticProps() {
       productService.getFeaturedProducts(8).catch(() => ({ success: false, data: [] })),
       productService.getTrendingProducts(8).catch(() => ({ success: false, data: [] })),
       bannerService.getBanners().catch(() => ({ success: false, data: [] })),
-      // bannerService.getPromotionBanners("home_middle").catch(() => ({ success: false, data: [] })),
-
     ]);
 
     featuredProducts = productsRes?.success ? productsRes.data : [];
     trendingProducts = trendingRes?.success ? trendingRes.data : [];
     banners = bannersRes?.success ? bannersRes.data : [];
-    // TODO: Bỏ comment khi API promotion sẵn sàng
-    // promotions = promotionsRes?.success ? promotionsRes.data : [];
     news = newsList.slice(0, 4);
   } catch (error) {
     console.error("Home Page Data Fetch Error:", error);

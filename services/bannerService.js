@@ -9,8 +9,6 @@ export const bannerService = {
     return api.get(`/banners/${id}`);
   },
 
-  getPromotionBanners: (position = "home_middle") => {
-    return api.get(`/promotions?position=${position}&isActive=true`);
-  },
+
 };
 

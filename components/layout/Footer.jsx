@@ -1,4 +1,3 @@
-// footer.jsx
 import Link from "next/link";
 import Image from "next/image";
 import styles from "@/styles/client/footer.module.css";
@@ -11,16 +10,16 @@ export default function Footer() {
         <div className={styles.brand}>
           <div className={styles.logo}>
             <Image
-              src="/logo.jpg"
+              src="/logo.tif"
               alt="Logo"
-              width={220}
-              height={70}
+              width={280}
+              height={90}
               quality={100}
               className={styles.logoImg}
             />
           </div>
           <p className={styles.desc}>
-            Chuyên cung cấp phụ tùng xe máy, đồ chơi xe và phụ kiện xe điện chính hãng. 
+            Chuyên cung cấp phụ tùng xe máy và phụ kiện xe điện chính hãng. 
             Uy tín tạo nên thương hiệu - Chất lượng khẳng định vị thế.
           </p>
         </div>
@@ -60,7 +59,7 @@ export default function Footer() {
             </li>
             <li>
               <i className="bi bi-envelope" />
-              <span>Email: support@feichi.vn</span>
+              <span> Email:feichi2025.co@gmail.com</span>
             </li>
           </ul>
 

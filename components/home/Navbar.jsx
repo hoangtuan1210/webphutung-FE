@@ -26,7 +26,6 @@ export default function Navbar() {
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileProductsOpen, setIsMobileProductsOpen] = useState(false);
-  const [topBannerVisible, setTopBannerVisible] = useState(true);
 
   const searchRef = useRef(null);
   const mobileSearchRef = useRef(null);
@@ -43,21 +42,17 @@ export default function Navbar() {
     fetchInitialData();
 
     const handleClickOutside = (e) => {
-      if (searchRef.current && !searchRef.current.contains(e.target)) setShowSuggestions(false);
-      if (desktopNavRef.current && !desktopNavRef.current.contains(e.target)) setActiveDropdown(null);
-    };
-
-    let ticking = false;
-    const SCROLL_THRESHOLD = 5;
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          setTopBannerVisible(window.scrollY <= SCROLL_THRESHOLD);
-          ticking = false;
-        });
-        ticking = true;
+      if (
+        searchRef.current && !searchRef.current.contains(e.target) &&
+        mobileSearchRef.current && !mobileSearchRef.current.contains(e.target)
+      ) {
+        setShowSuggestions(false);
+      }
+      if (desktopNavRef.current && !desktopNavRef.current.contains(e.target)) {
+        setActiveDropdown(null);
       }
     };
+
     const handleResize = () => {
       if (window.innerWidth >= 992) {
         setIsMobileMenuOpen(false);
@@ -66,12 +61,10 @@ export default function Navbar() {
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-    window.addEventListener("scroll", handleScroll, { passive: true });
     window.addEventListener("resize", handleResize);
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
-      window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", handleResize);
     };
   }, []);
@@ -171,107 +164,106 @@ export default function Navbar() {
 
   return (
     <div className={styles.navbarWrapper}>
-      <div className={`${styles.topBanner} ${topBannerVisible ? styles.topBannerVisible : ""}`}>
-        <div className={styles.topBannerContent}>
-          <span className={styles.topBannerItem}>
-            <i className="bi bi-lightning-charge-fill" /> Phụ tùng xe máy - xe điện chính hãng
-          </span>
-        </div>
-      </div>
-
       <nav className={styles.navbar}>
         <div className={styles.navContainer}>
-          <Link href="/" className={styles.logo}>
-            <Image src="/logo.jpg" alt="Logo" width={260} height={82} priority quality={100} className={styles.logoImg} />
-          </Link>
-
-          <div className={styles.searchContainer} ref={searchRef}>
-            <form className={styles.searchDesktop} onSubmit={handleSearchSubmit}>
-              <div className={styles.searchInputWrapper}>
-                <i className={`bi bi-search ${styles.searchIconInside}`} />
-                <input
-                  className={styles.searchInput}
-                  type="text"
-                  placeholder="Tìm kiếm phụ tùng, đồ chơi xe..."
-                  value={searchQuery}
-                  onChange={(e) => {
-                    setSearchQuery(e.target.value);
-                    if (e.target.value.trim().length >= 2) {
-                      setShowSuggestions(true);
-                    } else {
-                      setShowSuggestions(false);
-                    }
-                  }}
-                  onFocus={() => {
-                    if (searchQuery.trim().length >= 2) setShowSuggestions(true);
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === "Escape") {
-                      setShowSuggestions(false);
-                      setSearchQuery("");
-                    }
-                  }}
-                />
-                {searchQuery && (
-                  <button type="button" className={styles.clearSearchBtn} onClick={() => setSearchQuery("")}>
-                    <i className="bi bi-x-circle-fill" />
-                  </button>
-                )}
+          <div className={styles.navLeft}>
+            <Link href="/" className={styles.logo}>
+              <div className={styles.logoWrapper} style={{ overflow: 'hidden' }}>
+                <Image src="/logo.tif" alt="Logo" width={320} height={100} priority quality={100} className={styles.logoImg} />
+                <span className={styles.logoSlogan}>PHỤ TÙNG XE MÁY – XE ĐIỆN CHÍNH HÃNG</span>
               </div>
-            </form>
-            {renderSuggestions()}
+            </Link>
           </div>
 
+          <div className={styles.navCenter}>
+            <div className={styles.searchContainer} ref={searchRef}>
+              <form className={styles.searchDesktop} onSubmit={handleSearchSubmit}>
+                <div className={styles.searchInputWrapper}>
+                  <i className={`bi bi-search ${styles.searchIconInside}`} />
+                  <input
+                    className={styles.searchInput}
+                    type="text"
+                    placeholder="Tìm kiếm phụ tùng, đồ chơi xe..."
+                    value={searchQuery}
+                    onChange={(e) => {
+                      setSearchQuery(e.target.value);
+                      if (e.target.value.trim().length >= 2) {
+                        setShowSuggestions(true);
+                      } else {
+                        setShowSuggestions(false);
+                      }
+                    }}
+                    onFocus={() => {
+                      if (searchQuery.trim().length >= 2) setShowSuggestions(true);
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Escape") {
+                        setShowSuggestions(false);
+                        setSearchQuery("");
+                      }
+                    }}
+                  />
+                  {searchQuery && (
+                    <button type="button" className={styles.clearSearchBtn} onClick={() => setSearchQuery("")}>
+                      <i className="bi bi-x-circle-fill" />
+                    </button>
+                  )}
+                </div>
+              </form>
+              {renderSuggestions()}
+            </div>
+          </div>
 
-          <div className={styles.desktopNavWrapper} ref={desktopNavRef}>
-            <ul className={styles.desktopNavList}>
-              {NAV_ITEMS.map((item, i) => (
-                <li
-                  key={i}
-                  className={styles.desktopNavItem}
-                  onMouseEnter={() => item.label === "Sản phẩm" && setActiveDropdown(item.label)}
-                  onMouseLeave={() => item.label === "Sản phẩm" && setActiveDropdown(null)}
-                >
-                  <Link href={item.href} className={`${styles.desktopNavLink} ${activeDropdown === item.label ? styles.active : ""}`}>
-                    {item.label}
-                    {item.label === "Sản phẩm" && <i className={`bi bi-chevron-down ${styles.chevron}`} />}
-                  </Link>
+          <div className={styles.navRight}>
+            <div className={styles.desktopNavWrapper} ref={desktopNavRef}>
+              <ul className={styles.desktopNavList}>
+                {NAV_ITEMS.map((item, i) => (
+                  <li
+                    key={i}
+                    className={styles.desktopNavItem}
+                    onMouseEnter={() => item.label === "Sản phẩm" && setActiveDropdown(item.label)}
+                    onMouseLeave={() => item.label === "Sản phẩm" && setActiveDropdown(null)}
+                  >
+                    <Link href={item.href} className={`${styles.desktopNavLink} ${activeDropdown === item.label ? styles.active : ""}`}>
+                      {item.label}
+                      {item.label === "Sản phẩm" && <i className={`bi bi-chevron-down ${styles.chevron}`} />}
+                    </Link>
 
-                  {item.label === "Sản phẩm" && (
-                    <div className={`${styles.categoryDropdown} ${activeDropdown === "Sản phẩm" ? styles.categoryDropdownOpen : ""}`}>
-                      <div className={styles.categoryInner}>
-                        <div className={styles.categoryGrid}>
-                          {categories.map((cat) => (
-                            <Link key={cat.id} href={`/products?categoryId=${cat.id}`} className={styles.categoryLink} onClick={() => setActiveDropdown(null)}>
-                              {cat.name}
+                    {item.label === "Sản phẩm" && (
+                      <div className={`${styles.categoryDropdown} ${activeDropdown === "Sản phẩm" ? styles.categoryDropdownOpen : ""}`}>
+                        <div className={styles.categoryInner}>
+                          <div className={styles.categoryGrid}>
+                            {categories.map((cat) => (
+                              <Link key={cat.id} href={`/products?categoryId=${cat.id}`} className={styles.categoryLink} onClick={() => setActiveDropdown(null)}>
+                                {cat.name}
+                              </Link>
+                            ))}
+                            <Link href="/products" className={`${styles.categoryLink} ${styles.viewAllCategories}`} onClick={() => setActiveDropdown(null)}>
+                              Xem tất cả sản phẩm <i className="bi bi-arrow-right" />
                             </Link>
-                          ))}
-                          <Link href="/products" className={`${styles.categoryLink} ${styles.viewAllCategories}`} onClick={() => setActiveDropdown(null)}>
-                            Xem tất cả sản phẩm <i className="bi bi-arrow-right" />
-                          </Link>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-          <div className={styles.rightIcons}>
-            <button className={`${styles.iconBtn} ${styles.searchToggle}`} onClick={toggleSearch} aria-label="Tìm kiếm">
-              <i className="bi bi-search" />
-            </button>
+            <div className={styles.rightIcons}>
+              <button className={`${styles.iconBtn} ${styles.searchToggle}`} onClick={toggleSearch} aria-label="Tìm kiếm">
+                <i className="bi bi-search" />
+              </button>
 
-            <button className={`${styles.iconBtn} ${styles.cartBtn}`} onClick={() => setIsOpen?.(true)} aria-label="Giỏ hàng">
-              <i className="bi bi-cart3" />
-              {totalQty > 0 && <span className={styles.cartBadge}>{totalQty > 99 ? "99+" : totalQty}</span>}
-            </button>
+              <button className={`${styles.iconBtn} ${styles.cartBtn}`} onClick={() => setIsOpen?.(true)} aria-label="Giỏ hàng">
+                <i className="bi bi-cart3" />
+                {totalQty > 0 && <span className={styles.cartBadge}>{totalQty > 99 ? "99+" : totalQty}</span>}
+              </button>
 
-
-            <button className={`${styles.iconBtn} ${styles.hamburger}`} onClick={toggleMobileMenu} aria-label="Menu">
-              <i className={`bi ${isMobileMenuOpen ? "bi-x-lg" : "bi-list"} fs-5`} />
-            </button>
+              <button className={`${styles.iconBtn} ${styles.hamburger}`} onClick={toggleMobileMenu} aria-label="Menu">
+                <i className={`bi ${isMobileMenuOpen ? "bi-x-lg" : "bi-list"} fs-5`} />
+              </button>
+            </div>
           </div>
         </div>
       </nav>

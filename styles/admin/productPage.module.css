@@ -47,16 +47,25 @@
 }
 .searchInput {
   width: 100%;
-  height: 40px;
-  padding: 0 2.2rem 0 2.1rem;
-  border: var(--btn-border);
-  border-radius: var(--btn-radius);
-  font-size: 0.87rem;
+  height: 42px;
+  padding: 0 2.2rem 0 2.5rem;
+  border: 1px solid #f0f0f0; /* Viền cực mảnh, nhẹ nhàng */
+  background-color: #f8f9fa; /* Nền xám nhạt hiện đại */
+  border-radius: 50px; /* Bo tròn mềm mại */
+  font-size: 0.95rem;
   outline: none;
-  transition: border-color 0.2s;
+  transition: all 0.25s ease;
 }
+
+.searchInput:hover {
+  background-color: #fff;
+  border-color: #0056b3; /* Hiện viền xanh nhẹ khi rê chuột qua */
+}
+
 .searchInput:focus {
-  border-color: var(--color-primary);
+  background-color: #fff;
+  border-color: #0056b3;
+  box-shadow: 0 4px 12px rgba(0, 86, 179, 0.08); /* Đổ bóng nhẹ sang trọng */
 }
 .clearSearch {
   position: absolute;
@@ -79,45 +88,57 @@
 }
 
 .sortSelect {
-  height: 40px;
-  padding: 0 0.75rem;
-  border: var(--btn-border);
-  border-radius: var(--btn-radius);
-  font-size: 0.83rem;
-  color: var(--color-secondary);
-  background: var(--color-white);
+  height: 42px;
+  padding: 0 1rem;
+  border: 1px solid #f0f0f0;
+  background-color: #f8f9fa;
+  border-radius: 50px;
+  font-size: 0.88rem;
+  color: #333;
   cursor: pointer;
   outline: none;
+  transition: all 0.25s ease;
+}
+.sortSelect:hover {
+  background-color: #fff;
+  border-color: #0056b3;
 }
 .sortSelect:focus {
-  border-color: var(--color-primary);
+  background-color: #fff;
+  border-color: #0056b3;
+  box-shadow: 0 4px 12px rgba(0, 86, 179, 0.08);
 }
 
 .viewToggle {
   display: flex;
-  border: var(--btn-border);
-  border-radius: var(--btn-radius);
+  background-color: #f8f9fa;
+  border: 1px solid #f0f0f0;
+  border-radius: 50px;
   overflow: hidden;
+  padding: 3px;
 }
 .viewBtn {
-  width: 38px;
-  height: 40px;
-  background: var(--color-white);
+  width: 36px;
+  height: 36px;
+  background: transparent;
   border: none;
+  border-radius: 50%;
   cursor: pointer;
   font-size: 0.9rem;
-  color: var(--color-muted-2);
+  color: #888;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 0.2s;
 }
 .viewBtn:hover {
-  color: var(--color-secondary);
+  color: #0056b3;
+  background: #fff;
 }
 .viewBtnActive {
-  border-color: #e63946;
-  color: #e63946;
-  background: #fff;
+  background: var(--color-primary) !important;
+  color: #fff !important;
+  box-shadow: 0 2px 8px rgba(230, 57, 70, 0.2); /* Đổ bóng màu đỏ nhạt */
 }
 
 .mainContent {
@@ -176,8 +197,10 @@
 }
 
 .categoryItem:hover:not(.categoryActive) {
-  background: #f8f9fa;
-  color: #111;
+  background: #fff;
+  border-color: #0056b3;
+  color: #0056b3;
+  box-shadow: 0 4px 12px rgba(0, 86, 179, 0.05);
 }
 
 .categoryActive {
@@ -589,8 +612,21 @@
     display: none; 
   }
   .breadcrumb {
-    margin-top: 3.5rem;
     font-size: 0.85rem;
+  }
+  .searchInput,
+  .sortSelect {
+    font-size: 0.85rem !important;
+    height: 38px !important;
+    padding: 0 1rem 0 2.2rem !important;
+  }
+  .toolbar {
+     gap: 0.4rem;
+     margin-bottom: 0.8rem;
+  }
+  .viewBtn {
+    width: 34px;
+    height: 34px;
   }
   .grid {
     grid-template-columns: repeat(2, 1fr);
@@ -610,13 +646,32 @@
 
 @media (max-width: 575.98px) {
   .page {
-    padding: 1rem 0 3rem;
+    padding: 0.5rem 0 3rem;
   }
   .title {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+  }
+  .count {
+    font-size: 0.85rem;
+  }
+  .searchInput,
+  .sortSelect {
+    font-size: 16px !important; /* Bắt buộc 16px để chống lỗi tự động phóng to (zoom) trên mobile */
+    height: 34px !important;
+    padding: 0 1rem 0 2.2rem !important;
+  }
+  .toolbar {
+     gap: 0.35rem;
+     margin-bottom: 0.6rem;
+  }
+  .viewBtn {
+    width: 32px;
+    height: 32px;
+    font-size: 0.8rem;
   }
   .grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 0.65rem;
+    gap: 0.5rem;
   }
 }

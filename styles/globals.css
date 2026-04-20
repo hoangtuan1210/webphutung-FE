@@ -79,10 +79,23 @@ ul {
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 135px;
+}
+
+@media (max-width: 1099.98px) {
+  html {
+    scroll-padding-top: 120px;
+  }
+}
+
+@media (max-width: 576px) {
+  html {
+    scroll-padding-top: 95px;
+  }
 }
 
 ::selection {
-  background-color: var(--color-primary);
+  background-color: #0056b3; /* Blue selection color */
   color: #fff;
 }
 

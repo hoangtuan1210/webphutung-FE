@@ -9,15 +9,21 @@
   gap: 0.45rem;
   font-size: 0.95rem;
   color: var(--color-gray);
-  margin-top: 1rem;
+  margin-top: 2.5rem;
   margin-bottom: 1.5rem;
   flex-wrap: wrap;
 }
 
 @media (max-width: 991px) {
   .breadcrumb {
-    margin-top: 3.5rem;
     font-size: 0.85rem;
+    margin-top: 1.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .breadcrumb {
+    margin-top: 1rem;
   }
 }
 
@@ -131,7 +137,7 @@
   gap: 0.4rem;
   flex-wrap: wrap;
 }
-.price     { font-size: 0.95rem; font-weight: 700; color: var(--color-accent); }
+.price     { font-size: 0.95rem; font-weight: 700; color: var(--color-primary); }
 .oldPrice  { font-size: 0.76rem; color: var(--color-gray-300); text-decoration: line-through; }
 
 /* ── Badges ── */
@@ -196,18 +202,18 @@
 }
 
 .layoutMain {
-  padding-top: 170px; /* Banner (60) + Nav (106) + spacing */
+  padding-top: 135px; /* Tăng từ 110px để không che mất content do logo mới to hơn */
 }
 
 @media (max-width: 1099.98px) {
   .layoutMain {
-    padding-top: 180px;
+    padding-top: 120px; /* Tăng thêm để đảm bảo không che mất breadcrumb trên tablet */
   }
 }
 
 @media (max-width: 576px) {
   .layoutMain {
-    padding-top: 140px;
+    padding-top: 95px;
   }
 }
 

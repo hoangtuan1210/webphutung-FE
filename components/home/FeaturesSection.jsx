@@ -3,8 +3,8 @@ import styles from "@/styles/client/home.module.css";
 const FEATURES = [
   {
     icon: "bi-shield-check",
-    title: "Chất lượng chính hãng",
-    desc: "Cam kết 100% phụ tùng chính hãng từ các thương hiệu lớn",
+    title: "Chất lượng sản phẩm",
+    desc: "Cam kết phụ tùng chính hãng từ nhà máy sản xuất",
     color: "#ff3d00",
   },
   {
@@ -15,8 +15,8 @@ const FEATURES = [
   },
   {
     icon: "bi-tools",
-    title: "Hỗ trợ kỹ thuật",
-    desc: "Đội ngũ chuyên viên tư vấn lắp đặt và bảo dưỡng tận tình",
+    title: "Chăm sóc khách hàng",
+    desc: "Đội ngũ nhân viên tư vấn chi tiết, nhiệt tình",
     color: "#00c853",
   },
   {
