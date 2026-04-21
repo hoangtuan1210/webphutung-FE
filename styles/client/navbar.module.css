@@ -129,6 +129,7 @@
   font-size: 0.65rem;
   font-weight: 700;
   margin-top: -7px;
+  padding-bottom: 5px;   /* Tạo khoảng trống phía dưới slogan */
   letter-spacing: 0.2px;
   white-space: nowrap;
 }
@@ -152,7 +153,7 @@
   padding: 0 1.1rem;
   border: 1px solid #ddd;
   border-right: none;
-  border-radius: 50px 0 0 50px;
+  border-radius: 12px 0 0 12px;
   font-size: 0.93rem;
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
@@ -169,7 +170,7 @@
   background: #111;
   color: #fff;
   border: 1px solid #111;
-  border-radius: 0 50px 50px 0;
+  border-radius: 0 12px 12px 0;
   cursor: pointer;
   transition: background 0.2s;
   display: flex;
@@ -297,7 +298,7 @@
   display: flex;
   align-items: center;
   background: #fff;
-  border-radius: 50px;
+  border-radius: 12px;
   padding: 0 1.25rem;
   border: 2px solid #0056b3; /* Bold blue border by default */
   width: 100%;
@@ -381,7 +382,7 @@
   letter-spacing: 0.3px;
   padding: 0.55rem 1.1rem;
   border: 1.5px solid #e0e0e0;
-  border-radius: 50px;
+  border-radius: 12px;
   background: #fdfdfd;
   white-space: nowrap;
 }
@@ -707,9 +708,31 @@
 .mobileSearchForm {
   display: flex;
   align-items: center;
-  border-bottom: 2px solid #eee;
-  padding-bottom: 5px;
-  transition: border-color 0.3s;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding-left: 1rem;
+  padding-right: 0;
+  transition: all 0.3s;
+  overflow: hidden;
+  background: #fff;
+}
+
+.mobileSearchBtn {
+  height: 44px;
+  padding: 0 1.25rem;
+  background: #111;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.mobileSearchBtn:hover {
+  background: #eee;
+  color: #000;
 }
 
 .mobileSearchForm:focus-within {
@@ -909,17 +932,22 @@
     gap: 0.25rem;
   }
   .logoImg {
-    width: 150px !important;
+    width: 180px !important;
     height: auto !important;
     margin-top: -8px !important;
     margin-bottom: -10px !important;
   }
   .logo {
-    max-width: 150px;
+    max-width: 200px;
+    display: block;
   }
   .logoSlogan {
-    font-size: 0.45rem;
+    font-size: 0.52rem;
     margin-top: -4px;
+    padding-bottom: 8px; /* Tăng thêm một chút trên mobile */
+    white-space: nowrap;
+    display: block;
+    width: 100%;
   }
 
   .iconBtn {

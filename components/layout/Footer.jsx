@@ -12,9 +12,10 @@ export default function Footer() {
             <Image
               src="/logo.tif"
               alt="Logo"
-              width={280}
-              height={90}
+              width={220}
+              height={70}
               quality={100}
+              style={{ objectFit: 'contain' }}
               className={styles.logoImg}
             />
           </div>

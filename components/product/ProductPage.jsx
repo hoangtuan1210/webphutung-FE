@@ -181,15 +181,7 @@ export default function ProductsComponent({
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
-                {searchTerm && (
-                  <button 
-                    className={styles.clearSearch} 
-                    onClick={handleClearSearch}
-                    aria-label="Clear search"
-                  >
-                    <i className="bi bi-x-circle-fill" />
-                  </button>
-                )}
+
               </div>
 
               <div className={styles.toolbarRight}>

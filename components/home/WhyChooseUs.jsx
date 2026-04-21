@@ -70,13 +70,17 @@ export default function WhyChooseUs({ imageSrc }) {
           <div className="col-12 col-md-6 order-1 order-md-2 text-center">
             <div className={styles.mainImageFrame}>
               <div className={styles.videoContainer}>
-                  <iframe 
-                    src={`${data.videoUrl}?autoplay=0`}
+                <iframe
+                  src={`${data.videoUrl}?autoplay=0`}
                   title="YouTube video player"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowFullScreen
                   className={styles.videoIframe}
                 ></iframe>
+              </div>
+              <div className={styles.experienceBadge}>
+                <span className={styles.badgeNum}>10+</span>
+                <span className={styles.badgeText}>Năm kinh nghiệm</span>
               </div>
             </div>
           </div>

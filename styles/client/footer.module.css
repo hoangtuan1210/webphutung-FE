@@ -20,6 +20,9 @@
 }
 
 .logoImg {
+  width: auto;
+  max-width: 280px;
+  height: auto !important;
   mix-blend-mode: multiply;
   display: block;
 }

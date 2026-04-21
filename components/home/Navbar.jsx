@@ -47,6 +47,7 @@ export default function Navbar() {
         mobileSearchRef.current && !mobileSearchRef.current.contains(e.target)
       ) {
         setShowSuggestions(false);
+        setIsSearchOpen(false);
       }
       if (desktopNavRef.current && !desktopNavRef.current.contains(e.target)) {
         setActiveDropdown(null);
@@ -203,11 +204,7 @@ export default function Navbar() {
                       }
                     }}
                   />
-                  {searchQuery && (
-                    <button type="button" className={styles.clearSearchBtn} onClick={() => setSearchQuery("")}>
-                      <i className="bi bi-x-circle-fill" />
-                    </button>
-                  )}
+
                 </div>
               </form>
               {renderSuggestions()}
@@ -283,8 +280,8 @@ export default function Navbar() {
               onFocus={() => setShowSuggestions(true)}
               autoFocus
             />
-            <button className={styles.searchBtn} type="submit"><i className="bi bi-search" /></button>
-            <button className={styles.closeSearch} type="button" onClick={() => setIsSearchOpen(false)}><i className="bi bi-x-lg" /></button>
+            <button className={styles.mobileSearchBtn} type="submit"><i className="bi bi-search" /></button>
+
           </form>
           {renderSuggestions()}
         </div>

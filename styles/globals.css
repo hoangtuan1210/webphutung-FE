@@ -108,6 +108,7 @@ html {
   border-color: var(--color-primary) !important;
   color: white !important;
   font-weight: 700 !important;
+  border-radius: 12px !important;
 }
 
 .btn-primary:hover {
@@ -120,6 +121,7 @@ html {
   background-color: var(--color-black) !important;
   color: white !important;
   transition: all 0.3s ease;
+  border-radius: 12px !important;
 }
 
 .btn-dark:hover {
@@ -169,4 +171,34 @@ main {
 
 .container {
   max-width: 1240px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  border: 0.5px solid #ddd;
+  padding: 12px;
+}
+
+th {
+  background-color: var(--color-gray-light);
+  font-weight: 700;
+}
+
+/* Ẩn dấu X mặc định của trình duyệt trong ô search */
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
+  display: none;
+}
+
+input[type="text"]::-ms-clear,
+input[type="text"]::-ms-reveal {
+  display: none;
+  width: 0;
+  height: 0;
 }
