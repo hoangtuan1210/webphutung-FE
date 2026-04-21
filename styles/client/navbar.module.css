@@ -708,7 +708,7 @@
 .mobileSearchForm {
   display: flex;
   align-items: center;
-  border: 1px solid #ddd;
+  border: 0.3px solid #ddd;
   border-radius: 8px;
   padding-left: 1rem;
   padding-right: 0;
