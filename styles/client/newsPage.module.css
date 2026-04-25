@@ -6,6 +6,7 @@
   text-align: center;
   margin-bottom: 3rem;
   padding-bottom: 1rem;
+  padding-top: 2.5rem;
 }
 
 .title {
@@ -261,7 +262,7 @@
 }
 /* ── News Detail ── */
 .detailWrapper {
-  padding: 3rem 0 6rem;
+  padding: 4.5rem 0 6rem;
   background-color: #fff;
   min-height: 80vh;
 }
@@ -283,6 +284,7 @@
   max-width: 800px;
   margin: 0 auto 3rem;
   text-align: center;
+  padding-top: 1.5rem;
 }
 
 .detailMeta {
@@ -542,5 +544,56 @@
   }
   .newsRowInfo {
     padding: 1.25rem;
+  }
+}
+
+/* ── Pagination ── */
+.paginationArea {
+  margin-top: 4rem;
+  display: flex;
+  justify-content: center;
+}
+
+.pageLinks {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.pageLink {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1.5px solid #eee;
+  background: #fff;
+  color: #666;
+  font-weight: 600;
+  transition: all 0.2s;
+  cursor: pointer;
+  padding: 0;
+}
+
+.pageLink:hover:not(:disabled) {
+  border-color: #000;
+  color: #000;
+}
+
+.pageLinkActive {
+  background: #000;
+  color: #fff;
+  border-color: #000;
+}
+
+.pageLink:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .detailWrapper {
+    padding-top: 5.5rem;
   }
 }

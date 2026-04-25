@@ -1,21 +1,52 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Head from "next/head";
-import { newsList as staticNewsList, categories } from "@/data/news";
+import { useRouter } from "next/router";
+import { newsService } from "@/services/newsService";
 import styles from "@/styles/client/newsPage.module.css";
 import ClientLayout from "@/layouts/ClientLayout";
 
-export default function NewsPage({ newsList }) {
+const formatDate = (dateString) => {
+  if (!dateString) return "";
+  return new Intl.DateTimeFormat("vi-VN").format(new Date(dateString));
+};
+
+const CATEGORIES = ["Tất cả", "Kiến thức xe", "Tin tức", "Khuyến mãi", "Review"];
+
+export default function NewsPage({ newsList, featuredList, totalCount, currentPage, pageSize }) {
+  const router = useRouter();
   const [activeCategory, setActiveCategory] = useState("Tất cả");
+
+  const mapArticle = (article) => ({
+    ...article,
+    image: article.thumbnail || "",
+    excerpt: article.summary || article.description || "",
+    hot: article.isFeatured || article.featured || false,
+    date: (article.created_at || article.createdAt) ? formatDate(article.created_at || article.createdAt) : "",
+    readTime: "5 phút đọc",
+    category: article.category?.name || article.category || "Tin tức",
+  });
+
+  const allNews = newsList.map(mapArticle);
+  const featuredNews = featuredList.map(mapArticle)[0] || allNews[0];
 
   const filtered =
     activeCategory === "Tất cả"
-      ? newsList
-      : newsList.filter((n) => n.category === activeCategory);
+      ? allNews
+      : allNews.filter((n) => n.category === activeCategory);
 
-  const featured = filtered[0];
-  const rest = filtered.slice(1);
+  const rest = (featuredNews && currentPage === 1) ? filtered.filter(n => n.id !== featuredNews.id) : filtered;
+
+  const totalPages = Math.ceil(totalCount / pageSize);
+  const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
+
+  const handlePageChange = (newPage) => {
+    router.push({
+      pathname: router.pathname,
+      query: { ...router.query, page: newPage },
+    });
+  };
 
   return (
     <ClientLayout>
@@ -35,8 +66,8 @@ export default function NewsPage({ newsList }) {
             </p>
           </div>
 
-          <div className={styles.filterRow}>
-            {categories.map((cat) => (
+          {/* <div className={styles.filterRow}>
+            {CATEGORIES.map((cat) => (
               <button
                 key={cat}
                 className={`${styles.filterBtn} ${activeCategory === cat ? styles.filterActive : ""}`}
@@ -45,7 +76,7 @@ export default function NewsPage({ newsList }) {
                 {cat}
               </button>
             ))}
-          </div>
+          </div> */}
 
           {filtered.length === 0 ? (
             <div className={styles.empty}>
@@ -54,34 +85,34 @@ export default function NewsPage({ newsList }) {
             </div>
           ) : (
             <>
-              {featured && (
+              {featuredNews && activeCategory === "Tất cả" && currentPage === 1 && (
                 <Link
-                  href={`/news/${featured.slug}`}
+                  href={`/news/${featuredNews.slug}`}
                   className={styles.featured}
                 >
                   <div className={styles.featuredImg}>
                     <Image
-                      src={featured.image}
+                      src={featuredNews.image}
                       fill
-                      alt={featured.title}
+                      alt={featuredNews.title}
                       className={styles.featuredImgEl}
                       sizes="(max-width: 768px) 100vw, 60vw"
                       priority
                     />
-                    {featured.hot && (
+                    {featuredNews.hot && (
                       <span className={styles.hotBadge}>🔥 Hot</span>
                     )}
                   </div>
                   <div className={styles.featuredInfo}>
-                    <span className={styles.catTag}>{featured.category}</span>
-                    <h2 className={styles.featuredTitle}>{featured.title}</h2>
-                    <p className={styles.featuredExcerpt}>{featured.excerpt}</p>
+                    {/* <span className={styles.catTag}>{featuredNews.category}</span> */}
+                    <h2 className={styles.featuredTitle}>{featuredNews.title}</h2>
+                    <p className={styles.featuredExcerpt}>{featuredNews.excerpt}</p>
                     <div className={styles.meta}>
                       <span>
-                        <i className="bi bi-calendar3" /> {featured.date}
+                        <i className="bi bi-calendar3" /> {featuredNews.date}
                       </span>
                       <span>
-                        <i className="bi bi-clock" /> {featured.readTime}
+                        <i className="bi bi-clock" /> {featuredNews.readTime}
                       </span>
                     </div>
                     <span className={styles.readMore}>
@@ -110,7 +141,7 @@ export default function NewsPage({ newsList }) {
                         </div>
 
                         <div className={styles.cardInfo}>
-                          <span className={styles.catTag}>{news.category}</span>
+                          {/* <span className={styles.catTag}>{news.category}</span> */}
                           <h3 className={styles.cardTitle}>{news.title}</h3>
                           <p className={styles.cardExcerpt}>{news.excerpt}</p>
                           <div className={styles.meta}>
@@ -127,6 +158,38 @@ export default function NewsPage({ newsList }) {
                   ))}
                 </div>
               )}
+
+              {totalPages > 1 && (
+                <div className={styles.paginationArea}>
+                  <div className={styles.pageLinks}>
+                    <button
+                      className={styles.pageLink}
+                      disabled={currentPage === 1}
+                      onClick={() => handlePageChange(currentPage - 1)}
+                    >
+                      <i className="bi bi-chevron-left" />
+                    </button>
+
+                    {pageNumbers.map((page) => (
+                      <button
+                        key={page}
+                        className={`${styles.pageLink} ${page === currentPage ? styles.pageLinkActive : ""}`}
+                        onClick={() => handlePageChange(page)}
+                      >
+                        {page}
+                      </button>
+                    ))}
+
+                    <button
+                      className={styles.pageLink}
+                      disabled={currentPage === totalPages}
+                      onClick={() => handlePageChange(currentPage + 1)}
+                    >
+                      <i className="bi bi-chevron-right" />
+                    </button>
+                  </div>
+                </div>
+              )}
             </>
           )}
         </div>
@@ -135,11 +198,50 @@ export default function NewsPage({ newsList }) {
   );
 }
 
-export async function getStaticProps() {
-  return {
-    props: {
-      newsList: staticNewsList,
-    },
-    revalidate: 3600,
-  };
+export async function getServerSideProps({ query }) {
+  const page = parseInt(query.page || "1");
+  const limit = parseInt(query.limit || "12");
+
+  try {
+    const [newsRes, featuredRes] = await Promise.all([
+      newsService.getPublicNews({ page, limit }),
+      newsService.getFeaturedNews(),
+    ]);
+
+    let newsList = [];
+    let totalCount = 0;
+
+    if (newsRes?.success) {
+      if (Array.isArray(newsRes.data)) {
+        newsList = newsRes.data;
+        totalCount = newsRes.total ?? newsRes.data.length;
+      } else {
+        newsList = newsRes.data?.items ?? newsRes.data?.data ?? [];
+        totalCount = newsRes.data?.total ?? newsRes.total ?? newsList.length;
+      }
+    }
+
+    return {
+      props: {
+        newsList,
+        featuredList: featuredRes.success ? featuredRes.data : [],
+        totalCount,
+        currentPage: page,
+        pageSize: limit,
+      },
+    };
+  } catch (error) {
+    console.error("Error fetching news:", error);
+    return {
+      props: {
+        newsList: [],
+        featuredList: [],
+        totalCount: 0,
+        currentPage: page,
+        pageSize: limit,
+      },
+    };
+  }
 }
+
+

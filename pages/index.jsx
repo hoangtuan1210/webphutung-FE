@@ -6,13 +6,12 @@ import PromoBanner from "@/components/home/PromoBanner";
 import NewsSection from "@/components/home/NewsSection";
 import FeaturesSection from "@/components/home/FeaturesSection";
 import WhyChooseUs from "@/components/home/WhyChooseUs";
-import { newsList } from "@/data/news";
+import { newsService } from "@/services/newsService";
 import { productService } from "@/services/productService";
 import { bannerService } from "@/services/bannerService";
 
 
 export default function Home({ news, featuredProducts, trendingProducts, banners }) {
-
   return (
     <ClientLayout>
       <Head>
@@ -37,7 +36,7 @@ export default function Home({ news, featuredProducts, trendingProducts, banners
 
       <PromoBanner />
       <WhyChooseUs imageSrc="/about-us.png" />
-      <NewsSection news={news} />
+      {news && news.length > 0 && <NewsSection news={news} />}
     </ClientLayout>
   );
 }
@@ -49,19 +48,35 @@ export async function getStaticProps() {
   let banners = [];
 
   try {
-    const [productsRes, trendingRes, bannersRes] = await Promise.all([
+    const [productsRes, trendingRes, bannersRes, newsRes] = await Promise.all([
       productService.getFeaturedProducts(8).catch(() => ({ success: false, data: [] })),
       productService.getTrendingProducts(8).catch(() => ({ success: false, data: [] })),
       bannerService.getBanners().catch(() => ({ success: false, data: [] })),
+      newsService.getFeaturedNews().catch(() => ({ success: false, data: [] })),
     ]);
 
     featuredProducts = productsRes?.success ? productsRes.data : [];
     trendingProducts = trendingRes?.success ? trendingRes.data : [];
     banners = bannersRes?.success ? bannersRes.data : [];
-    news = newsList.slice(0, 4);
+
+    if (newsRes?.success) {
+      const allNews = Array.isArray(newsRes.data) ? newsRes.data : (newsRes.data?.data || []);
+      news = allNews.map((article) => ({
+        ...article,
+        image: article.thumbnail || "",
+        excerpt: article.summary || article.description || "",
+        date: (article.created_at || article.createdAt) ? new Intl.DateTimeFormat("vi-VN").format(new Date(article.created_at || article.createdAt)) : "",
+        category: article.category?.name || article.category || "Tin tức",
+      }));
+    }
+
+    if (news.length === 0) {
+      // Có thể gán mảng rỗng nếu không muốn hiển thị dữ liệu tĩnh
+      news = [];
+    }
   } catch (error) {
     console.error("Home Page Data Fetch Error:", error);
-    news = newsList.slice(0, 4);
+    news = [];
   }
 
   return {
@@ -73,4 +88,4 @@ export async function getStaticProps() {
     },
     revalidate: 3600,
   };
-}
+}

@@ -12,9 +12,21 @@ export default function WhyChooseUs({ imageSrc }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await homeService.getWhyChooseUs();
-        if (res.success) {
-          setData(res.data);
+        const [whyChooseUsRes, videoRes] = await Promise.all([
+          homeService.getWhyChooseUs(),
+          homeService.getActiveVideos(),
+        ]);
+
+        let videoUrl = "https://www.youtube.com/embed/jWjhlpMpetc";
+        if (videoRes.success && videoRes.data && videoRes.data.length > 0) {
+          videoUrl = videoRes.data[0].url;
+        }
+
+        if (whyChooseUsRes.success) {
+          setData({
+            ...whyChooseUsRes.data,
+            videoUrl: videoUrl,
+          });
         }
       } catch (error) {
         console.error("Error fetching WhyChooseUs data:", error);
@@ -22,6 +34,10 @@ export default function WhyChooseUs({ imageSrc }) {
     };
     fetchData();
   }, []);
+
+  const isYoutube = (url) => {
+    return url?.includes("youtube.com") || url?.includes("youtu.be");
+  };
 
   return (
     <div className="container mt-5 mb-5">
@@ -70,13 +86,24 @@ export default function WhyChooseUs({ imageSrc }) {
           <div className="col-12 col-md-6 order-1 order-md-2 text-center">
             <div className={styles.mainImageFrame}>
               <div className={styles.videoContainer}>
-                <iframe
-                  src={`${data.videoUrl}?autoplay=0`}
-                  title="YouTube video player"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                  className={styles.videoIframe}
-                ></iframe>
+                {isYoutube(data.videoUrl) ? (
+                  <iframe
+                    src={`${data.videoUrl}?autoplay=0`}
+                    title="YouTube video player"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                    className={styles.videoIframe}
+                  ></iframe>
+                ) : (
+                  <video
+                    src={data.videoUrl}
+                    className={styles.videoIframe}
+                    controls
+                    autoPlay={false}
+                    muted
+                    playsInline
+                  />
+                )}
               </div>
               <div className={styles.experienceBadge}>
                 <span className={styles.badgeNum}>10+</span>
@@ -89,3 +116,4 @@ export default function WhyChooseUs({ imageSrc }) {
     </div>
   );
 }
+

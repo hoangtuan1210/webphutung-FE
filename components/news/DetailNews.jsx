@@ -1,9 +1,35 @@
 import Image from "next/image";
 import Link from "next/link";
 import styles from "@/styles/client/newsPage.module.css";
+import { toast } from "react-hot-toast";
+import { useEffect, useState } from "react";
 
 export default function DetailNews({ article }) {
+  const [currentUrl, setCurrentUrl] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setCurrentUrl(window.location.href);
+    }
+  }, []);
+
   if (!article) return null;
+
+  const handleShareFacebook = (e) => {
+    e.preventDefault();
+    window.open(
+      `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`,
+      "facebook-share-dialog",
+      "width=626,height=436"
+    );
+  };
+
+  const handleCopyLink = (e) => {
+    e.preventDefault();
+    navigator.clipboard.writeText(currentUrl).then(() => {
+      toast.success("Đã sao chép liên kết!");
+    });
+  };
 
   return (
     <article className={styles.detailWrapper}>
@@ -14,7 +40,7 @@ export default function DetailNews({ article }) {
 
         <header className={styles.detailHeader}>
           <div className={styles.detailMeta}>
-            <span className={styles.catTag}>{article.category}</span>
+{/* <span className={styles.catTag}>{article.category}</span> */}
             <span className={styles.date}>{article.date}</span>
             <span className={styles.dot}>•</span>
             <span className={styles.readTime}>{article.readTime}</span>
@@ -45,9 +71,26 @@ export default function DetailNews({ article }) {
            <div className={styles.shareRow}>
               <span>Chia sẻ bài viết:</span>
               <div className={styles.shareIcons}>
-                <a href="#"><i className="bi bi-facebook" /></a>
-                <a href="#"><i className="bi bi-messenger" /></a>
-                <a href="#"><i className="bi bi-link-45deg" /></a>
+                <a 
+                  href="#" 
+                  onClick={handleShareFacebook} 
+                  title="Chia sẻ Facebook"
+                >
+                  <i className="bi bi-facebook" />
+                </a>
+                <a 
+                  href={`fb-messenger://share/?link=${encodeURIComponent(currentUrl)}`}
+                  title="Chia sẻ Messenger"
+                >
+                  <i className="bi bi-messenger" />
+                </a>
+                <a 
+                  href="#" 
+                  onClick={handleCopyLink} 
+                  title="Sao chép liên kết"
+                >
+                  <i className="bi bi-link-45deg" />
+                </a>
               </div>
            </div>
         </footer>
@@ -55,3 +98,4 @@ export default function DetailNews({ article }) {
     </article>
   );
 }
+

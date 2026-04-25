@@ -1,7 +1,12 @@
 import Head from "next/head";
 import ClientLayout from "@/layouts/ClientLayout";
-import { newsList } from "@/data/news";
+import { newsService } from "@/services/newsService";
 import DetailNews from "@/components/news/DetailNews";
+
+const formatDate = (dateString) => {
+  if (!dateString) return "";
+  return new Intl.DateTimeFormat("vi-VN").format(new Date(dateString));
+};
 
 export default function NewsDetailPage({ article }) {
   if (!article) {
@@ -17,36 +22,54 @@ export default function NewsDetailPage({ article }) {
     );
   }
 
+  const mappedArticle = {
+    ...article,
+    image: article.thumbnail || "",
+    excerpt: article.summary || article.description || "",
+    hot: article.isFeatured || article.featured || false,
+    date: (article.created_at || article.createdAt) ? formatDate(article.created_at || article.createdAt) : "",
+    readTime: "5 phút đọc",
+    category: article.category?.name || article.category || "Tin tức",
+  };
+
   return (
     <ClientLayout>
       <Head>
-        <title>{article.title} | Shop Phụ Tùng</title>
-        <meta name="description" content={article.excerpt} />
+        <title>{`${mappedArticle.title} | Shop Phụ Tùng`}</title>
+        <meta name="description" content={mappedArticle.excerpt} />
 
         <meta property="og:type" content="article" />
-        <meta property="og:title" content={`${article.title} | Shop Phụ Tùng`} />
-        <meta property="og:description" content={article.excerpt} />
-        <meta property="og:image" content={article.image} />
-        <meta property="og:url" content={`https://shopphutung.com/news/${article.slug}`} />
+        <meta property="og:title" content={`${mappedArticle.title} | Shop Phụ Tùng`} />
+        <meta property="og:description" content={mappedArticle.excerpt} />
+        <meta property="og:image" content={mappedArticle.image} />
+        <meta property="og:url" content={`https://shopphutung.com/news/${mappedArticle.slug}`} />
 
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={article.title} />
-        <meta name="twitter:description" content={article.excerpt} />
-        <meta name="twitter:image" content={article.image} />
+        <meta name="twitter:title" content={mappedArticle.title} />
+        <meta name="twitter:description" content={mappedArticle.excerpt} />
+        <meta name="twitter:image" content={mappedArticle.image} />
       </Head>
-      <DetailNews article={article} />
+      <DetailNews article={mappedArticle} />
     </ClientLayout>
   );
 }
 
-
-
 export async function getServerSideProps({ params }) {
-  const article = newsList.find((item) => item.slug === params.slug);
-
-  return {
-    props: {
-      article: article || null,
-    },
-  };
+  try {
+    const res = await newsService.getNewsBySlug(params.slug);
+    
+    return {
+      props: {
+        article: res.success ? res.data : null,
+      },
+    };
+  } catch (error) {
+    console.error("Error fetching news detail:", error);
+    return {
+      props: {
+        article: null,
+      },
+    };
+  }
 }
+

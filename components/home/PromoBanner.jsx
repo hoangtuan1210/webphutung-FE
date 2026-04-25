@@ -16,6 +16,7 @@ export default function PromoBanner() {
         if (res?.success && res.data?.length > 0) {
           setLastBanner(res.data[res.data.length - 1]);
         }
+
       } catch (err) {
         console.error("Lỗi khi tải banner thân trang:", err);
       } finally {

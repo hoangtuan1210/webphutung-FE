@@ -4,7 +4,7 @@ import Link from "next/link";
 import styles from "../../styles/client/detailProduct.module.css";
 import { useCart } from "@/context/CartContext";
 
-export default function DetailProduct({ productData }) {
+export default function DetailProduct({ productData, relatedProducts = [] }) {
   const product = productData;
 
   const [activeImg, setActiveImg] = useState(0);
@@ -31,7 +31,7 @@ export default function DetailProduct({ productData }) {
   const descDetails = product.descDetails ?? [];
   const descImages = product.descImages ?? [];
 
-  const related = product.relatedProducts || [];
+  const related = relatedProducts.length > 0 ? relatedProducts : (product.relatedProducts || []);
 
   const cartItem = {
     id: product.id,
@@ -39,6 +39,7 @@ export default function DetailProduct({ productData }) {
     price,
     image: images[0] || fallbackImg,
   };
+
 
   const handleAddToCart = () => addToCart(cartItem, qty);
   const handleBuyNow = () => { addToCart(cartItem, qty); setIsOpen(true); };
@@ -51,9 +52,9 @@ export default function DetailProduct({ productData }) {
           <i className="bi bi-chevron-right" />
           <Link href="/products">Sản phẩm</Link>
           <i className="bi bi-chevron-right" />
-          {categorySlug && (
+          {product.category && (
             <>
-              <Link href={`/products?category=${categorySlug}`}>{categoryName}</Link>
+              <Link href={`/products?categoryId=${product.category.id || product.categoryId}`}>{categoryName}</Link>
               <i className="bi bi-chevron-right" />
             </>
           )}

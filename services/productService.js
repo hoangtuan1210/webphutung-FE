@@ -15,7 +15,7 @@ export const productService = {
   },
 
   getProductBySlug: (slug) => {
-    return api.get(`/products/slug/${slug}`);
+    return api.get(`/products/slug/${encodeURIComponent(slug)}`);
   },
 
   getProductById: (id) => {
