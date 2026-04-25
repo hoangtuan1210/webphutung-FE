@@ -8,8 +8,17 @@ export default function ProductsPage({ initialProducts, categories, totalCount }
   return (
     <ClientLayout>
       <Head>
-        <title>Sản phẩm - Shop</title>
-        <meta name="description" content="Danh sách sản phẩm chính hãng" />
+        <title>Sản phẩm - Shop Feichi</title>
+        <meta name="description" content="Danh sách sản phẩm chính hãng tại Shop Feichi" />
+        <meta property="og:title" content="Sản phẩm - Shop Feichi" />
+        <meta property="og:description" content="Danh sách sản phẩm chính hãng tại Shop Feichi" />
+        <meta property="og:url" content="https://feichi.htechsoft.vn/products" />
+        <meta property="og:image" content="https://feichi.htechsoft.vn/about-us.png" />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Sản phẩm - Shop Feichi" />
+        <meta name="twitter:description" content="Danh sách sản phẩm chính hãng tại Shop Feichi" />
+        <meta name="twitter:image" content="https://feichi.htechsoft.vn/about-us.png" />
       </Head>
       <ProductsComponent
         initialProducts={initialProducts}

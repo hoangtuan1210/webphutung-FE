@@ -53,8 +53,15 @@ export default function NewsPage({ newsList, featuredList, totalCount, currentPa
       <Head>
         <title>Tin tức & Blog | Phụ tùng Shop</title>
         <meta name="description" content="Cập nhật kiến thức bảo dưỡng xe, xu hướng đồ chơi xe và các chương trình khuyến mãi mới nhất từ Phụ tùng Shop." />
-        <meta property="og:title" content="Tin tức & Blog | Phụ tùng Shop" />
+        <meta property="og:title" content="Tin tức & Blog | Phụ tùng Feichi" />
         <meta property="og:description" content="Chia sẻ kinh nghiệm độ xe và tin tức phụ tùng chính hãng." />
+        <meta property="og:url" content="https://feichi.htechsoft.vn/news" />
+        <meta property="og:image" content="https://feichi.htechsoft.vn/about-us.png" />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Tin tức & Blog | Phụ tùng Shop" />
+        <meta name="twitter:description" content="Chia sẻ kinh nghiệm độ xe và tin tức phụ tùng chính hãng." />
+        <meta name="twitter:image" content="https://feichi.htechsoft.vn/about-us.png" />
       </Head>
 
       <div className={styles.page}>

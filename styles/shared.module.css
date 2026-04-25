@@ -23,7 +23,7 @@
 
 @media (max-width: 576px) {
   .breadcrumb {
-    margin-top: 1rem;
+    margin-top: 2.2rem;
   }
 }
 
@@ -104,6 +104,7 @@
   overflow: hidden;
   background: var(--color-white);
   transition: box-shadow 0.2s, transform 0.2s;
+  height: 100%;
 }
 .card:hover {
   box-shadow: 0 6px 24px rgba(0,0,0,0.08);
@@ -128,6 +129,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  flex: 1;
 }
 
 /* ── Price ── */

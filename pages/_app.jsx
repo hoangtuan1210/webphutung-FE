@@ -9,6 +9,7 @@ export default function App({ Component, pageProps }) {
   useEffect(() => {
     require("bootstrap/dist/js/bootstrap.bundle.min.js");
   }, []);
+
   const getLayout = Component.getLayout ?? ((page) => page);
 
   return (
@@ -16,8 +17,8 @@ export default function App({ Component, pageProps }) {
       <Head>
         <title>Web Phụ Tùng Xe Máy</title>
         <meta name="description" content="Cửa hàng phụ tùng xe máy uy tín - Chất lượng cao, giá tốt nhất" />
-        <link rel="icon" href="/favicon.png" type="image/png" />
-        <link rel="shortcut icon" href="/favicon.png" type="image/png" />
+        <link rel="icon" href="/favicon_new.png?v=2" type="image/png" />
+        <link rel="shortcut icon" href="/favicon_new.png?v=2" type="image/png" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <CartProvider>

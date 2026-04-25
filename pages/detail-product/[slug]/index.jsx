@@ -6,9 +6,9 @@ import { productService } from "@/services/productService";
 export default function DetailProductPage({ product, relatedProducts }) {
   if (!product) return <div className="p-5 text-center">Sản phẩm không tồn tại</div>;
 
-  const pageTitle = `${product.name} | Phụ tùng Shop`;
+  const pageTitle = `${product.name} | Shop Feichi`;
   const pageDesc = product.metaDescription || product.description?.substring(0, 160) || "Phụ tùng chính hãng, chất lượng cao.";
-  const pageImage = product.images?.[0]?.url || "/logo.png";
+  const pageImage = product.images?.[0]?.url || "https://feichi.htechsoft.vn/logo.png";
 
   return (
     <ClientLayout>
@@ -20,7 +20,7 @@ export default function DetailProductPage({ product, relatedProducts }) {
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={pageDesc} />
         <meta property="og:image" content={pageImage} />
-        <meta property="og:url" content={`/detail-product/${product.slug}`} />
+        <meta property="og:url" content={`https://feichi.htechsoft.vn/detail-product/${product.slug}`} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={pageDesc} />
@@ -34,12 +34,11 @@ export default function DetailProductPage({ product, relatedProducts }) {
 
 export async function getServerSideProps({ params }) {
   const { slug } = params;
-  
+
   try {
     const res = await productService.getProductBySlug(slug);
     console.log("Detail API Response for slug:", slug, JSON.stringify(res, null, 2));
 
-    // Handle structured response { success, data: { ... } } or { success, data: { data: { ... } } }
     let product = null;
     if (res?.success) {
       product = res.data?.data || res.data || null;

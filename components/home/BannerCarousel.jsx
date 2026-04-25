@@ -6,14 +6,23 @@ import Link from "next/link";
 export default function BannerCarousel({ banners = [] }) {
   const slidesToUse = banners.length > 0
     ? banners.map(b => ({
-      src: b.image,
-      tag: b.title,
-      title: b.title,
-      desc: b.description ,
+      src: b.image || "https://placehold.co/1920x720/png?text=Phu+Tung+Shop",
+      tag: b.title || "Khuyến mãi",
+      title: b.title || "Ưu đãi",
+      desc: b.description || "",
       btn: "Xem ngay",
       href: b.link || "/products"
     }))
-    : [];
+    : [
+      {
+        src: "https://placehold.co/1920x720/png?text=Phu+Tung+Shop",
+        tag: "Khuyến mãi",
+        title: "Ưu đãi đặc biệt",
+        desc: "Khám phá ngay các ưu đãi hấp dẫn tại Phụ Tùng Shop.",
+        btn: "Xem ngay",
+        href: "/products"
+      }
+    ];
 
 
   return (
@@ -46,7 +55,7 @@ export default function BannerCarousel({ banners = [] }) {
                 height={720}
                 quality={90}
                 alt={slide.title}
-                priority={i === 0}
+                priority={true}
                 style={{
                   width: "100%",
                   height: "clamp(300px, 40vw, 550px)",

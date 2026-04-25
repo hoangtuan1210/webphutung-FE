@@ -24,7 +24,7 @@ export default function NewsDetailPage({ article }) {
 
   const mappedArticle = {
     ...article,
-    image: article.image || "",
+    image: article.image || "https://feichi.htechsoft.vn/about-us.png",
     excerpt: article.summary || article.description || "",
     hot: article.isFeatured || article.featured || false,
     date: (article.created_at || article.createdAt) ? formatDate(article.created_at || article.createdAt) : "",
@@ -35,14 +35,14 @@ export default function NewsDetailPage({ article }) {
   return (
     <ClientLayout>
       <Head>
-        <title>{`${mappedArticle.title} | Shop Phụ Tùng`}</title>
+        <title>{`${mappedArticle.title} | Shop Feichi`}</title>
         <meta name="description" content={mappedArticle.excerpt} />
 
         <meta property="og:type" content="article" />
-        <meta property="og:title" content={`${mappedArticle.title} | Shop Phụ Tùng`} />
+        <meta property="og:title" content={`${mappedArticle.title} | Shop Feichi`} />
         <meta property="og:description" content={mappedArticle.excerpt} />
         <meta property="og:image" content={mappedArticle.image} />
-        <meta property="og:url" content={`https://shopphutung.com/news/${mappedArticle.slug}`} />
+        <meta property="og:url" content={`https://feichi.htechsoft.vn/news/${mappedArticle.slug}`} />
 
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={mappedArticle.title} />
@@ -57,7 +57,7 @@ export default function NewsDetailPage({ article }) {
 export async function getServerSideProps({ params }) {
   try {
     const res = await newsService.getNewsBySlug(params.slug);
-    
+
     return {
       props: {
         article: res.success ? res.data : null,

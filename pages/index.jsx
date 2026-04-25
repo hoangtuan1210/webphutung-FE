@@ -19,7 +19,13 @@ export default function Home({ news, featuredProducts, trendingProducts, banners
         <meta name="description" content="Chuyên cung cấp phụ tùng xe máy, xe điện chính hãng, đồ chơi xe cao cấp. Giao hàng toàn quốc, bảo hành uy tín tại Phụ tùng Shop." />
         <meta property="og:title" content="Phụ tùng Shop - Phụ tùng chính hãng" />
         <meta property="og:description" content="Khám phá ngay bộ sưu tập đồ chơi xe và phụ tùng chất lượng cao." />
-        <meta property="og:image" content="/about-us.png" />
+        <meta property="og:image" content="https://feichi.htechsoft.vn/about-us.png" />
+        <meta property="og:url" content="https://feichi.htechsoft.vn" />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Phụ tùng Feichi - Phụ tùng chính hãng" />
+        <meta name="twitter:description" content="Khám phá ngay bộ sưu tập đồ chơi xe và phụ tùng chất lượng cao." />
+        <meta name="twitter:image" content="https://feichi.htechsoft.vn/about-us.png" />
       </Head>
 
       <BannerCarousel banners={banners} />
@@ -71,7 +77,6 @@ export async function getStaticProps() {
     }
 
     if (news.length === 0) {
-      // Có thể gán mảng rỗng nếu không muốn hiển thị dữ liệu tĩnh
       news = [];
     }
   } catch (error) {
@@ -88,4 +93,4 @@ export async function getStaticProps() {
     },
     revalidate: 3600,
   };
-}
+}
