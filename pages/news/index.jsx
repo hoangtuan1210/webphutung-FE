@@ -20,7 +20,7 @@ export default function NewsPage({ newsList, featuredList, totalCount, currentPa
 
   const mapArticle = (article) => ({
     ...article,
-    image: article.thumbnail || "",
+    image: article.image || "",
     excerpt: article.summary || article.description || "",
     hot: article.isFeatured || article.featured || false,
     date: (article.created_at || article.createdAt) ? formatDate(article.created_at || article.createdAt) : "",

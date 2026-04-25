@@ -9,7 +9,7 @@ export default function NewsCard({ image, title, desc, date, category, size = "s
   return (
     <div className={cardClass}>
       <Image
-        src={image}
+        src={image}     
         alt={title}
         fill
         sizes="(max-width:768px) 100vw, 50vw"
@@ -27,7 +27,7 @@ export default function NewsCard({ image, title, desc, date, category, size = "s
             {category && <span>{category}</span>}
           </div>
         )}
-        {desc && <p>{desc}</p>}
+        {desc && <p>{desc}</p>} 
       </div>
     </div>
   );

@@ -63,7 +63,7 @@ export async function getStaticProps() {
       const allNews = Array.isArray(newsRes.data) ? newsRes.data : (newsRes.data?.data || []);
       news = allNews.map((article) => ({
         ...article,
-        image: article.thumbnail || "",
+        image: article.image || "",
         excerpt: article.summary || article.description || "",
         date: (article.created_at || article.createdAt) ? new Intl.DateTimeFormat("vi-VN").format(new Date(article.created_at || article.createdAt)) : "",
         category: article.category?.name || article.category || "Tin tức",

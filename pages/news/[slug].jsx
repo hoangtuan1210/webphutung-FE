@@ -24,7 +24,7 @@ export default function NewsDetailPage({ article }) {
 
   const mappedArticle = {
     ...article,
-    image: article.thumbnail || "",
+    image: article.image || "",
     excerpt: article.summary || article.description || "",
     hot: article.isFeatured || article.featured || false,
     date: (article.created_at || article.createdAt) ? formatDate(article.created_at || article.createdAt) : "",
