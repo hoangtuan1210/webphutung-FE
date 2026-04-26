@@ -5,6 +5,98 @@ import { useRouter } from "next/router";
 import { useCart } from "@/context/CartContext";
 import styles from "@/styles/admin/productPage.module.css";
 
+const findCategoryInTree = (tree, id) => {
+  for (const cat of tree) {
+    if (String(cat.id) === String(id)) return cat;
+    if (cat.children?.length) {
+      const found = findCategoryInTree(cat.children, id);
+      if (found) return found;
+    }
+  }
+  return null;
+};
+
+const CategoryItem = ({ cat, categoryId, onSelect, depth = 0, maxDepth = 2 }) => {
+  const hasChildren = cat.children?.length > 0;
+  const isActive = String(categoryId) === String(cat.id);
+
+  const isChildActive = (children) => {
+    for (const child of children || []) {
+      if (String(categoryId) === String(child.id)) return true;
+      if (child.children?.length && isChildActive(child.children)) return true;
+    }
+    return false;
+  };
+
+  const [open, setOpen] = useState(() => isChildActive(cat.children));
+
+  const handleToggle = (e) => {
+    e.stopPropagation();
+    setOpen((v) => !v);
+  };
+
+  return (
+    <div>
+      <div
+        className={`${styles.categoryItem} ${isActive ? styles.categoryActive : ""} ${depth > 0 ? styles.categoryChild : ""}`}
+        style={{ paddingLeft: `${12 + depth * 14}px` }}
+      >
+        <span
+          className={styles.categoryLabel}
+          onClick={() => onSelect(cat.id)}
+        >
+          {cat.name}
+        </span>
+        <div className={styles.categoryMeta}>
+          {cat._count?.products > 0 && (
+            <span className={styles.filterCount}>{cat._count.products}</span>
+          )}
+          {hasChildren && depth < maxDepth && (
+            <button
+              className={`${styles.toggleBtn} ${open ? styles.toggleOpen : ""}`}
+              onClick={handleToggle}
+              aria-label={open ? "Thu gọn" : "Mở rộng"}
+            >
+              <i className="bi bi-chevron-down" />
+            </button>
+          )}
+        </div>
+      </div>
+
+      {hasChildren && open && depth < maxDepth && (
+        <div className={styles.categoryChildren}>
+          {cat.children.map((child) => (
+            <CategoryItem
+              key={child.id}
+              cat={child}
+              categoryId={categoryId}
+              onSelect={onSelect}
+              depth={depth + 1}
+              maxDepth={maxDepth}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Component hiển thị toàn bộ cây danh mục
+const CategoryTree = ({ categories, categoryId, onSelect }) => (
+  <>
+    {categories.map((cat) => (
+      <CategoryItem
+        key={cat.id}
+        cat={cat}
+        categoryId={categoryId}
+        onSelect={onSelect}
+        depth={0}
+        maxDepth={2}
+      />
+    ))}
+  </>
+);
+
 const SORT_OPTIONS = [
   { value: "newest", label: "Mới nhất" },
   { value: "price_asc", label: "Giá tăng dần" },
@@ -68,7 +160,7 @@ export default function ProductsComponent({
 
   const activeCategory = useMemo(() => {
     if (!categoryId) return "Tất cả";
-    const cat = categories.find((c) => c.id === categoryId);
+    const cat = findCategoryInTree(categories, categoryId);
     return cat ? cat.name : "Tất cả";
   }, [categoryId, categories]);
 
@@ -78,12 +170,10 @@ export default function ProductsComponent({
 
   const [searchTerm, setSearchTerm] = useState(urlSearch || "");
 
-  // Đồng bộ searchTerm khi URL thay đổi (ví dụ bấm nút reset)
   useEffect(() => {
     setSearchTerm(urlSearch || "");
   }, [urlSearch]);
 
-  // Debounced search logic
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       if (searchTerm !== (urlSearch || "")) {
@@ -157,15 +247,11 @@ export default function ProductsComponent({
                 >
                   <span>Tất cả</span>
                 </div>
-                {categories.map((cat) => (
-                  <div
-                    key={cat.id}
-                    className={`${styles.categoryItem} ${categoryId === cat.id ? styles.categoryActive : ""}`}
-                    onClick={() => handleFilterChange({ categoryId: cat.id })}
-                  >
-                    <span>{cat.name}</span>
-                  </div>
-                ))}
+                <CategoryTree
+                  categories={categories}
+                  categoryId={categoryId}
+                  onSelect={(id) => handleFilterChange({ categoryId: id })}
+                />
               </div>
             </div>
           </aside>
@@ -359,7 +445,7 @@ export default function ProductsComponent({
               </div>
             )}
 
-  
+
             {totalPages > 1 && (
               <div className={styles.paginationArea}>
                 <div className={styles.pageLinks}>

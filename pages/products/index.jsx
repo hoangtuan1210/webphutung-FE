@@ -54,7 +54,7 @@ export async function getServerSideProps({ query }) {
         console.error("products fetch error:", e);
         return { success: false };
       }),
-      categoryService.getCategories().catch((e) => {
+      categoryService.getPublicCategories().catch((e) => {
         console.error("categories fetch error:", e);
         return { success: false };
       }),
@@ -75,7 +75,9 @@ export async function getServerSideProps({ query }) {
       }
     }
 
-    const categories = categoriesRes?.success ? (categoriesRes.data ?? []) : [];
+    const categories = categoriesRes?.success
+      ? (Array.isArray(categoriesRes.data) ? categoriesRes.data : (categoriesRes.data?.data ?? []))
+      : [];
 
     return {
       props: {

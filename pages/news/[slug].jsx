@@ -41,13 +41,13 @@ export default function NewsDetailPage({ article }) {
         <meta property="og:type" content="article" />
         <meta property="og:title" content={`${mappedArticle.title} | Shop Feichi`} />
         <meta property="og:description" content={mappedArticle.excerpt} />
-        <meta property="og:image" content={mappedArticle.image} />
+        <meta property="og:image" content={mappedArticle.image?.startsWith('/') ? `https://feichi.htechsoft.vn${mappedArticle.image}` : mappedArticle.image} />
         <meta property="og:url" content={`https://feichi.htechsoft.vn/news/${mappedArticle.slug}`} />
 
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={mappedArticle.title} />
         <meta name="twitter:description" content={mappedArticle.excerpt} />
-        <meta name="twitter:image" content={mappedArticle.image} />
+        <meta name="twitter:image" content={mappedArticle.image?.startsWith('/') ? `https://feichi.htechsoft.vn${mappedArticle.image}` : mappedArticle.image} />
       </Head>
       <DetailNews article={mappedArticle} />
     </ClientLayout>

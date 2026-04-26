@@ -1,4 +1,30 @@
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://feichi-api.htechsoft.vn";
+
+const formatDataUrls = (data) => {
+  if (typeof data === "string") {
+    if (data.startsWith("/uploads/")) {
+      return `${BASE_URL}${data}`;
+    }
+    if (data.includes('src="/uploads/')) {
+      return data.replace(/src="\/uploads\//g, `src="${BASE_URL}/uploads/`);
+    }
+    return data;
+  }
+
+  if (Array.isArray(data)) {
+    return data.map(formatDataUrls);
+  }
+
+  if (data !== null && typeof data === "object") {
+    const formatted = {};
+    for (const key in data) {
+      formatted[key] = formatDataUrls(data[key]);
+    }
+    return formatted;
+  }
+
+  return data;
+};
 
 export const fetcher = async (url, options = {}) => {
   const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
@@ -16,7 +42,8 @@ export const fetcher = async (url, options = {}) => {
     headers,
   });
 
-  const result = await response.json();
+  let result = await response.json();
+  result = formatDataUrls(result);
 
   if (!response.ok) {
     throw new Error(result.error?.message || result.message || "An error occurred");

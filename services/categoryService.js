@@ -1,6 +1,10 @@
 import { api } from "@/utils/api";
 
 export const categoryService = {
+  getPublicCategories: (depth = 3) => {
+    return api.get(`/categories?includeChildren=${depth}`);
+  },
+
   getCategories: () => {
     return api.get("/categories");
   },

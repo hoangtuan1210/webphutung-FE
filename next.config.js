@@ -1,35 +1,39 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone',
+  output: "standalone",
   images: {
-    domains: ['feichi-api.htechsoft.vn', 'placehold.co'],
+    domains: ["feichi-api.htechsoft.vn", "placehold.co"],
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'feichi-api.htechsoft.vn',
-        pathname: '/**',
+        protocol: "https",
+        hostname: "feichi-api.htechsoft.vn",
+        pathname: "/**",
       },
       {
-        protocol: 'http',
-        hostname: 'feichi-api.htechsoft.vn',
-        pathname: '/**',
+        protocol: "http",
+        hostname: "feichi-api.htechsoft.vn",
+        pathname: "/**",
       },
       {
-        protocol: 'https',
-        hostname: 'placehold.co',
-        pathname: '/**',
+        protocol: "https",
+        hostname: "placehold.co",
+        pathname: "/**",
       },
       {
-        protocol: 'https',
-        hostname: '**',
+        protocol: "https",
+        hostname: "**",
+      },
+      {
+        protocol: "http",
+        hostname: "localhost",
+        pathname: "/**",
       },
     ],
     qualities: [75, 90, 100],
     dangerouslyAllowSVG: true,
-    contentDispositionType: 'attachment',
+    contentDispositionType: "attachment",
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
-
 };
 
 module.exports = nextConfig;
