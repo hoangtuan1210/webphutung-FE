@@ -76,3 +76,25 @@
   .title { margin-bottom: 0.8rem; }
   .btn { padding: 0.45rem 1rem; font-size: 0.8rem; }
 }
+
+/* Skeleton loading cho banner - hiển thị ngay khi ảnh chưa tải xong */
+.skeleton {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    #1a1a2e 0%,
+    #16213e 40%,
+    #0f3460 60%,
+    #1a1a2e 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.8s infinite;
+  z-index: 1;
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}

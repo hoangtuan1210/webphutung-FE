@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useState } from "react";
 import styles from "@/styles/client/banner.module.css";
 import Link from "next/link";
 
@@ -48,39 +49,7 @@ export default function BannerCarousel({ banners = [] }) {
 
         <div className="carousel-inner overflow-hidden">
           {slidesToUse.map((slide, i) => (
-            <div key={i} className={`carousel-item ${i === 0 ? "active" : ""}`}>
-              <Image
-                src={slide.src}
-                width={1920}
-                height={720}
-                quality={90}
-                alt={slide.title}
-                priority={true}
-                style={{
-                  width: "100%",
-                  height: "clamp(300px, 40vw, 550px)",
-                  objectFit: "cover",
-                }}
-              />
-
-              <div className={styles.overlay} />
-
-              <div className={styles.content}>
-                <span className={styles.tag}>{slide.tag}</span>
-                <h2 className={styles.title}>
-                  {slide.title.split("\n").map((line, j) => (
-                    <span key={j}>
-                      {line}
-                      <br />
-                    </span>
-                  ))}
-                </h2>
-                <p className={styles.desc}>{slide.desc}</p>
-                <Link href={slide.href} className={styles.btn}>
-                  {slide.btn} <i className="bi bi-arrow-right" />
-                </Link>
-              </div>
-            </div>
+            <BannerSlide key={i} slide={slide} index={i} />
           ))}
         </div>
 
@@ -100,6 +69,60 @@ export default function BannerCarousel({ banners = [] }) {
         >
           <span className="carousel-control-next-icon" />
         </button>
+      </div>
+    </div>
+  );
+}
+
+// Tách thành component riêng để quản lý loading state mỗi slide độc lập
+function BannerSlide({ slide, index }) {
+  const [loaded, setLoaded] = useState(false);
+
+  return (
+    <div className={`carousel-item ${index === 0 ? "active" : ""}`}>
+      {/* Skeleton hiển thị ngay lập tức khi ảnh chưa tải xong */}
+      {!loaded && (
+        <div
+          className={styles.skeleton}
+          style={{ height: "clamp(300px, 40vw, 550px)" }}
+          aria-hidden="true"
+        />
+      )}
+
+      <Image
+        src={slide.src}
+        width={1920}
+        height={720}
+        quality={75}
+        alt={slide.title}
+        priority={index === 0}  // Chỉ preload ảnh đầu tiên
+        loading={index === 0 ? "eager" : "lazy"}  // Lazy load các ảnh còn lại
+        onLoad={() => setLoaded(true)}
+        style={{
+          width: "100%",
+          height: "clamp(300px, 40vw, 550px)",
+          objectFit: "cover",
+          opacity: loaded ? 1 : 0,
+          transition: "opacity 0.4s ease",
+        }}
+      />
+
+      <div className={styles.overlay} />
+
+      <div className={styles.content}>
+        <span className={styles.tag}>{slide.tag}</span>
+        <h2 className={styles.title}>
+          {slide.title.split("\n").map((line, j) => (
+            <span key={j}>
+              {line}
+              <br />
+            </span>
+          ))}
+        </h2>
+        <p className={styles.desc}>{slide.desc}</p>
+        <Link href={slide.href} className={styles.btn}>
+          {slide.btn} <i className="bi bi-arrow-right" />
+        </Link>
       </div>
     </div>
   );
