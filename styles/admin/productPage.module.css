@@ -659,6 +659,47 @@
   color: #fff;
 }
 
+/* Chevron toggle icon: ẩn trên desktop, hiện trên mobile qua media query */
+.catToggleIcon {
+  display: none;
+  font-size: 0.8rem;
+  color: #888;
+  flex-shrink: 0;
+}
+
+/* Mobile Category Navigation (Horizontal scroll) */
+.mobileCategoryNav {
+  display: none; /* Ẩn mặc định trên desktop */
+  gap: 0.65rem;
+  overflow-x: auto;
+  padding: 0.5rem 0.25rem 1rem;
+  margin-bottom: 0.5rem;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Ẩn scrollbar Firefox */
+}
+.mobileCategoryNav::-webkit-scrollbar {
+  display: none; /* Ẩn scrollbar Chrome/Safari */
+}
+
+.mobileCategoryChip {
+  white-space: nowrap;
+  padding: 0.55rem 1.1rem;
+  background: #f1f3f5;
+  color: #495057;
+  border-radius: 50px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.chipActive {
+  background: #111 !important;
+  color: #fff !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
 /* RESPONSIVE */
 @media (max-width: 1199.98px) {
   .grid {
@@ -667,11 +708,50 @@
 }
 
 @media (max-width: 991.98px) {
+  .mobileCategoryNav {
+    display: flex; /* Hiện trên mobile */
+  }
   .mainContent {
     grid-template-columns: 1fr;
   }
+  /* Không ẩn sidebar, hiển thị dạng accordion */
   .sidebar {
-    display: none; 
+    display: flex;
+    gap: 0;
+  }
+  .sidebarCard {
+    width: 100%;
+    border-radius: 12px;
+    padding: 0;
+    overflow: hidden;
+  }
+  /* Header trở thành nút toggle trên mobile */
+  .sidebarTitle {
+    padding: 0.85rem 1.1rem;
+    margin: 0;
+    cursor: pointer;
+    user-select: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+    justify-content: space-between;
+  }
+  /* Chevron hiện trên mobile */
+  .catToggleIcon {
+    display: inline-block !important;
+  }
+  /* Ẩn danh mục mặc định trên mobile */
+  .categoryList {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease;
+    padding: 0;
+    gap: 0;
+  }
+  /* Mở khi có class .categoryListOpen */
+  .categoryListOpen {
+    max-height: 600px;
+    padding: 0.5rem 1rem 0.75rem;
+    overflow-y: auto;
   }
   .breadcrumb {
     font-size: 0.85rem;

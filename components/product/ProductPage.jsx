@@ -119,6 +119,7 @@ export default function ProductsComponent({
     page: urlPage,
   } = router.query;
 
+  const [isCatOpen, setIsCatOpen] = useState(false);
   const [products, setProducts] = useState(
     initialProducts || []
   );
@@ -130,10 +131,8 @@ export default function ProductsComponent({
   const PAGE_SIZE = 12;
 
   useEffect(() => {
-    if (initialProducts.length > 0) {
-      setProducts(initialProducts);
-      setTotal(totalCount);
-    }
+    setProducts(initialProducts || []);
+    setTotal(totalCount || 0);
   }, [initialProducts, totalCount]);
 
   const handleFilterChange = (updates) => {
@@ -179,10 +178,10 @@ export default function ProductsComponent({
       if (searchTerm !== (urlSearch || "")) {
         handleFilterChange({ search: searchTerm });
       }
-    }, 600);
+    }, 1000);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [searchTerm, urlSearch]);
+  }, [searchTerm]);
 
   const handleClearSearch = () => {
     setSearchTerm("");
@@ -233,10 +232,17 @@ export default function ProductsComponent({
         <div className={styles.mainContent}>
           <aside className={styles.sidebar}>
             <div className={styles.sidebarCard}>
-              <h2 className={styles.sidebarTitle}>
-                <i className="bi bi-grid-fill" /> Danh mục
+              <h2
+                className={styles.sidebarTitle}
+                onClick={() => setIsCatOpen(!isCatOpen)}
+                style={{ cursor: 'pointer' }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                  <i className="bi bi-grid-fill" /> Danh mục
+                </div>
+                <i className={`bi bi-chevron-${isCatOpen ? 'up' : 'down'} ${styles.catToggleIcon}`} />
               </h2>
-              <div className={styles.categoryList}>
+              <div className={`${styles.categoryList} ${isCatOpen ? styles.categoryListOpen : ""}`}>
                 <div
                   className={`${styles.categoryItem} ${!categoryId ? styles.categoryActive : ""}`}
                   onClick={() =>
@@ -257,6 +263,25 @@ export default function ProductsComponent({
           </aside>
 
           <div className={styles.productsArea}>
+            {/* Thanh danh mục nằm ngang cho mobile */}
+            <div className={styles.mobileCategoryNav}>
+              <div
+                className={`${styles.mobileCategoryChip} ${!categoryId ? styles.chipActive : ""}`}
+                onClick={() => handleFilterChange({ categoryId: "" })}
+              >
+                Tất cả
+              </div>
+              {categories.map((cat) => (
+                <div
+                  key={cat.id}
+                  className={`${styles.mobileCategoryChip} ${String(categoryId) === String(cat.id) ? styles.chipActive : ""}`}
+                  onClick={() => handleFilterChange({ categoryId: cat.id })}
+                >
+                  {cat.name}
+                </div>
+              ))}
+            </div>
+
             <div className={styles.toolbar}>
               <div className={styles.searchWrap}>
                 <i className="bi bi-search" />

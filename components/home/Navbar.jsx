@@ -81,7 +81,7 @@ export default function Navbar() {
       try {
         setLoadingSearch(true);
         setShowSuggestions(true);
-        const res = await productService.getProducts({ limit: 6, search: searchQuery });
+        const res = await productService.getProducts({ limit: 8, search: searchQuery });
 
         let list = [];
         if (Array.isArray(res?.data)) list = res.data;

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import styles from "@/styles/client/banner.module.css";
 import Link from "next/link";
 
@@ -19,7 +19,7 @@ export default function BannerCarousel({ banners = [] }) {
         src: "https://placehold.co/1920x720/png?text=Phu+Tung+Shop",
         tag: "Khuyến mãi",
         title: "Ưu đãi đặc biệt",
-        desc: "Khám phá ngay các ưu đãi hấp dẫn tại Phụ Tùng Shop.",
+        desc: "Khám phá ngay các ưu đãi hấp dẫn tại Feichi.",
         btn: "Xem ngay",
         href: "/products"
       }
@@ -74,38 +74,54 @@ export default function BannerCarousel({ banners = [] }) {
   );
 }
 
-// Tách thành component riêng để quản lý loading state mỗi slide độc lập
 function BannerSlide({ slide, index }) {
   const [loaded, setLoaded] = useState(false);
+  const imgRef = useRef(null);
+
+  // Fallback: nếu ảnh đã được cache (complete) thì onLoad không trigger → xử lý thủ công
+  useEffect(() => {
+    const img = imgRef.current?.querySelector("img");
+    if (img && img.complete && img.naturalWidth > 0) {
+      setLoaded(true);
+    }
+  }, []);
 
   return (
-    <div className={`carousel-item ${index === 0 ? "active" : ""}`}>
-      {/* Skeleton hiển thị ngay lập tức khi ảnh chưa tải xong */}
+    <div
+      className={`carousel-item ${index === 0 ? "active" : ""}`}
+      style={{ position: "relative" }}  // ← Fix: đảm bảo skeleton absolute định vị đúng
+    >
+      {/* Skeleton chỉ hiện khi chưa load, dùng pointer-events:none để không chặn click */}
       {!loaded && (
         <div
           className={styles.skeleton}
-          style={{ height: "clamp(300px, 40vw, 550px)" }}
+          style={{ height: "clamp(300px, 40vw, 550px)", pointerEvents: "none" }}
           aria-hidden="true"
         />
       )}
 
-      <Image
-        src={slide.src}
-        width={1920}
-        height={720}
-        quality={75}
-        alt={slide.title}
-        priority={index === 0}  // Chỉ preload ảnh đầu tiên
-        loading={index === 0 ? "eager" : "lazy"}  // Lazy load các ảnh còn lại
-        onLoad={() => setLoaded(true)}
-        style={{
-          width: "100%",
-          height: "clamp(300px, 40vw, 550px)",
-          objectFit: "cover",
-          opacity: loaded ? 1 : 0,
-          transition: "opacity 0.4s ease",
-        }}
-      />
+      <div ref={imgRef}>
+        <Image
+          src={slide.src}
+          width={1920}
+          height={720}
+          quality={75}
+          alt={slide.title}
+          priority={index === 0}
+          // Fix: dùng eager cho tất cả để tránh lazy không trigger onLoad khi slide chưa visible
+          loading="eager"
+          onLoad={() => setLoaded(true)}
+          onError={() => setLoaded(true)} // Tránh skeleton dính mãi nếu ảnh lỗi
+          style={{
+            width: "100%",
+            height: "clamp(300px, 40vw, 550px)",
+            objectFit: "cover",
+            opacity: loaded ? 1 : 0,
+            transition: "opacity 0.4s ease",
+            display: "block",
+          }}
+        />
+      </div>
 
       <div className={styles.overlay} />
 

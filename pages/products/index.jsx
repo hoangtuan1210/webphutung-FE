@@ -60,8 +60,6 @@ export async function getServerSideProps({ query }) {
       }),
     ]);
 
-    console.log("productsRes:", JSON.stringify(productsRes, null, 2));
-
     let initialProducts = [];
     let totalCount = 0;
 

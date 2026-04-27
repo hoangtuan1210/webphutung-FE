@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Head from "next/head";
@@ -7,36 +7,43 @@ import { newsService } from "@/services/newsService";
 import styles from "@/styles/client/newsPage.module.css";
 import ClientLayout from "@/layouts/ClientLayout";
 
+// Tách hàm format ra ngoài để tránh khởi tạo lại mỗi lần render
 const formatDate = (dateString) => {
   if (!dateString) return "";
-  return new Intl.DateTimeFormat("vi-VN").format(new Date(dateString));
+  try {
+    return new Intl.DateTimeFormat("vi-VN").format(new Date(dateString));
+  } catch (e) {
+    return "";
+  }
 };
 
-const CATEGORIES = ["Tất cả", "Kiến thức xe", "Tin tức", "Khuyến mãi", "Review"];
+// Hàm chuẩn hóa dữ liệu bài viết
+const mapArticle = (article) => ({
+  ...article,
+  image: article.image || "/placeholder.jpg",
+  excerpt: article.summary || article.description || "",
+  hot: !!(article.isFeatured || article.featured),
+  date: (article.created_at || article.createdAt) ? formatDate(article.created_at || article.createdAt) : "",
+  category: article.category?.name || article.category || "Tin tức",
+});
 
 export default function NewsPage({ newsList, featuredList, totalCount, currentPage, pageSize }) {
   const router = useRouter();
-  const [activeCategory, setActiveCategory] = useState("Tất cả");
 
-  const mapArticle = (article) => ({
-    ...article,
-    image: article.image || "",
-    excerpt: article.summary || article.description || "",
-    hot: article.isFeatured || article.featured || false,
-    date: (article.created_at || article.createdAt) ? formatDate(article.created_at || article.createdAt) : "",
-    readTime: "5 phút đọc",
-    category: article.category?.name || article.category || "Tin tức",
-  });
+  // Memoize danh sách bài viết để tránh re-calculate
+  const allNews = useMemo(() => (newsList || []).map(mapArticle), [newsList]);
+  
+  // Lấy bài viết nổi bật (ưu tiên từ featuredList, fallback bài đầu tiên)
+  const featuredNews = useMemo(() => {
+    if (featuredList?.length > 0) return mapArticle(featuredList[0]);
+    return allNews[0] || null;
+  }, [featuredList, allNews]);
 
-  const allNews = newsList.map(mapArticle);
-  const featuredNews = featuredList.map(mapArticle)[0] || allNews[0];
-
-  const filtered =
-    activeCategory === "Tất cả"
-      ? allNews
-      : allNews.filter((n) => n.category === activeCategory);
-
-  const rest = (featuredNews && currentPage === 1) ? filtered.filter(n => n.id !== featuredNews.id) : filtered;
+  // Lọc bỏ bài viết nổi bật khỏi danh sách thường ở trang 1
+  const displayNews = useMemo(() => {
+    if (!featuredNews || currentPage !== 1) return allNews;
+    return allNews.filter(n => n.id !== featuredNews.id);
+  }, [allNews, featuredNews, currentPage]);
 
   const totalPages = Math.ceil(totalCount / pageSize);
   const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
@@ -45,7 +52,7 @@ export default function NewsPage({ newsList, featuredList, totalCount, currentPa
     router.push({
       pathname: router.pathname,
       query: { ...router.query, page: newPage },
-    });
+    }, undefined, { scroll: true });
   };
 
   return (
@@ -58,10 +65,6 @@ export default function NewsPage({ newsList, featuredList, totalCount, currentPa
         <meta property="og:url" content="https://feichi.htechsoft.vn/news" />
         <meta property="og:image" content="https://feichi.htechsoft.vn/about-us.png" />
         <meta property="og:type" content="website" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Tin tức & Blog | Phụ tùng Shop" />
-        <meta name="twitter:description" content="Chia sẻ kinh nghiệm độ xe và tin tức phụ tùng chính hãng." />
-        <meta name="twitter:image" content="https://feichi.htechsoft.vn/about-us.png" />
       </Head>
 
       <div className={styles.page}>
@@ -73,30 +76,16 @@ export default function NewsPage({ newsList, featuredList, totalCount, currentPa
             </p>
           </div>
 
-          {/* <div className={styles.filterRow}>
-            {CATEGORIES.map((cat) => (
-              <button
-                key={cat}
-                className={`${styles.filterBtn} ${activeCategory === cat ? styles.filterActive : ""}`}
-                onClick={() => setActiveCategory(cat)}
-              >
-                {cat}
-              </button>
-            ))}
-          </div> */}
-
-          {filtered.length === 0 ? (
+          {!allNews.length ? (
             <div className={styles.empty}>
               <i className="bi bi-newspaper" />
-              <p>Chưa có bài viết nào trong danh mục này.</p>
+              <p>Chưa có bài viết nào.</p>
             </div>
           ) : (
             <>
-              {featuredNews && activeCategory === "Tất cả" && currentPage === 1 && (
-                <Link
-                  href={`/news/${featuredNews.slug}`}
-                  className={styles.featured}
-                >
+              {/* Bài viết nổi bật - Chỉ hiện ở trang 1 */}
+              {featuredNews && currentPage === 1 && (
+                <Link href={`/news/${featuredNews.slug}`} className={styles.featured}>
                   <div className={styles.featuredImg}>
                     <Image
                       src={featuredNews.image}
@@ -106,21 +95,13 @@ export default function NewsPage({ newsList, featuredList, totalCount, currentPa
                       sizes="(max-width: 768px) 100vw, 60vw"
                       priority
                     />
-                    {featuredNews.hot && (
-                      <span className={styles.hotBadge}>🔥 Hot</span>
-                    )}
+                    {featuredNews.hot && <span className={styles.hotBadge}>🔥 Hot</span>}
                   </div>
                   <div className={styles.featuredInfo}>
-                    {/* <span className={styles.catTag}>{featuredNews.category}</span> */}
                     <h2 className={styles.featuredTitle}>{featuredNews.title}</h2>
                     <p className={styles.featuredExcerpt}>{featuredNews.excerpt}</p>
                     <div className={styles.meta}>
-                      <span>
-                        <i className="bi bi-calendar3" /> {featuredNews.date}
-                      </span>
-                      <span>
-                        <i className="bi bi-clock" /> {featuredNews.readTime}
-                      </span>
+                      <span><i className="bi bi-calendar3" /> {featuredNews.date}</span>
                     </div>
                     <span className={styles.readMore}>
                       Đọc tiếp <i className="bi bi-arrow-right" />
@@ -129,9 +110,10 @@ export default function NewsPage({ newsList, featuredList, totalCount, currentPa
                 </Link>
               )}
 
-              {rest.length > 0 && (
+              {/* Danh sách các bài viết khác */}
+              {displayNews.length > 0 && (
                 <div className="row g-4 mt-2">
-                  {rest.map((news) => (
+                  {displayNews.map((news) => (
                     <div key={news.id} className="col-lg-4 col-md-6">
                       <Link href={`/news/${news.slug}`} className={styles.card}>
                         <div className={styles.cardImg}>
@@ -142,22 +124,13 @@ export default function NewsPage({ newsList, featuredList, totalCount, currentPa
                             className={styles.cardImgEl}
                             sizes="(max-width: 576px) 100vw, (max-width: 992px) 50vw, 33vw"
                           />
-                          {news.hot && (
-                            <span className={styles.hotBadge}>🔥 Hot</span>
-                          )}
+                          {news.hot && <span className={styles.hotBadge}>🔥 Hot</span>}
                         </div>
-
                         <div className={styles.cardInfo}>
-                          {/* <span className={styles.catTag}>{news.category}</span> */}
                           <h3 className={styles.cardTitle}>{news.title}</h3>
                           <p className={styles.cardExcerpt}>{news.excerpt}</p>
                           <div className={styles.meta}>
-                            <span>
-                              <i className="bi bi-calendar3" /> {news.date}
-                            </span>
-                            <span>
-                              <i className="bi bi-clock" /> {news.readTime}
-                            </span>
+                            <span><i className="bi bi-calendar3" /> {news.date}</span>
                           </div>
                         </div>
                       </Link>
@@ -166,6 +139,7 @@ export default function NewsPage({ newsList, featuredList, totalCount, currentPa
                 </div>
               )}
 
+              {/* Phân trang */}
               {totalPages > 1 && (
                 <div className={styles.paginationArea}>
                   <div className={styles.pageLinks}>
@@ -205,9 +179,10 @@ export default function NewsPage({ newsList, featuredList, totalCount, currentPa
   );
 }
 
+// Chuyển sang getServerSideProps để dữ liệu luôn mới nhất, nhưng tối ưu logic map dữ liệu
 export async function getServerSideProps({ query }) {
   const page = parseInt(query.page || "1");
-  const limit = parseInt(query.limit || "12");
+  const limit = 12;
 
   try {
     const [newsRes, featuredRes] = await Promise.all([
@@ -219,13 +194,9 @@ export async function getServerSideProps({ query }) {
     let totalCount = 0;
 
     if (newsRes?.success) {
-      if (Array.isArray(newsRes.data)) {
-        newsList = newsRes.data;
-        totalCount = newsRes.total ?? newsRes.data.length;
-      } else {
-        newsList = newsRes.data?.items ?? newsRes.data?.data ?? [];
-        totalCount = newsRes.data?.total ?? newsRes.total ?? newsList.length;
-      }
+      const data = newsRes.data;
+      newsList = Array.isArray(data) ? data : (data?.items ?? data?.data ?? []);
+      totalCount = newsRes.total ?? data?.total ?? newsList.length;
     }
 
     return {
@@ -238,17 +209,8 @@ export async function getServerSideProps({ query }) {
       },
     };
   } catch (error) {
-    console.error("Error fetching news:", error);
     return {
-      props: {
-        newsList: [],
-        featuredList: [],
-        totalCount: 0,
-        currentPage: page,
-        pageSize: limit,
-      },
+      props: { newsList: [], featuredList: [], totalCount: 0, currentPage: page, pageSize: limit },
     };
   }
 }
-
-
