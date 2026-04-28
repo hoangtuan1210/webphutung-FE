@@ -3,10 +3,10 @@ const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://feichi-api.htechsof
 const formatDataUrls = (data) => {
   if (typeof data === "string") {
     if (data.startsWith("/uploads/")) {
-      return `${BASE_URL}${data}`;
+      return `${BASE_URL.replace('/api', '')}${data}`;
     }
     if (data.includes('src="/uploads/')) {
-      return data.replace(/src="\/uploads\//g, `src="${BASE_URL}/uploads/`);
+      return data.replace(/src="\/uploads\//g, `src="${BASE_URL.replace('/api', '')}/uploads/`);
     }
     return data;
   }
