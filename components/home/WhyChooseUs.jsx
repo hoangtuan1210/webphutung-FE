@@ -3,11 +3,20 @@ import styles from "@/styles/client/home.module.css";
 import Image from "next/image";
 import Link from "next/link";
 import { homeService } from "@/services/homeService";
+import { BASE_URL } from "@/utils/api";
 
 export default function WhyChooseUs({ imageSrc }) {
   const [data, setData] = useState({
     videoUrl: "https://www.youtube.com/embed/jWjhlpMpetc",
   });
+
+  const getFullUrl = (url) => {
+    if (!url) return "";
+    if (url.startsWith("http")) return url;
+    if (!BASE_URL) return url;
+    const cleanBaseUrl = BASE_URL.replace("/api", "");
+    return `${cleanBaseUrl}${url.startsWith("/") ? "" : "/"}${url}`;
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,7 +28,8 @@ export default function WhyChooseUs({ imageSrc }) {
 
         let videoUrl = "https://www.youtube.com/embed/jWjhlpMpetc";
         if (videoRes.success && videoRes.data && videoRes.data.length > 0) {
-          videoUrl = videoRes.data[0].url;
+          const rawUrl = videoRes.data[0].url;
+          videoUrl = getFullUrl(rawUrl);
         }
 
         if (whyChooseUsRes.success) {

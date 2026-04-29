@@ -58,7 +58,7 @@ export async function getStaticProps() {
       productService.getFeaturedProducts(8).catch(() => ({ success: false, data: [] })),
       productService.getTrendingProducts(8).catch(() => ({ success: false, data: [] })),
       bannerService.getBanners().catch(() => ({ success: false, data: [] })),
-      newsService.getFeaturedNews().catch(() => ({ success: false, data: [] })),
+      newsService.getFeaturedNews({ limit: 3 }).catch(() => ({ success: false, data: [] })),
     ]);
 
     featuredProducts = productsRes?.success ? productsRes.data : [];
@@ -67,7 +67,7 @@ export async function getStaticProps() {
 
     if (newsRes?.success) {
       const allNews = Array.isArray(newsRes.data) ? newsRes.data : (newsRes.data?.data || []);
-      news = allNews.map((article) => ({
+      news = allNews.slice(0, 3).map((article) => ({
         ...article,
         image: article.image || "",
         excerpt: article.summary || article.description || "",

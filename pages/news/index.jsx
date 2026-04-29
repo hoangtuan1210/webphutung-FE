@@ -7,7 +7,6 @@ import { newsService } from "@/services/newsService";
 import styles from "@/styles/client/newsPage.module.css";
 import ClientLayout from "@/layouts/ClientLayout";
 
-// Tách hàm format ra ngoài để tránh khởi tạo lại mỗi lần render
 const formatDate = (dateString) => {
   if (!dateString) return "";
   try {
@@ -17,7 +16,6 @@ const formatDate = (dateString) => {
   }
 };
 
-// Hàm chuẩn hóa dữ liệu bài viết
 const mapArticle = (article) => ({
   ...article,
   image: article.image || "/placeholder.jpg",
@@ -30,16 +28,12 @@ const mapArticle = (article) => ({
 export default function NewsPage({ newsList, featuredList, totalCount, currentPage, pageSize }) {
   const router = useRouter();
 
-  // Memoize danh sách bài viết để tránh re-calculate
   const allNews = useMemo(() => (newsList || []).map(mapArticle), [newsList]);
-  
-  // Lấy bài viết nổi bật (ưu tiên từ featuredList, fallback bài đầu tiên)
   const featuredNews = useMemo(() => {
     if (featuredList?.length > 0) return mapArticle(featuredList[0]);
     return allNews[0] || null;
   }, [featuredList, allNews]);
 
-  // Lọc bỏ bài viết nổi bật khỏi danh sách thường ở trang 1
   const displayNews = useMemo(() => {
     if (!featuredNews || currentPage !== 1) return allNews;
     return allNews.filter(n => n.id !== featuredNews.id);
@@ -83,7 +77,6 @@ export default function NewsPage({ newsList, featuredList, totalCount, currentPa
             </div>
           ) : (
             <>
-              {/* Bài viết nổi bật - Chỉ hiện ở trang 1 */}
               {featuredNews && currentPage === 1 && (
                 <Link href={`/news/${featuredNews.slug}`} className={styles.featured}>
                   <div className={styles.featuredImg}>
@@ -110,7 +103,6 @@ export default function NewsPage({ newsList, featuredList, totalCount, currentPa
                 </Link>
               )}
 
-              {/* Danh sách các bài viết khác */}
               {displayNews.length > 0 && (
                 <div className="row g-4 mt-2">
                   {displayNews.map((news) => (
@@ -179,7 +171,6 @@ export default function NewsPage({ newsList, featuredList, totalCount, currentPa
   );
 }
 
-// Chuyển sang getServerSideProps để dữ liệu luôn mới nhất, nhưng tối ưu logic map dữ liệu
 export async function getServerSideProps({ query }) {
   const page = parseInt(query.page || "1");
   const limit = 12;

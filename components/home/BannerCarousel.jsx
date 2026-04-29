@@ -7,7 +7,7 @@ import Link from "next/link";
 export default function BannerCarousel({ banners = [] }) {
   const slidesToUse = banners.length > 0
     ? banners.map(b => ({
-      src: b.image || "https://placehold.co/1920x720/png?text=Phu+Tung+Shop",
+      src: b.image || "https://placehold.co/1920x720/png?text=Feichi+Shop",
       tag: b.title || "Khuyến mãi",
       title: b.title || "Ưu đãi",
       desc: b.description || "",
@@ -16,7 +16,7 @@ export default function BannerCarousel({ banners = [] }) {
     }))
     : [
       {
-        src: "https://placehold.co/1920x720/png?text=Phu+Tung+Shop",
+        src: "https://placehold.co/1920x720/png?text=Feichi+Shop",
         tag: "Khuyến mãi",
         title: "Ưu đãi đặc biệt",
         desc: "Khám phá ngay các ưu đãi hấp dẫn tại Feichi.",
@@ -78,7 +78,6 @@ function BannerSlide({ slide, index }) {
   const [loaded, setLoaded] = useState(false);
   const imgRef = useRef(null);
 
-  // Fallback: nếu ảnh đã được cache (complete) thì onLoad không trigger → xử lý thủ công
   useEffect(() => {
     const img = imgRef.current?.querySelector("img");
     if (img && img.complete && img.naturalWidth > 0) {
@@ -89,9 +88,8 @@ function BannerSlide({ slide, index }) {
   return (
     <div
       className={`carousel-item ${index === 0 ? "active" : ""}`}
-      style={{ position: "relative" }}  // ← Fix: đảm bảo skeleton absolute định vị đúng
+      style={{ position: "relative" }} 
     >
-      {/* Skeleton chỉ hiện khi chưa load, dùng pointer-events:none để không chặn click */}
       {!loaded && (
         <div
           className={styles.skeleton}
@@ -108,10 +106,9 @@ function BannerSlide({ slide, index }) {
           quality={75}
           alt={slide.title}
           priority={index === 0}
-          // Fix: dùng eager cho tất cả để tránh lazy không trigger onLoad khi slide chưa visible
           loading="eager"
           onLoad={() => setLoaded(true)}
-          onError={() => setLoaded(true)} // Tránh skeleton dính mãi nếu ảnh lỗi
+          onError={() => setLoaded(true)} 
           style={{
             width: "100%",
             height: "clamp(300px, 40vw, 550px)",

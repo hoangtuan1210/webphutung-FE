@@ -6,8 +6,9 @@ export const newsService = {
     return api.get(`/news/public?${queryString}`);
   },
 
-  getFeaturedNews: async () => {
-    return api.get("/news/featured");
+  getFeaturedNews: async (params = {}) => {
+    const queryString = new URLSearchParams(params).toString();
+    return api.get(`/news/featured?${queryString}`);
   },
 
   getNewsBySlug: async (slug) => {

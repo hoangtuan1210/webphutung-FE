@@ -9,6 +9,5 @@ export const bannerService = {
     return api.get(`/banners/${id}`);
   },
 
-
 };
 

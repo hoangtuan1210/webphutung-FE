@@ -1,11 +1,11 @@
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://feichi-api.htechsoft.vn";
+export const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const formatDataUrls = (data) => {
   if (typeof data === "string") {
-    if (data.startsWith("/uploads/")) {
+    if (data.startsWith("/uploads/") && BASE_URL) {
       return `${BASE_URL.replace('/api', '')}${data}`;
     }
-    if (data.includes('src="/uploads/')) {
+    if (data.includes('src="/uploads/') && BASE_URL) {
       return data.replace(/src="\/uploads\//g, `src="${BASE_URL.replace('/api', '')}/uploads/`);
     }
     return data;

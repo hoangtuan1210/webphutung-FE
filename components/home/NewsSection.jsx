@@ -7,7 +7,7 @@ export default function NewsSection({ news }) {
 
   return (
     <div className="container mt-5">
-      <h3 className="mb-4">Tin tức</h3>
+      <h3 className="mb-4">Tin tức nổi bật</h3>
 
       <div className="row g-4">
         {highlighted[0] && (
@@ -19,21 +19,11 @@ export default function NewsSection({ news }) {
         )}
 
         <div className="col-md-6 d-flex flex-column gap-4">
-          {highlighted[1] && (
-            <Link href={`/news/${highlighted[1].slug}`} className={styles.newsLink}>
-              <NewsCard {...highlighted[1]} />
+          {highlighted.slice(1).map((item) => (
+            <Link key={item.id} href={`/news/${item.slug}`} className={styles.newsLink}>
+              <NewsCard {...item} />
             </Link>
-          )}
-
-          <div className="row g-4 flex-fill">
-            {highlighted.slice(2).map((item) => (
-              <div key={item.id} className="col-6">
-                <Link href={`/news/${item.slug}`} className={styles.newsLink}>
-                  <NewsCard {...item} />
-                </Link>
-              </div>
-            ))}
-          </div>
+          ))}
         </div>
       </div>
 
