@@ -40,7 +40,6 @@ export default function DetailNews({ article }) {
 
         <header className={styles.detailHeader}>
           <div className={styles.detailMeta}>
-{/* <span className={styles.catTag}>{article.category}</span> */}
             <span className={styles.date}>{article.date}</span>
             <span className={styles.dot}>•</span>
             <span className={styles.readTime}>{article.readTime}</span>
@@ -62,37 +61,37 @@ export default function DetailNews({ article }) {
           </div>
         )}
 
-        <div 
+        <div
           className={styles.detailContent}
           dangerouslySetInnerHTML={{ __html: article.content }}
         />
-        
+
         <footer className={styles.detailFooter}>
-           <div className={styles.shareRow}>
-              <span>Chia sẻ bài viết:</span>
-              <div className={styles.shareIcons}>
-                <a 
-                  href="#" 
-                  onClick={handleShareFacebook} 
-                  title="Chia sẻ Facebook"
-                >
-                  <i className="bi bi-facebook" />
-                </a>
-                <a 
-                  href={`fb-messenger://share/?link=${encodeURIComponent(currentUrl)}`}
-                  title="Chia sẻ Messenger"
-                >
-                  <i className="bi bi-messenger" />
-                </a>
-                <a 
-                  href="#" 
-                  onClick={handleCopyLink} 
-                  title="Sao chép liên kết"
-                >
-                  <i className="bi bi-link-45deg" />
-                </a>
-              </div>
-           </div>
+          <div className={styles.shareRow}>
+            <span>Chia sẻ bài viết:</span>
+            <div className={styles.shareIcons}>
+              <a
+                href="#"
+                onClick={handleShareFacebook}
+                title="Chia sẻ Facebook"
+              >
+                <i className="bi bi-facebook" />
+              </a>
+              <a
+                href={`fb-messenger://share/?link=${encodeURIComponent(currentUrl)}`}
+                title="Chia sẻ Messenger"
+              >
+                <i className="bi bi-messenger" />
+              </a>
+              <a
+                href="#"
+                onClick={handleCopyLink}
+                title="Sao chép liên kết"
+              >
+                <i className="bi bi-link-45deg" />
+              </a>
+            </div>
+          </div>
         </footer>
       </div>
     </article>

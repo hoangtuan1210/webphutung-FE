@@ -14,7 +14,8 @@ export default function PromoBanner() {
         setLoading(true);
         const res = await bannerService.getBanners();
         if (res?.success && res.data?.length > 0) {
-          setLastBanner(res.data[res.data.length - 1]);
+          const banner = res.data[res.data.length - 1];
+          setLastBanner(banner);
         }
 
       } catch (err) {

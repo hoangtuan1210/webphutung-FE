@@ -61,6 +61,7 @@ export async function getStaticProps() {
       newsService.getFeaturedNews({ limit: 3 }).catch(() => ({ success: false, data: [] })),
     ]);
 
+
     featuredProducts = productsRes?.success ? productsRes.data : [];
     trendingProducts = trendingRes?.success ? trendingRes.data : [];
     banners = bannersRes?.success ? bannersRes.data : [];

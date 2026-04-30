@@ -1,13 +1,37 @@
 export const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
+export const getFullUrl = (url) => {
+  if (!url || typeof url !== "string") return "";
+  if (!BASE_URL) return url;
+  const cleanBaseUrl = BASE_URL.replace("/api", "");
+
+  if (url.startsWith(cleanBaseUrl)) return url;
+
+  if (url.startsWith("/uploads/")) {
+    return `${cleanBaseUrl}${url}`;
+  }
+
+  if (url.includes("/uploads/") && !url.includes(" ") && !url.includes("<")) {
+    const parts = url.split("/uploads/");
+    return `${cleanBaseUrl}/uploads/${parts.slice(1).join("/uploads/")}`;
+  }
+
+  return url;
+};
+
 const formatDataUrls = (data) => {
   if (typeof data === "string") {
-    if (data.startsWith("/uploads/") && BASE_URL) {
-      return `${BASE_URL.replace('/api', '')}${data}`;
+    if (data.includes("<") && data.includes(">")) {
+      if (data.includes("/uploads/") && BASE_URL) {
+        const cleanBaseUrl = BASE_URL.replace("/api", "");
+        return data.replace(/src=(["'])\/uploads\//g, `src=$1${cleanBaseUrl}/uploads/`);
+      }
+      return data;
     }
-    if (data.includes('src="/uploads/') && BASE_URL) {
-      return data.replace(/src="\/uploads\//g, `src="${BASE_URL.replace('/api', '')}/uploads/`);
-    }
+
+    const formatted = getFullUrl(data);
+    if (formatted !== data) return formatted;
+
     return data;
   }
 

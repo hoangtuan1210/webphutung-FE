@@ -3,7 +3,6 @@ import { useState, useEffect, useRef } from "react";
 import styles from "@/styles/client/banner.module.css";
 import Link from "next/link";
 
-
 export default function BannerCarousel({ banners = [] }) {
   const slidesToUse = banners.length > 0
     ? banners.map(b => ({
