@@ -374,11 +374,11 @@ export default function ProductsComponent({
                         </Link>
                         <div className={styles.priceRow}>
                           <span className={styles.price}>
-                            {product.price.toLocaleString("vi-VN")}đ
+                            {product.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} vnđ
                           </span>
                           {product.comparePrice > 0 && (
                             <span className={styles.oldPrice}>
-                              {product.comparePrice.toLocaleString("vi-VN")}đ
+                              {product.comparePrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} vnđ
                             </span>
                           )}
                         </div>
@@ -440,11 +440,11 @@ export default function ProductsComponent({
                     <div className={styles.listActions}>
                       <div className={styles.priceRow}>
                         <span className={styles.price}>
-                          {product.price.toLocaleString("vi-VN")}đ
+                          {product.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} vnđ
                         </span>
                         {product.comparePrice > 0 && (
                           <span className={styles.oldPrice}>
-                            {product.comparePrice.toLocaleString("vi-VN")}đ
+                            {product.comparePrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} vnđ
                           </span>
                         )}
                       </div>

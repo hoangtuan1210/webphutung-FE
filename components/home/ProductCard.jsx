@@ -25,7 +25,7 @@ export default function ProductCard({ product }) {
             <h6 className={styles.productName}>{product.name}</h6>
 
             <p className={styles.productPrice}>
-              {product.price.toLocaleString("vi-VN")}đ
+              {product.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} vnđ
             </p>
 
             <button className="btn btn-dark btn-sm w-100">Xem Chi Tiết</button>

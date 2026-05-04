@@ -99,22 +99,24 @@
 }
 
 .priceRow {
-  composes: priceRow from "../shared.module.css";
+  display: flex;
+  align-items: baseline;
   margin-bottom: 0.85rem;
   gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
 .price {
-  composes: price from "../shared.module.css";
-  font-size: 2.2rem;
+  font-size: 1.8rem;
   font-weight: 800;
   color: var(--color-primary);
   letter-spacing: -0.02em;
 }
 
 .oldPrice {
-  composes: oldPrice from "../shared.module.css";
-  font-size: 1rem;
+  font-size: 1.1rem;
+  color: var(--color-gray-300);
+  text-decoration: line-through;
 }
 
 .discount {
@@ -346,6 +348,7 @@
   color: #444;
   line-height: 1.85;
   margin: 0;
+  white-space: pre-wrap;
 }
 
 .descSubtitle {

@@ -83,7 +83,7 @@ export default function Checkout() {
       deliverySlot: "",
       customerNotes: ""
     };
-    
+
     let orderId = null;
     try {
       const res = await checkoutService.createGuestOrder(guestPayload);
@@ -123,7 +123,7 @@ export default function Checkout() {
       <div className={styles.page}>
         <div className="container" style={{ position: "relative" }}>
           {loading && (
-            <div 
+            <div
               style={{
                 position: "fixed",
                 top: 0,
@@ -273,10 +273,10 @@ export default function Checkout() {
                         <div className="flex-fill">
                           <p className="small fw-bold mb-0 text-truncate" style={{ maxWidth: 180 }}>{item.name}</p>
                           <small className="text-muted">
-                            {item.price.toLocaleString("vi-VN")}đ <span className={styles.itemQty}>x{item.qty}</span>
+                            {item.price.toLocaleString("vi-VN")} vnđ <span className={styles.itemQty}>x{item.qty}</span>
                           </small>
                         </div>
-                        <span className="fw-bold text-end">{(item.price * item.qty).toLocaleString("vi-VN")}đ</span>
+                        <span className="fw-bold text-end">{(item.price * item.qty).toLocaleString("vi-VN")} vnđ</span>
                       </div>
                     ))}
                   </div>
@@ -285,7 +285,7 @@ export default function Checkout() {
 
                   <div className="d-flex justify-content-between mb-2">
                     <span className="text-muted small">Tạm tính ({selectedItems.length} sản phẩm)</span>
-                    <span className="small">{selectedTotalPrice.toLocaleString("vi-VN")}đ</span>
+                    <span className="small">{selectedTotalPrice.toLocaleString("vi-VN")} vnđ</span>
                   </div>
                   <div className="d-flex justify-content-between mb-2">
                     <span className="text-muted small">Phí vận chuyển</span>
@@ -293,7 +293,7 @@ export default function Checkout() {
                   </div>
 
                   <div className={styles.totalBox}>
-                    <h5 className="mb-0" style={{ color: "#fff"}}>Tổng tiền</h5>
+                    <h5 className="mb-0" style={{ color: "#fff" }}>Tổng tiền</h5>
                     <h4 className={styles.totalPrice}>{selectedTotalPrice.toLocaleString("vi-VN")}đ</h4>
                   </div>
 

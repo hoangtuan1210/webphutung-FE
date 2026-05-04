@@ -104,12 +104,12 @@ export default function DetailProduct({ productData, relatedProducts = [] }) {
 
             <div className={styles.priceRow}>
               <span className={styles.price}>
-                {price.toLocaleString("vi-VN")}đ
+                {price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} vnđ
               </span>
               {comparePrice > 0 && (
                 <>
                   <span className={styles.oldPrice}>
-                    {comparePrice.toLocaleString("vi-VN")}đ
+                    {comparePrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} vnđ
                   </span>
                   <span className={styles.discount}>
                     -{Math.round((1 - price / comparePrice) * 100)}%
@@ -252,9 +252,9 @@ export default function DetailProduct({ productData, relatedProducts = [] }) {
                       <div className={styles.relatedInfo}>
                         <p className={styles.relatedName}>{item.name}</p>
                         <div className={styles.relatedPriceRow}>
-                          <span className={styles.relatedPrice}>{itemPrice.toLocaleString("vi-VN")}đ</span>
+                          <span className={styles.relatedPrice}>{itemPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}vnđ</span>
                           {itemOldPrice > 0 && (
-                            <span className={styles.relatedOldPrice}>{itemOldPrice.toLocaleString("vi-VN")}đ</span>
+                            <span className={styles.relatedOldPrice}>{itemOldPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}vnđ</span>
                           )}
                         </div>
                       </div>

@@ -31,7 +31,7 @@ const CartItem = memo(({ item, isSelected, onToggle, onUpdateQty, onRemove }) =>
       <div className={styles.itemInfo}>
         <p className={styles.itemName}>{item.name}</p>
         <p className={styles.itemPrice}>
-          {item.price.toLocaleString("vi-VN")}đ
+          {item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} vnđ
         </p>
 
         <div className={styles.itemQty}>
@@ -144,7 +144,7 @@ export default function CartDrawer() {
             <div className={styles.totalRow}>
               <span>Tạm tính ({selectedIds.length})</span>
               <span className={styles.totalPrice}>
-                {totalPrice.toLocaleString("vi-VN")}đ
+                {totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} vnđ
               </span>
             </div>
 

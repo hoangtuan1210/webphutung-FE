@@ -150,7 +150,7 @@ export default function Navbar() {
                 <div className={styles.suggestionInfo}>
                   <span className={styles.suggestionName}>{p.name}</span>
                   <span className={styles.suggestionPrice}>
-                    {Number(p.price).toLocaleString("vi-VN")}₫
+                    {Number(p.price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} vnđ
                   </span>
                 </div>
               </Link>
