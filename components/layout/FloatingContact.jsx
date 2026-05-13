@@ -4,7 +4,7 @@ export default function FloatingContact() {
   return (
     <div className={styles.container}>
       <a
-        href="https://m.me/yourusername"
+        href="https://www.facebook.com/share/17gyPzVHdo/?mibextid=wwXIfr"
         target="_blank"
         rel="noopener noreferrer"
         className={`${styles.item} ${styles.messenger}`}

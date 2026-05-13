@@ -36,7 +36,7 @@
 }
 
 .title {
-  font-size: clamp(1.2rem, 3vw, 2rem);
+  font-size: clamp(3rem, 3vw, 2rem);
   font-weight: 800;
   color: #fff;
   line-height: 1.25;
@@ -73,7 +73,7 @@
 
 @media (max-width: 576px) {
   .desc { display: none; }
-  .title { margin-bottom: 0.8rem; }
+  .title { margin-bottom: 0.8rem; font-size: clamp(1.3rem, 3vw, 2rem);}
   .btn { padding: 0.45rem 1rem; font-size: 0.8rem; }
 }
 

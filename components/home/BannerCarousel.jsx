@@ -111,6 +111,7 @@ function BannerSlide({ slide, index }) {
           style={{
             width: "100%",
             height: "clamp(300px, 40vw, 550px)",
+            // height: "100%",
             objectFit: "cover",
             opacity: loaded ? 1 : 0,
             transition: "opacity 0.4s ease",
@@ -122,7 +123,7 @@ function BannerSlide({ slide, index }) {
       <div className={styles.overlay} />
 
       <div className={styles.content}>
-        <span className={styles.tag}>{slide.tag}</span>
+        {/* <span className={styles.tag}>{slide.tag}</span> */}
         <h2 className={styles.title}>
           {slide.title.split("\n").map((line, j) => (
             <span key={j}>
